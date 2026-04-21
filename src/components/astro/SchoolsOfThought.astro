@@ -1,0 +1,39 @@
+---
+interface School {
+  label: string;
+  name: string;
+  centers: string;
+  tagline: string;
+  emphasized?: boolean;
+}
+
+interface Props {
+  schools: School[];
+}
+
+const { schools } = Astro.props;
+---
+
+<div class="mt-10 grid gap-4 md:grid-cols-3">
+  {
+    schools.map((s) => (
+      <article
+        class:list={[
+          'flex h-full flex-col rounded-lg border p-6 transition-colors',
+          s.emphasized
+            ? 'border-ink-900 bg-paper shadow-soft'
+            : 'border-ink-100 bg-paper-muted',
+        ]}
+      >
+        <p class:list={['eyebrow mb-3', s.emphasized ? 'text-accent' : 'text-ink-400']}>
+          {s.label}
+        </p>
+        <h3 class="font-serif text-xl font-semibold text-ink-900">{s.name}</h3>
+        <p class="mt-3 text-sm font-medium uppercase tracking-wide text-ink-500">
+          Centers the · <span class="text-ink-900">{s.centers}</span>
+        </p>
+        <p class="mt-4 text-sm leading-relaxed text-ink-600">{s.tagline}</p>
+      </article>
+    ))
+  }
+</div>

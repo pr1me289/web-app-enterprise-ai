@@ -2,15 +2,13 @@
 order: 4
 key: approach
 eyebrow: 'Part 04 · Approach'
-title: 'Specs govern the system. Agents execute inside that scope.'
-lede: 'A four-document spec hierarchy, a deterministic supervisor, and a hybrid agentic retrieval layer. The model is asked to reason, not to improvise control flow.'
+title: 'Governed translation, not autonomous improvisation'
+lede: 'A five-document spec stack, a deterministic Python supervisor, and a hybrid agentic retrieval layer. The model reasons. Orchestration does not.'
 tone: default
 ---
 
-The approach has three load-bearing pieces:
+The design deliberately refuses the flashier options. No LLM supervisor. No swarm of autonomous agents. No single-index RAG over everything.
 
-1. **A spec hierarchy** with non-overlapping jurisdictions — PRD, Design Doc, Context Contract, Agent Specs.
-2. **A deterministic Python supervisor** that walks six pipeline steps with explicit gate conditions. Orchestration is code; reasoning is LLM.
-3. **Hybrid agentic retrieval** — per-source dense (Chroma) + lexical (BM25) collections, row-targeted matrix retrieval, cross-encoder re-ranking, authority-weighted bundle assembly.
+Instead: a plain Python state machine walks the pipeline through explicit gates. The Context Contract governs what each agent is allowed to see. Agent Specs govern how each agent behaves inside that bundle. Embedding is deliberately **non-uniform** — some sources are indexed, some are deliberately not, because "embed everything" is often the wrong answer.
 
-The agents themselves are small, tightly scoped LLMs governed by behavioral specs with strict DOs / DON'Ts, output contracts, and distinct blocked / escalated / complete output shapes.
+I am intentionally using a practical hybrid agentic retrieval approach rather than a flashy autonomous one, because the goal is governed enterprise reliability and explainability — not novelty theater.

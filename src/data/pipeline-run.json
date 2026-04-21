@@ -1,80 +1,227 @@
 {
   "run": {
-    "id": "run-lichen-optichain-2026-04-21-001",
-    "scenario": "Lichen Manufacturing onboarding OptiChain",
+    "id": "run-optichain-onboarding-2026-04-21",
+    "scenario": "Lichen Manufacturing · OptiChain vendor onboarding",
     "startedAt": "2026-04-21T14:02:11Z",
     "completedAt": "2026-04-21T14:04:38Z",
     "outcome": "escalated",
-    "summary": "Run completed with two escalations: one policy/questionnaire conflict on data residency, one procurement precondition unmet."
+    "summary": "Five acts. Three open blockers, four resolved determinations, one actionable approval package. The pipeline closes ESCALATED rather than fabricating COMPLETE.",
+    "statusVocabulary": [
+      { "key": "blocked", "label": "BLOCKED", "meaning": "Missing prerequisite. Nothing to reason over." },
+      { "key": "provisional", "label": "PROVISIONAL", "meaning": "Partially classifiable; ambiguity unresolved. Folded into ESCALATED in impl." },
+      { "key": "escalated", "label": "ESCALATED", "meaning": "Human judgment or action required." },
+      { "key": "resolved", "label": "RESOLVED", "meaning": "Sufficient output reached for this step." },
+      { "key": "complete", "label": "COMPLETE", "meaning": "Run terminal state; rare on regulated paths." }
+    ]
   },
-  "steps": [
+  "acts": [
     {
-      "index": 1,
-      "id": "ingest",
-      "title": "Ingest & route",
-      "state": "complete",
-      "agent": "Supervisor",
-      "summary": "Source documents validated and routed to per-source Chroma + BM25 collections.",
-      "evidence": [
-        "policy_it_sec_v4.pdf",
-        "optichain_questionnaire.json",
-        "procurement_matrix.xlsx",
-        "slack_export_it_sec.json"
-      ],
-      "rationale": "All sources passed integrity checks. Row-targeted matrix loaded for downstream agents."
+      "id": "act-1",
+      "roman": "I",
+      "title": "Intake gate",
+      "record": "R-01",
+      "outcome": "Questionnaire absent. Pipeline emits BLOCKED. Human intervention clears the gate.",
+      "steps": [
+        {
+          "index": 1,
+          "id": "r01-intake-check",
+          "title": "R-01 · Questionnaire intake check",
+          "state": "blocked",
+          "agent": "Supervisor",
+          "summary": "No questionnaire submission found. Supervisor emits BLOCKED, all downstream halted, Procurement notified.",
+          "evidence": [],
+          "rationale": "Missing prerequisite evidence — nothing to reason over. The pipeline does not fabricate a determination; it surfaces the gate."
+        },
+        {
+          "index": 2,
+          "id": "r01-human-resolution",
+          "title": "R-01 · Human intervention",
+          "state": "resolved",
+          "agent": "Procurement (human)",
+          "summary": "Procurement requests submission. OptiChain submits the onboarding questionnaire. Gate cleared.",
+          "evidence": ["OptiChain_Questionnaire_v1.json (new submission)"],
+          "rationale": "Gate cleared by human action, not by the model. The supervisor re-enters the pipeline from a valid state."
+        }
+      ]
     },
     {
-      "index": 2,
-      "id": "it-security",
-      "title": "IT Security determination",
-      "state": "escalated",
-      "agent": "IT Security Agent",
-      "summary": "Policy over questionnaire conflict on data residency (EU-only policy vs. US-hosted vendor claim).",
-      "evidence": [
-        "policy_it_sec_v4.pdf §4.2",
-        "optichain_questionnaire.json Q17"
-      ],
-      "rationale": "Policy precedence applied. Escalation raised to human reviewer per Context Contract §3."
+      "id": "act-2",
+      "roman": "II",
+      "title": "Path classification",
+      "record": "R-02",
+      "outcome": "Classification: REGULATED. Fast-track: INELIGIBLE. Downstream review posture is bound.",
+      "steps": [
+        {
+          "index": 3,
+          "id": "r02-path-classifier",
+          "title": "R-02 · Onboarding path classification",
+          "state": "resolved",
+          "agent": "Supervisor",
+          "summary": "EU shift data and SAP S/4HANA data exports trigger REGULATED classification; ERP involvement raises review posture.",
+          "evidence": [
+            "Questionnaire Q-07 (EU employee scheduling/shift data)",
+            "Questionnaire Q-11 (SAP S/4HANA export consumption)",
+            "Questionnaire Q-14 (NDA in progress)"
+          ],
+          "rationale": "EU personal data alone is sufficient for regulated classification. ERP involvement compounds posture. Middleware-vs-export ambiguity flagged for downstream."
+        },
+        {
+          "index": 4,
+          "id": "r02-fast-track",
+          "title": "R-02 · Fast-track eligibility",
+          "state": "resolved",
+          "agent": "Supervisor",
+          "summary": "Fast-track disqualified: regulated data + ERP involvement + unresolved questionnaire items.",
+          "evidence": ["Procurement Approval Matrix §2.3 (fast-track preconditions)"],
+          "rationale": "Classification binds downstream paths. No agent can later override this without citing the matrix."
+        }
+      ]
     },
     {
-      "index": 3,
-      "id": "legal",
-      "title": "Legal determination",
-      "state": "complete",
-      "agent": "Legal Agent",
-      "summary": "Contractual posture aligns with standard MSA template; no redlines required.",
-      "evidence": ["msa_template_v7.pdf", "optichain_proposed_terms.pdf"],
-      "rationale": "Vendor terms fall within pre-approved posture band."
+      "id": "act-3",
+      "roman": "III",
+      "title": "Domain reviews",
+      "record": "R-03 & R-04",
+      "outcome": "Three domains, three states: Legal ESCALATED, IT Security PROVISIONAL, Procurement RESOLVED. No swallowing.",
+      "steps": [
+        {
+          "index": 5,
+          "id": "r03-legal",
+          "title": "R-03 · Legal Agent determination",
+          "state": "escalated",
+          "agent": "Legal Agent",
+          "summary": "DPA required and blocks data exchange. NDA status remains provisional pending procurement confirmation.",
+          "evidence": ["DPA Matrix A-01", "DPA Matrix E-01", "ISP-001 §12.1.4 (NDA clause)"],
+          "rationale": "dpa_required = true; dpa_blocker = true; nda_status = provisional. Human-owned legal execution required; the model will not sign."
+        },
+        {
+          "index": 6,
+          "id": "r03-it-security",
+          "title": "R-03 · IT Security Agent determination",
+          "state": "escalated",
+          "agent": "IT Security Agent",
+          "summary": "Evidence doesn't satisfy Tier 2 (mediated) or Tier 3 (indirect). Integration tier cannot be classified from the questionnaire alone.",
+          "evidence": ["ISP-001 §12.2 (ERP Integration Tier table)"],
+          "rationale": "integration_tier = unclassified_pending_review; fast_track_eligible = false. OptiChain must provide architecture diagram + data-flow docs within 10 business days.",
+          "conceptualState": "provisional"
+        },
+        {
+          "index": 7,
+          "id": "r04-procurement",
+          "title": "R-04 · Procurement Agent determination",
+          "state": "resolved",
+          "agent": "Procurement Agent",
+          "summary": "Approval path: STANDARD. Executive approval not required. Fast-track already denied upstream.",
+          "evidence": ["Procurement Approval Matrix row 14"],
+          "rationale": "Matrix rules produce a deterministic path once regulated classification binds."
+        }
+      ]
     },
     {
-      "index": 4,
-      "id": "procurement",
-      "title": "Procurement determination",
-      "state": "escalated",
-      "agent": "Procurement Agent",
-      "summary": "Precondition unmet — procurement matrix shows no signed SOW for the current fiscal year.",
-      "evidence": ["procurement_matrix.xlsx row 42"],
-      "rationale": "Escalated rather than blocked; SOW can be resolved outside the pipeline."
+      "id": "act-4",
+      "roman": "IV",
+      "title": "Approval checklist",
+      "record": "R-05",
+      "outcome": "ESCALATED. Three blockers preserved with citations; four resolved items preserved with citations.",
+      "steps": [
+        {
+          "index": 8,
+          "id": "r05-checklist",
+          "title": "R-05 · Checklist assembly",
+          "state": "escalated",
+          "agent": "Checklist Assembler",
+          "summary": "Bundle composed with authority weighting. Upstream escalations pass through unmutated. No silent swallow.",
+          "evidence": ["Upstream agent outputs (Legal, IT Security, Procurement)"],
+          "rationale": "Null-passthrough discipline: escalated inputs produce escalated outputs. The checklist is the artifact humans act on, not a summary.",
+          "blockers": [
+            {
+              "id": "B-01",
+              "title": "GDPR Art. 28 DPA not yet executed",
+              "owner": "Legal",
+              "citations": ["DPA Matrix A-01", "DPA Matrix E-01"]
+            },
+            {
+              "id": "B-02",
+              "title": "NDA execution unconfirmed",
+              "owner": "Procurement / Legal",
+              "citations": ["ISP-001 §12.1.4"]
+            },
+            {
+              "id": "B-03",
+              "title": "ERP integration tier unclassified",
+              "owner": "IT Security",
+              "citations": ["ISP-001 §12.2"]
+            }
+          ],
+          "resolvedItems": [
+            {
+              "title": "Onboarding path classification",
+              "determination": "REGULATED",
+              "owner": "IT Security / Supervisor",
+              "citation": "Questionnaire + policy"
+            },
+            {
+              "title": "Approval path",
+              "determination": "STANDARD",
+              "owner": "Procurement",
+              "citation": "Procurement Approval Matrix"
+            },
+            {
+              "title": "Fast-track eligibility",
+              "determination": "INELIGIBLE",
+              "owner": "IT Security / Procurement",
+              "citation": "Regulated path + matrix"
+            },
+            {
+              "title": "Executive approval",
+              "determination": "NOT REQUIRED",
+              "owner": "Procurement",
+              "citation": "Procurement Approval Matrix"
+            }
+          ]
+        }
+      ]
     },
     {
-      "index": 5,
-      "id": "assemble",
-      "title": "Checklist assembly",
-      "state": "complete",
-      "agent": "Checklist Assembler",
-      "summary": "Bundle composed with authority weighting; escalated items preserved in null-passthrough state.",
-      "evidence": [],
-      "rationale": "No silent-swallow. Escalated upstream items remain escalated downstream."
-    },
-    {
-      "index": 6,
-      "id": "checkoff",
-      "title": "Checkoff",
-      "state": "escalated",
-      "agent": "Checkoff Agent",
-      "summary": "Final determination: escalated. Two items require human disposition before the run can close as complete.",
-      "evidence": [],
-      "rationale": "Run ends in escalated state per design — no fabricated 'complete' output."
+      "id": "act-5",
+      "roman": "V",
+      "title": "Stakeholder guidance",
+      "record": "R-06",
+      "outcome": "Pipeline closes ESCALATED. Approval package delivered with cited blockers and per-stakeholder next actions.",
+      "steps": [
+        {
+          "index": 9,
+          "id": "r06-checkoff",
+          "title": "R-06 · Checkoff & stakeholder guidance",
+          "state": "escalated",
+          "agent": "Checkoff Agent",
+          "summary": "Final determination: ESCALATED. The run ends in the state the evidence warrants — not a fabricated COMPLETE.",
+          "evidence": ["Assembled checklist from R-05"],
+          "rationale": "The actionable deliverable is the approval package: cited blockers, assigned owners, estimated unblock window.",
+          "stakeholderGuidance": [
+            {
+              "role": "Legal",
+              "action": "Execute GDPR Art. 28 DPA before any data exchange",
+              "citation": "DPA Matrix A-01, E-01"
+            },
+            {
+              "role": "IT Security",
+              "action": "Request architecture diagram + data-flow docs; assign ERP tier under ISP-001 §12.2",
+              "citation": "ISP-001 §12.2"
+            },
+            {
+              "role": "Procurement",
+              "action": "Confirm NDA execution",
+              "citation": "ISP-001 §12.1.4"
+            },
+            {
+              "role": "Business Owner (Operations)",
+              "action": "Three blockers open; no implementation until resolved. Est. 10 business days with prompt responses.",
+              "citation": "Derived from upstream agent SLAs"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

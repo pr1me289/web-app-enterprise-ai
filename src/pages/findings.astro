@@ -6,50 +6,91 @@ import SectionHero from '../components/astro/SectionHero.astro';
 import TakeawayCard from '../components/astro/TakeawayCard.astro';
 import Callout from '../components/astro/Callout.astro';
 import PrincipleList from '../components/astro/PrincipleList.astro';
+import StatementCallout from '../components/astro/StatementCallout.astro';
+import StatBlock from '../components/astro/StatBlock.astro';
 import DetailExpander from '../components/react/DetailExpander';
 
 const keyFindings = [
   {
     title: 'Null-passthrough holds under pressure',
-    body: 'Across the adversarial suite, every escalated upstream step produced an escalated downstream output — no silent fabrication.',
+    body: 'Across the adversarial suite, every escalated upstream step produced an escalated downstream output. No fabricated COMPLETE. No silent swallow.',
   },
   {
     title: 'Policy precedence is structural',
-    body: 'Policy-over-questionnaire conflicts were resolved at the Context Contract layer in 100% of test fixtures — the individual agents never had to decide.',
+    body: 'Policy-over-questionnaire conflicts were resolved at the Context Contract layer — the individual agents never had to decide. Authority lives in the governance doc, not the prompt.',
   },
   {
     title: 'Deterministic supervisor pays for itself',
-    body: 'Moving orchestration into Python made failure modes inspectable. Every retry, gate, and escalation is traceable to a line of code, not a model sample.',
+    body: "Orchestration in Python means every retry, gate, and escalation is traceable to a line of code — not a model sample. Debugging is a stack trace, not an archaeology dig.",
   },
   {
     title: 'Hybrid retrieval beats flat RAG on real inputs',
-    body: 'Row-targeted matrix retrieval + cross-encoder re-ranking recovered correct evidence where flat dense retrieval surfaced superficially similar but wrong material.',
+    body: 'Row-targeted matrix retrieval + cross-encoder re-ranking recovered correct evidence where flat dense retrieval surfaced superficially similar but wrong material. Naive RAG would miss the NDA clause entirely.',
   },
 ];
 
 const demonstrations = [
-  { title: 'Silent-swallow resistance', body: 'Escalated upstream results never collapsed to complete in downstream agents.' },
-  { title: 'Retrieval-layer failure handling', body: 'Synthetic collection outages surfaced as escalations rather than hallucinated answers.' },
-  { title: 'Cross-agent escalation cascades', body: 'An IT Security escalation propagated cleanly through Checklist Assembler and Checkoff without being masked.' },
-  { title: 'Blocked-shape discipline', body: 'Precondition failures produced the blocked shape — not a partial complete with caveats.' },
+  {
+    title: 'Silent-swallow resistance',
+    body: 'Escalated upstream results never collapsed to COMPLETE in downstream agents — the null-passthrough discipline held across the full adversarial suite.',
+  },
+  {
+    title: 'Retrieval-layer failure handling',
+    body: 'Synthetic collection outages surfaced as escalations with traceable cause, not hallucinated answers that looked confident.',
+  },
+  {
+    title: 'Cross-agent escalation cascades',
+    body: 'An IT Security escalation propagated cleanly through Checklist Assembler and Checkoff — no agent quietly dropped it to preserve a tidy output.',
+  },
+  {
+    title: 'Blocked-shape discipline',
+    body: 'Precondition failures produced the BLOCKED shape — not a partial COMPLETE with caveats. The gate is the point.',
+  },
 ];
 
 const evaluation = [
-  { title: '15+ adversarial fixtures', body: 'Each fixture targets a specific behavioral dimension, not a generic pass/fail.' },
-  { title: 'Behavioral dimensions, not task accuracy', body: 'Evaluation checks shape compliance, escalation discipline, and evidence traceability — not just final answer correctness.' },
-  { title: 'Fixture design as spec', body: 'Fixtures are authored alongside agent specs; a new DO/DON\'T in a spec typically lands with its fixture.' },
+  {
+    title: '15+ adversarial fixtures',
+    body: 'Each fixture targets a specific behavioral dimension, not a generic pass/fail. The suite is a behavioral specification, not a benchmark.',
+  },
+  {
+    title: 'Behavioral dimensions, not task accuracy',
+    body: 'Evaluation checks shape compliance, escalation discipline, and evidence traceability — not just whether the final determination happened to be right.',
+  },
+  {
+    title: 'Fixture design as spec',
+    body: "A new DO/DON'T in an Agent Spec typically ships with its fixture. The test is the rule, made executable.",
+  },
 ];
 
 const limitations = [
-  { title: 'Single-scenario corpus', body: 'The mock corpus instantiates one vendor-onboarding scenario. Generalization claims are structural, not statistical.' },
-  { title: 'Captured-run demo only', body: 'The public replay plays back JSON. A live backend is out of scope for v1 of this presentation.' },
-  { title: 'No red-team LLM', body: 'Adversarial fixtures are hand-authored. A learned adversary would likely surface additional failure modes.' },
+  {
+    title: 'Single-scenario corpus',
+    body: 'The mock corpus instantiates one vendor-onboarding scenario. Generalization claims here are structural — they ride on the spec hierarchy, not on statistical coverage.',
+  },
+  {
+    title: 'Captured-run demo only',
+    body: 'The public replay plays back JSON. A live backend is out of scope for v1 of this presentation; the contract shape is what travels.',
+  },
+  {
+    title: 'No red-team LLM',
+    body: 'Adversarial fixtures are hand-authored. A learned adversary would almost certainly surface additional failure modes — especially in the "surface compliance, substantive violation" class.',
+  },
 ];
 
 const futureWork = [
-  { title: 'Live replay with evaluation overlays', body: 'Overlay spec excerpts and test-fixture outcomes onto each replay step.' },
-  { title: 'Second domain corpus', body: 'Apply the same spec hierarchy to a second enterprise workflow to stress-test generality.' },
-  { title: 'Learned adversary fixture-gen', body: 'Use an LLM red-team loop to propose behavioral fixtures beyond the hand-authored set.' },
+  {
+    title: 'Live replay with evaluation overlays',
+    body: 'Overlay spec excerpts and test-fixture outcomes onto each replay step so the governance layer is legible without leaving the demo.',
+  },
+  {
+    title: 'Second domain corpus',
+    body: 'Apply the same spec hierarchy to a second enterprise workflow (incident triage, compliance audit) to stress-test generality.',
+  },
+  {
+    title: 'Learned adversary fixture-gen',
+    body: "Use an LLM red-team loop to propose behavioral fixtures beyond the hand-authored set — especially around the subtle drift patterns §8 of the findings flagged.",
+  },
 ];
 ---
 
@@ -59,13 +100,58 @@ const futureWork = [
       <SectionHero
         as="h1"
         eyebrow="Part 07 · Findings"
-        title="What the system demonstrated, what it didn't, and what's next."
-        lede="A structured read on what was learned from the upstream pipeline — evaluation shape, limitations, and the questions that still matter."
+        title="Surface compliance, substantive violation"
+        lede="The most interesting failure mode a governance layer catches is the one a shape-level check would miss entirely. The pipeline held its citation rules while an early agent version still let informal content reshape fields the citation rules didn't govern. Naming that pattern is the finding."
       />
     </Container>
   </section>
 
-  <NarrativeSection id="key-findings" tone="default">
+  <section class="border-b border-ink-100 bg-paper-muted py-section-sm md:py-section">
+    <Container width="wide">
+      <StatementCallout eyebrow="The pattern, named">
+        We designed a scenario specifically to detect the subtle failure mode of <em>surface compliance with substantive drift</em>. The agent kept citation-level governance rules clean while letting informal commentary reshape the approver set. The evaluator caught behavior a shape-level check would have missed entirely — which is why the governance layer matters beyond prompt engineering.
+      </StatementCallout>
+
+      <div class="mt-12 grid gap-4 md:grid-cols-3">
+        <StatBlock
+          value="Shape ✓"
+          label="Citations clean: no Slack cited as PRIMARY, correct matrix row, status set to complete."
+          source="Day 14 testing"
+        />
+        <StatBlock
+          value="Semantics ✗"
+          label="Informal content reshaped the determination field that citation rules didn't govern."
+          source="Day 14 testing"
+          emphasis={true}
+        />
+        <StatBlock
+          value="Caught"
+          label="Scenario-specific semantic checks caught the drift that benchmark-style evaluation would miss."
+          source="Evaluator layer"
+        />
+      </div>
+    </Container>
+  </section>
+
+  <NarrativeSection id="root-cause" tone="default">
+    <header class="max-w-prose">
+      <p class="eyebrow mb-3">The root-cause discovery</p>
+      <h2 class="font-serif text-display-sm font-semibold text-ink-900">
+        The spec got blamed. The model got blamed. It was the chunking pipeline.
+      </h2>
+      <p class="lede mt-4">
+        Upstream plumbing turned out to be the culprit for a class of failures that looked like governance misbehavior. Worth saying out loud.
+      </p>
+    </header>
+
+    <Callout kind="rationale" title="Why this matters for the approach">
+      <p>
+        The whole argument for a spec-driven stack is that failures become locatable. When evaluation caught the drift, the immediate instinct was to patch the Agent Spec or reach for a different model. Both were wrong. Chunk boundaries were splitting a governance-relevant sentence, and retrieval was surfacing the half without the authority signal. The fix was in the indexing layer — but the only reason it was <em>findable</em> is because the governance layer made the symptom precise enough to bisect.
+      </p>
+    </Callout>
+  </NarrativeSection>
+
+  <NarrativeSection id="key-findings" tone="muted">
     <header class="max-w-prose">
       <p class="eyebrow mb-3">Key findings</p>
       <h2 class="font-serif text-display-sm font-semibold text-ink-900">Four things the pipeline showed</h2>
@@ -81,7 +167,7 @@ const futureWork = [
     </div>
   </NarrativeSection>
 
-  <NarrativeSection id="demonstrated" tone="muted">
+  <NarrativeSection id="demonstrated" tone="default">
     <header class="max-w-prose">
       <p class="eyebrow mb-3">What the system demonstrated</p>
       <h2 class="font-serif text-display-sm font-semibold text-ink-900">Behavioral properties under adversarial load</h2>
@@ -90,24 +176,28 @@ const futureWork = [
     <PrincipleList items={demonstrations} />
 
     <DetailExpander summary="Sample fixture: policy-over-questionnaire conflict" kind="spec" client:visible>
-      The vendor's questionnaire claims US-only data residency. Internal policy requires EU-hosted processing for the data class in question. The fixture asserts that the run surfaces an escalation identifying the specific policy clause that overrides the vendor claim — never a summary that treats both sources as equivalent.
+      The vendor's questionnaire claims US-only data residency. Internal policy requires EU-hosted processing for the data class in question. The fixture asserts that the run surfaces an escalation citing the specific policy clause that overrides the vendor claim — never a summary that treats both sources as equivalent. Authority is not a tiebreaker the model negotiates; it is a Context Contract directive the supervisor enforces.
     </DetailExpander>
   </NarrativeSection>
 
-  <NarrativeSection id="evaluation" tone="default">
+  <NarrativeSection id="evaluation" tone="muted">
     <header class="max-w-prose">
       <p class="eyebrow mb-3">Evaluation</p>
       <h2 class="font-serif text-display-sm font-semibold text-ink-900">Scenario-based, not leaderboard-based</h2>
-      <p class="lede mt-4">Evaluation is shaped around whether the system honors its specs — not whether it produces fluent answers.</p>
+      <p class="lede mt-4">
+        Evaluation is shaped around whether the system honors its specs — not whether it produces fluent answers. A hallucinated answer that happens to be correct is still a governance failure.
+      </p>
     </header>
     <PrincipleList items={evaluation} />
 
     <Callout kind="rationale" title="Why behavioral evaluation over task accuracy">
-      A hallucinated answer that happens to be correct is still a governance failure. Evaluating only final-answer accuracy would reward systems that fabricate and punish systems that escalate. The fixtures flip that — shape compliance and escalation discipline are first-class pass criteria.
+      <p>
+        Benchmark-style evaluation would reward fabrication and punish principled escalation. The fixtures flip that: shape compliance, citation discipline, and escalation traceability are first-class pass criteria. A correct-by-accident answer fails. A correctly escalated run passes.
+      </p>
     </Callout>
   </NarrativeSection>
 
-  <NarrativeSection id="limitations" tone="muted">
+  <NarrativeSection id="limitations" tone="default">
     <header class="max-w-prose">
       <p class="eyebrow mb-3">Limitations</p>
       <h2 class="font-serif text-display-sm font-semibold text-ink-900">What this work does not claim</h2>
@@ -123,22 +213,25 @@ const futureWork = [
     </div>
   </NarrativeSection>
 
-  <NarrativeSection id="reflections" tone="default">
+  <NarrativeSection id="reflections" tone="muted">
     <header class="max-w-prose">
       <p class="eyebrow mb-3">Reflections</p>
-      <h2 class="font-serif text-display-sm font-semibold text-ink-900">The part that surprised me</h2>
+      <h2 class="font-serif text-display-sm font-semibold text-ink-900">Needing a shovel to get to the shovel</h2>
     </header>
     <div class="prose-narrative mt-6">
       <p>
-        Writing the specs first made the agents smaller than I expected. Once the Context Contract was doing its job, each domain agent had dramatically less to reason about — most governance questions had already been settled structurally. The agents started looking more like focused evaluators than general reasoners.
+        The original plan was four days. The build took sixteen-plus. The driver was the document chain itself — each spec layer demanded more iteration than anticipated. You cannot write a precise Agent Spec until the Context Contract is firm. You cannot finalize the Context Contract until the Design Doc commits to a retrieval shape. The dependency is real, and pretending it isn't just hides the cost until later.
       </p>
       <p>
-        The other surprise: adversarial fixtures were the fastest feedback loop in the project. More useful than any benchmark. They forced the specs to be precise in places prose would have been comfortable being vague.
+        Writing the specs first also made the agents smaller than I expected. Once the Context Contract was doing its job, each domain agent had dramatically less to reason about — most governance questions had already been settled structurally. Agents started looking more like focused evaluators than general reasoners. That is, I think, the point.
+      </p>
+      <p>
+        The fastest feedback loop in the whole project was adversarial fixtures. More useful than any benchmark. They forced the specs to be precise in places where prose would have been comfortable being vague — which is exactly where governance fails quietly.
       </p>
     </div>
   </NarrativeSection>
 
-  <NarrativeSection id="future-work" tone="muted">
+  <NarrativeSection id="future-work" tone="default">
     <header class="max-w-prose">
       <p class="eyebrow mb-3">Future work</p>
       <h2 class="font-serif text-display-sm font-semibold text-ink-900">Where this goes next</h2>

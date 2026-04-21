@@ -47,3 +47,27 @@
 
 **Next:** Real copy passes on parts 3–5; wire the remaining homepage primitives (add `PipelineStep` rail visualization for the approach section); replace JSON pipeline-run with the real captured run from the upstream repo; add basic Playwright smoke tests; move `DetailExpander` onto Radix `Accordion` primitives once variants settle; begin Vercel setup.
 
+---
+
+### [#3] 2026-04-21 | Claude Code
+**Task:** Phase 3 — creative-director pass off `summary_notes.md`. Translate the substantive research, competitor landscape, scenario, and findings content into the existing scaffold. Branch: `feat/summary-build`.
+
+**Plan:**
+1. Read `summary_notes.md` end-to-end; identify the highest-value editorial moments: the 80/80 paradox, the three schools of SDD, context rot + ISR + multi-file cliff, the context engine landscape, the five-act OptiChain execution path, and the "surface compliance, substantive violation" finding.
+2. Build new presentation primitives for moments the existing kit couldn't express: `StatusPill` (blocked/provisional/escalated/resolved/complete vocabulary), `StatBlock` (big-number stat treatment), `StatementCallout` (pull-quote framing), `SchoolsOfThought` (3-column SDD comparison), `ActCard` (scenario acts), `CompetitorGrid` (context engine landscape).
+3. Extend `SpecHierarchy` from four layers to five to honor the ORCH-PLAN-001 emergence under implementation pressure (§3.1).
+4. Rewrite `src/content/parts/part-0{1..5}-*.mdx` with the real framing from the notes — 80/80 paradox, spec-driven positioning, context rot research, governed translation argument, five-act scenario framing.
+5. Recompose `src/pages/index.astro` with editorial moments: hero StatBlocks (80/80/19.36), SchoolsOfThought cards, CompetitorGrid (12 vendors), five-layer SpecHierarchy, five ActCards covering R-01 → R-06.
+6. Restructure `/demo` around the five-act scenario. Replace the generic 6-step run with the real OptiChain execution path (R-01 BLOCKED → R-02 REGULATED → R-03/R-04 three domain states → R-05 checklist with 3 blockers + 4 resolved items → R-06 stakeholder guidance). Rewrite `ReplayConsole.tsx` to group by act and render blocker/resolved/stakeholder tables on the final steps.
+7. Upgrade `/findings` with a new hero anchored on "surface compliance, substantive violation" (§2.6), a root-cause-was-chunking section (§2.7), and a "needing a shovel to get to the shovel" reflection (§6.3).
+8. Run `pnpm build` to verify.
+
+**Changes:**
+- Created: `src/components/astro/{StatusPill,StatBlock,StatementCallout,SchoolsOfThought,ActCard,CompetitorGrid}.astro`.
+- Modified: `src/components/astro/SpecHierarchy.astro` (4→5 layers with emergence caption), `src/components/react/ReplayConsole.tsx` (act grouping, blocker/resolved/stakeholder tables, expanded status vocabulary), `src/data/pipeline-run.json` (full rewrite — 5 acts, 9 steps, real citations: DPA Matrix A-01/E-01, ISP-001 §12.1.4, ISP-001 §12.2), `src/pages/{index,demo,findings}.astro` (recomposed with new primitives and real content), `src/content/parts/part-0{1..5}-*.mdx` (rewritten).
+- Commands run: `pnpm build` (passes; 3 static pages, 2 React islands).
+
+**Result:** Build passes. The site now presents substantive content across all three pages: the 80/80 paradox and three-schools positioning on the homepage; the real five-act OptiChain run on /demo with cited blockers and a proper approval-package output shape; the "surface compliance, substantive violation" finding as the findings hero. Status vocabulary is consistent across all three pages (BLOCKED / PROVISIONAL / ESCALATED / RESOLVED / COMPLETE). Creative decisions made without seeking guidance per user directive.
+
+**Next:** Real Vercel deploy; second pass on act-transition UI in the replay (animated step-through); second-corpus exploration per future-work card; Playwright smokes against the new interactive replay.
+

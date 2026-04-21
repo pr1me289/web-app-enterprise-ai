@@ -10,6 +10,11 @@ import PrincipleList from '../components/astro/PrincipleList.astro';
 import SpecHierarchy from '../components/astro/SpecHierarchy.astro';
 import TakeawayCard from '../components/astro/TakeawayCard.astro';
 import Quote from '../components/astro/Quote.astro';
+import StatBlock from '../components/astro/StatBlock.astro';
+import StatementCallout from '../components/astro/StatementCallout.astro';
+import SchoolsOfThought from '../components/astro/SchoolsOfThought.astro';
+import ActCard from '../components/astro/ActCard.astro';
+import CompetitorGrid from '../components/astro/CompetitorGrid.astro';
 import DetailExpander from '../components/react/DetailExpander';
 
 const parts = (await getCollection('parts')).sort((a, b) => a.data.order - b.data.order);
@@ -25,36 +30,73 @@ const ProblemBody = await problem.render();
 const ApproachBody = await approach.render();
 const ScenarioBody = await scenario.render();
 
+const schools = [
+  {
+    label: 'School I',
+    name: 'GitHub Spec Kit',
+    centers: 'Spec',
+    tagline: '4-phase CLI, 14+ agents, MIT-licensed. Greenfield, single-repo, agent-agnostic. The spec is the artifact.',
+  },
+  {
+    label: 'School II',
+    name: 'AWS Kiro',
+    centers: 'Workflow',
+    tagline: 'Code-OSS IDE; EARS notation; Requirements → Design → Tasks. AWS-native, formal documentation stack.',
+  },
+  {
+    label: 'School III',
+    name: 'This work',
+    centers: 'Governed translation',
+    tagline: 'Specs translate stakeholder intent into scoped, authority-aware agent context. Retrieval and orchestration are first-class citizens of the spec stack, not afterthoughts.',
+    emphasized: true,
+  },
+];
+
+const contextEngines = [
+  { name: 'Unblocked', angle: 'Authority signals — who reviewed whose code, who is the domain expert.' },
+  { name: 'Augment Code', angle: 'Semantic dependency analysis across 400K+ files, SOC 2 Type II.' },
+  { name: 'Qodo Context Engine', angle: 'Deep research agent; high DeepCodeBench accuracy.' },
+  { name: 'Context Hub (Ng)', angle: 'Open-source CLI; agents annotate and "remember" workarounds.' },
+  { name: 'Kayba ACE', angle: 'Self-improving via reflection; evolving "Skillbook" as system prompt.' },
+  { name: 'Microsoft Agent Skills', angle: '126 modular knowledge packages for Azure / Foundry.' },
+  { name: 'Tabnine ECE', angle: 'Privacy-first; on-prem or air-gapped deployments.' },
+  { name: 'Greptile', angle: 'Graph-first semantic code graph; cross-service propagation detection.' },
+  { name: 'Sourcegraph Amp', angle: 'Most established; enterprise knowledge graph; SOC 2 + ISO 27001.' },
+  { name: 'Hyland ECE', angle: 'Broad content/process/people linking across ERP, CRM, EHR.' },
+  { name: 'Faros Clara', angle: 'Enhanced AGENTS.md built from years of coding assistant usage.' },
+  { name: 'Graphiti (Zep)', angle: 'Temporal knowledge graphs; time-aware fact management.' },
+];
+
 const principles = [
   {
     title: 'Substance over polish',
-    body: 'The work being presented is the value proposition. Visual refinement matters, but never at the cost of substance.',
+    body: 'The value proposition is the work itself. Visual refinement is secondary to whether the thing does what it claims.',
   },
   {
-    title: 'Progressive disclosure as core pattern',
-    body: 'Default views stay approachable. Technical detail lives one click away. Applied consistently across every section.',
+    title: 'Embedding is not the intelligence',
+    body: 'The intelligence lives in the retrieval flow — subquery decomposition, lane routing, authority rules, bundle assembly. Embedding stays boring, deterministic, auditable.',
   },
   {
-    title: 'Specs govern, models reason',
-    body: 'Orchestration is deterministic Python. LLM agents reason inside tightly scoped behavioral contracts.',
+    title: 'Source authority precedes semantic similarity',
+    body: 'A BM25 exact-clause hit on policy beats a high-cosine hit on a Slack thread. Always. Authority is a filter, not a tiebreaker.',
   },
   {
-    title: 'Retrieval is a first-class citizen',
-    body: 'Per-source dense + lexical collections, row-targeted matrix retrieval, cross-encoder re-ranking. Designed for the agents, not reused from chat UX.',
+    title: 'Determinations reason from the bundle',
+    body: 'Agents never reason from the Design Doc or governance documents directly. They reason from the Supervisor-assembled evidence bundle, and they cite it.',
   },
 ];
 
 const agents = [
-  { name: 'IT Security', role: 'Applies policy; produces blocked / escalated / complete determinations.' },
-  { name: 'Legal', role: 'Applies contractual posture against vendor-supplied terms and redlines.' },
-  { name: 'Procurement', role: 'Evaluates commercial fit, vendor relationship, and procurement-policy alignment.' },
-  { name: 'Checklist Assembler', role: 'Sequences domain agents and composes the checklist bundle.' },
-  { name: 'Checkoff', role: 'Final determination stage — passes, escalates, or blocks with full audit trail.' },
+  { name: 'IT Security', role: 'Applies ISP-001 against questionnaire + integration evidence. Tier classification, provisional flags, architecture-diagram requests.' },
+  { name: 'Legal', role: 'Applies DPA Matrix (A-01, E-01) and NDA clauses from ISP-001 §12.1.4. Produces escalations for human-owned execution.' },
+  { name: 'Procurement', role: 'Applies Procurement Approval Matrix. Approval path classification; fast-track eligibility.' },
+  { name: 'Checklist Assembler', role: 'Composes a scoped bundle across domain outputs. Null-passthrough on any escalated upstream.' },
+  { name: 'Checkoff', role: 'Final determination. Passes, escalates, or blocks with full audit trail and cited blockers.' },
 ];
 ---
 
 <BaseLayout title="Spec-Driven Enterprise AI">
-  <!-- Part 1 — Title / Hero -->
+  <!-- Part 1 — Hero -->
   <section class="border-b border-ink-100">
     <Container width="wide" class="pt-24 pb-20 md:pt-40 md:pb-28">
       <p class="eyebrow mb-6">{titlePart.data.eyebrow}</p>
@@ -65,8 +107,29 @@ const agents = [
       <div class="mt-10 max-w-prose prose-narrative">
         <TitleBody.Content />
       </div>
+
+      <div class="mt-14 grid gap-4 md:grid-cols-3">
+        <StatBlock
+          value="80%"
+          label="of enterprises believe in the transformative impact of AI and have invested accordingly."
+          source="McKinsey · The State of AI"
+          emphasis
+        />
+        <StatBlock
+          value="80%"
+          label="of those same enterprises say they have not yet seen the investment reflected in the bottom line."
+          source="McKinsey · The State of AI"
+          emphasis
+        />
+        <StatBlock
+          value="19.36%"
+          label="Pass@1 on multi-file agentic coding tasks — down from 87.2% on single-function benchmarks."
+          source="Multi-file agentic coding benchmark"
+        />
+      </div>
+
       <Quote source="McKinsey, The State of AI 2024">
-        Enterprises have invested heavily in generative AI. Meaningful bottom-line impact remains the exception, not the rule.
+        80% of enterprises believe in the transformative impact of AI and thus are financially invested, and yet 80% of companies say they're not yet seeing impact on the bottom line from those investments.
       </Quote>
     </Container>
   </section>
@@ -81,12 +144,22 @@ const agents = [
     <div class="prose-narrative mt-8">
       <IntroBody.Content />
     </div>
+
+    <StatementCallout
+      eyebrow="Positioning"
+      attribution="Spec-driven development, three schools"
+    >
+      GitHub Spec Kit centers the spec. Kiro centers the workflow. <span class="text-accent">This model centers the governed translation from enterprise intent into agent-usable context.</span>
+    </StatementCallout>
+
+    <SchoolsOfThought schools={schools} />
+
     <div class="mt-12 grid gap-4 md:grid-cols-2">
       <TakeawayCard index={1} title="Governance is a design decision">
-        Role-based access, auditability, and policy precedence are architectural — they do not emerge from prompting.
+        Role-based access, auditability, and policy precedence are architectural choices. They do not emerge from prompting — they are built into the retrieval and orchestration layers.
       </TakeawayCard>
       <TakeawayCard index={2} title="The scenario is the vehicle">
-        Vendor onboarding is how we demonstrate the approach. The approach itself is general to enterprise workflows.
+        Vendor onboarding is how the approach is demonstrated. The approach itself generalizes to any enterprise workflow where authority, precedence, and audit matter more than fluency.
       </TakeawayCard>
     </div>
   </NarrativeSection>
@@ -101,31 +174,64 @@ const agents = [
     <div class="prose-narrative mt-8">
       <ProblemBody.Content />
     </div>
+
+    <div class="mt-10 grid gap-4 md:grid-cols-3">
+      <StatBlock
+        value="68 pts"
+        label="Accuracy drop when single-function benchmarks become multi-file, distributed tasks."
+        source="Multi-file agentic coding benchmark"
+      />
+      <StatBlock
+        value="CSR ≠ ISR"
+        label="An agent that follows 9 of 10 constraints gets a perfect Constraint Success Rate — and an Instruction Success Rate of zero."
+        source="Tsinghua · AGENTIF"
+      />
+      <StatBlock
+        value="Middle loss"
+        label="LLMs weight information at the start and end of long prompts more than information buried in the middle."
+        source="Chroma · Context Rot"
+      />
+    </div>
+
     <ComparisonBlock
       left={{
         label: 'Common approach',
         title: 'Naive RAG',
         points: [
-          'Single flat index across all documents.',
+          'Single flat index across every source.',
           'No role-based access at the retrieval layer.',
           'Model is asked to reason about policy precedence.',
           'Retrieval gaps become hallucinations.',
+          'No retrieval manifest; no audit trail.',
         ],
       }}
       right={{
         label: 'This project',
         title: 'Hybrid agentic retrieval',
         points: [
-          'Per-source Chroma + BM25 collections.',
+          'Per-source Chroma (dense) + BM25 (lexical) collections.',
           'Row-targeted matrix retrieval over questionnaire data.',
           'Cross-encoder re-ranking and authority-weighted bundles.',
           'Retrieval gaps raise escalations — never silently filled.',
+          'Every determination cites its evidence.',
         ],
       }}
       emphasis="right"
     />
-    <DetailExpander summary="Why policy must outrank questionnaire answers" kind="architecture" client:visible>
-      Vendor-supplied questionnaire data describes what a vendor claims to do. Internal policy describes what the enterprise requires. When the two disagree, the system must prefer policy and surface the delta as an escalation — not merge them into a neutral summary. This is enforced at the Context Contract layer, above any single agent's reasoning.
+
+    <CompetitorGrid
+      title="The 2026 context-engine boom"
+      subtitle="A dozen credible products crystallized into a single category in early 2026. Most are solving retrieval over code. None are solving governed translation from enterprise intent into scoped, authority-aware agent context."
+      competitors={contextEngines}
+      stance="This work is not another context engine. It is the governance layer that sits above the retrieval layer — the part that decides what the agent is allowed to see, under whose authority, and with what audit obligation."
+    />
+
+    <DetailExpander
+      summary="Why policy must outrank questionnaire answers"
+      kind="architecture"
+      client:visible
+    >
+      Vendor-supplied questionnaire data describes what a vendor claims. Internal policy describes what the enterprise requires. When the two disagree, the system must prefer policy and surface the delta as an escalation — not merge them into a neutral summary. This is enforced at the Context Contract layer, above any single agent's reasoning.
     </DetailExpander>
   </NarrativeSection>
 
@@ -140,33 +246,43 @@ const agents = [
       <ApproachBody.Content />
     </div>
 
-    <h3 class="mt-16 font-serif text-xl text-ink-900">The spec hierarchy</h3>
+    <StatementCallout eyebrow="Design philosophy" attribution="Project notes, Day 9">
+      I am intentionally using a practical hybrid agentic retrieval approach rather than a flashy autonomous one, because the goal is governed enterprise reliability and explainability — not novelty theater.
+    </StatementCallout>
+
+    <h3 class="mt-16 font-serif text-2xl text-ink-900">The spec stack</h3>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-ink-600">
+      Originally conceived as four documents. The fifth — the Orchestration Plan — emerged during implementation, owning runtime behavior the other four did not. Naming it openly is more useful than pretending the four-doc frame held.
+    </p>
     <SpecHierarchy />
 
     <Callout kind="rationale" title="Why a deterministic supervisor">
-      The supervisor walks six pipeline steps in Python. Each step has explicit gate conditions, subqueries, retrieval routing, and PipelineState mutation rules. This preserves determinism and auditability while still giving each LLM agent latitude to reason inside its scope. The model is never asked to decide the shape of control flow.
+      The Supervisor walks six pipeline steps in Python. Each step has explicit gate conditions, subqueries, retrieval routing, and PipelineState mutation rules. This preserves determinism and auditability while still giving each LLM agent latitude to reason inside its scope. The model is never asked to decide the shape of control flow.
     </Callout>
 
-    <h3 class="mt-16 font-serif text-xl text-ink-900">Operating principles</h3>
+    <h3 class="mt-16 font-serif text-2xl text-ink-900">Operating principles</h3>
     <PrincipleList items={principles} />
 
-    <h3 class="mt-16 font-serif text-xl text-ink-900">Domain agents</h3>
-    <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <h3 class="mt-16 font-serif text-2xl text-ink-900">Domain agents</h3>
+    <p class="mt-3 max-w-prose text-base leading-relaxed text-ink-600">
+      Five tightly-scoped agents. Each has a behavioral spec with DOs, DON'Ts, an output contract, and three distinct output shapes: <strong>blocked</strong>, <strong>escalated</strong>, <strong>complete</strong>.
+    </p>
+    <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {
         agents.map((agent) => (
-          <TakeawayCard title={agent.name}>
-            <span>{agent.role}</span>
-          </TakeawayCard>
+          <TakeawayCard title={agent.name}>{agent.role}</TakeawayCard>
         ))
       }
     </div>
 
-    <DetailExpander summary="Agent spec output shapes" kind="spec" client:visible>
-      Every domain agent produces one of three output shapes: <code>complete</code> (determination made with citations), <code>escalated</code> (insufficient evidence or policy conflict — routed to a human), <code>blocked</code> (precondition unmet — pipeline halts). Null-passthrough discipline means escalated runs never synthesize a complete output downstream.
+    <DetailExpander summary="Storage & indexing decisions" kind="spec" client:visible>
+      <p>
+        Dense (Chroma) and lexical (BM25) are stored per source, not as one giant corpus. Collections include <code>idx_security_policy</code>, <code>idx_dpa_matrix</code>, <code>idx_procurement_matrix</code>, <code>idx_precedents</code>, <code>idx_slack_notes</code>. The OptiChain questionnaire is <em>deliberately not embedded</em> — it is accessed via direct structured queries. Every chunk carries source_id, authority_tier, retrieval_lane, version, freshness_status, and allowed_agents as metadata.
+      </p>
     </DetailExpander>
   </NarrativeSection>
 
-  <!-- Part 5 — Business Scenario -->
+  <!-- Part 5 — Scenario, five acts -->
   <NarrativeSection id="scenario" tone={scenario.data.tone}>
     <SectionHero
       eyebrow={scenario.data.eyebrow}
@@ -176,7 +292,67 @@ const agents = [
     <div class="prose-narrative mt-8">
       <ScenarioBody.Content />
     </div>
-    <div class="mt-10 flex flex-wrap gap-3 text-sm">
+
+    <div class="mt-16">
+      <p class="eyebrow mb-3 text-accent">The arc</p>
+      <h3 class="font-serif text-2xl font-semibold text-ink-900">
+        One vendor. One pipeline. Five acts.
+      </h3>
+
+      <div class="mt-6">
+        <ActCard
+          act="I"
+          title="The gate holds"
+          lede="No questionnaire has been submitted. The Supervisor emits BLOCKED. Every downstream step halts. Procurement is notified, requests submission, and OptiChain uploads the questionnaire."
+          status="blocked"
+          citation="R-01 · Supervisor gate · Procurement intervention"
+        >
+          The system refuses to proceed without a prerequisite. This is the smallest unit of value the pipeline delivers: it knows when to stop.
+        </ActCard>
+
+        <ActCard
+          act="II"
+          title="Regulated path, classified"
+          lede="The submitted questionnaire reveals SAP S/4HANA exports, EU employee scheduling data, ambiguous middleware integration, and an NDA still 'in progress.' Classification: REGULATED."
+          status="escalated"
+          citation="R-02 · Onboarding path classification · Fast-track INELIGIBLE"
+        >
+          EU personal data alone is sufficient for regulated-path. ERP involvement raises review posture. The tier remains technically ambiguous — to be re-evaluated in Act III.
+        </ActCard>
+
+        <ActCard
+          act="III"
+          title="Three domains, three verdicts"
+          lede="Legal, IT Security, and Procurement each run against their own source material. The three outputs do not all agree — and that is the point."
+          status="escalated"
+          citation="R-03 · Domain reviews · DPA Matrix A-01 / ISP-001 §12.1.4, §12.2 / Approval Matrix"
+        >
+          **Legal:** DPA required, NDA status provisional. <strong>ESCALATED</strong> — human-owned legal execution required. **IT Security:** ERP integration tier cannot be resolved from the questionnaire alone. <strong>PROVISIONAL</strong> — architecture diagram + data-flow docs requested within 10 business days. **Procurement:** approval path STANDARD, no executive approval required, fast-track ineligible. <strong>RESOLVED</strong>.
+        </ActCard>
+
+        <ActCard
+          act="IV"
+          title="The checklist closes escalated"
+          lede="The Checklist Assembler composes the bundle. Three blockers open: GDPR Art. 28 DPA, NDA execution, ERP tier classification. Four items resolved. The run closes ESCALATED — not BLOCKED, not fabricated COMPLETE."
+          status="escalated"
+          citation="R-05 · Approval checklist · Authority-weighted assembly"
+        >
+          The point of the act is that the pipeline never synthesizes a false *complete* to look finished. Escalated stays escalated. Every blocker is cited to the exact clause or matrix row that produced it.
+        </ActCard>
+
+        <ActCard
+          act="V"
+          title="Guidance, not a verdict"
+          lede="The Checkoff Agent emits stakeholder-ready next steps. Legal executes the DPA. IT Security requests architecture docs. Procurement confirms NDA execution. Operations is told: three blockers open; no implementation until resolved; roughly 10 business days with prompt responses."
+          status="complete"
+          citation="R-06 · Stakeholder guidance · Auditable handoff"
+        >
+          The final output is not a decision. It is an *actionable approval package* — the thing the pipeline exists to produce. Decision authority stays with the humans who own each domain.
+        </ActCard>
+      </div>
+    </div>
+
+    <div class="mt-14 flex flex-wrap gap-3 text-sm">
       <a
         href="/demo"
         class="inline-flex items-center gap-2 rounded-md bg-ink-900 px-4 py-2 font-medium text-paper no-underline shadow-soft transition-colors hover:bg-ink-800"

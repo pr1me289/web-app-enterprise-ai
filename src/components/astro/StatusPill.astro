@@ -1,0 +1,29 @@
+---
+interface Props {
+  status: 'blocked' | 'provisional' | 'escalated' | 'complete' | 'resolved';
+  size?: 'sm' | 'md';
+}
+
+const { status, size = 'md' } = Astro.props;
+
+const map: Record<Props['status'], { label: string; className: string }> = {
+  blocked: { label: 'Blocked', className: 'bg-red-50 text-red-700 ring-red-200' },
+  provisional: { label: 'Provisional', className: 'bg-sky-50 text-sky-700 ring-sky-200' },
+  escalated: { label: 'Escalated', className: 'bg-amber-50 text-amber-800 ring-amber-200' },
+  complete: { label: 'Complete', className: 'bg-emerald-50 text-emerald-700 ring-emerald-200' },
+  resolved: { label: 'Resolved', className: 'bg-emerald-50 text-emerald-700 ring-emerald-200' },
+};
+
+const entry = map[status];
+const sizeClass = size === 'sm' ? 'px-1.5 py-0.5 text-[0.6rem]' : 'px-2 py-0.5 text-[0.7rem]';
+---
+
+<span
+  class:list={[
+    'inline-flex items-center rounded font-mono uppercase tracking-[0.12em] ring-1 ring-inset',
+    sizeClass,
+    entry.className,
+  ]}
+>
+  {entry.label}
+</span>

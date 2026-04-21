@@ -2,16 +2,15 @@
 order: 3
 key: problem
 eyebrow: 'Part 03 · Problem & landscape'
-title: 'Why naive RAG is not enough in the enterprise'
-lede: 'Most enterprise "AI copilots" bolt retrieval onto a chat model and hope governance emerges. It does not. The result is systems that look helpful in a demo and fail the first real audit.'
+title: 'Context is the bottleneck, not the model'
+lede: 'More context is not uniformly better. Beyond a threshold, it degrades performance. The enterprise fix is not a bigger window — it is a governed, scoped, authority-aware retrieval layer.'
 tone: muted
 ---
 
-Enterprise workflows are not free-form conversations. They have:
+Three findings from 2025–2026 research reshape the enterprise AI design space:
 
-- **Role-based access** — not every agent, not every user, should see every document.
-- **Policy over questionnaire precedence** — when a vendor-supplied answer disagrees with an internal policy, the policy wins.
-- **Auditability by default** — every determination must be traceable to the evidence that produced it.
-- **Non-null discipline** — retrieval gaps must produce escalations, not hallucinations.
+- **Context rot is real.** Across 18 LLMs, performance degrades as input length grows. Information buried in the middle of a long prompt is weighted less than information at the edges.
+- **Multi-file agentic coding collapses.** Models that hit 87.2% Pass@1 on single-function benchmarks drop to 19.36% on distributed multi-file tasks — a 68-point cliff once work actually looks like work.
+- **Instruction success is brutal.** Tsinghua's AGENTIF benchmark introduces ISR — the proportion of instructions for which *all* constraints hold. 9-of-10 compliance scores zero. Governance failures cluster where the model was "mostly right."
 
-Naive RAG collapses these dimensions into a single similarity search. This section frames the alternative.
+Meanwhile, a new product category — *context engines* — has crystallized in early 2026. Most of them are solving retrieval-over-code. Almost none are solving **governed translation of stakeholder intent into scoped, authority-aware agent context**.

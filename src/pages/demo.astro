@@ -3,19 +3,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/astro/Container.astro';
 import SectionHero from '../components/astro/SectionHero.astro';
 import Callout from '../components/astro/Callout.astro';
+import StatementCallout from '../components/astro/StatementCallout.astro';
+import StatusPill from '../components/astro/StatusPill.astro';
 import ReplayConsole from '../components/react/ReplayConsole';
 import runData from '../data/pipeline-run.json';
 
-const { run, steps } = runData;
+const { run, acts } = runData;
 const startedAt = new Date(run.startedAt);
 const completedAt = new Date(run.completedAt);
 const durationSec = Math.round((completedAt.getTime() - startedAt.getTime()) / 1000);
 
-const outcomeTone = {
-  complete: 'text-emerald-700',
-  escalated: 'text-amber-700',
-  blocked: 'text-red-700',
-}[run.outcome as 'complete' | 'escalated' | 'blocked'];
+const totalSteps = acts.reduce((sum, act) => sum + act.steps.length, 0);
+const blockerCount = acts
+  .flatMap((a) => a.steps)
+  .reduce((sum, step) => sum + ((step as { blockers?: unknown[] }).blockers?.length ?? 0), 0);
 ---
 
 <BaseLayout title="Demo · Pipeline replay">
@@ -24,26 +25,30 @@ const outcomeTone = {
       <SectionHero
         as="h1"
         eyebrow="Part 06 · Demo"
-        title="Pipeline replay"
-        lede="A captured run of the vendor-onboarding pipeline on the mock scenario. Step through the six stages to see how the supervisor, retrieval layer, and domain agents produced each determination."
+        title="Five acts, one approval package"
+        lede="A captured run of the governed pipeline against OptiChain. The story is the shape of the pipeline under real conditions — a blocking gate, a regulated classification, three domain reviews in three different states, and a final checklist that closes ESCALATED rather than fabricating COMPLETE."
       />
 
-      <div class="mt-10 grid gap-6 md:grid-cols-4">
+      <div class="mt-10 grid gap-3 md:grid-cols-5">
         <div class="rounded-md border border-ink-100 bg-paper p-4">
           <p class="eyebrow text-ink-400">Run ID</p>
-          <p class="mt-1 font-mono text-xs text-ink-700">{run.id}</p>
+          <p class="mt-1 font-mono text-[0.7rem] text-ink-700">{run.id}</p>
         </div>
         <div class="rounded-md border border-ink-100 bg-paper p-4">
-          <p class="eyebrow text-ink-400">Scenario</p>
-          <p class="mt-1 text-sm text-ink-800">{run.scenario}</p>
+          <p class="eyebrow text-ink-400">Acts</p>
+          <p class="mt-1 text-sm text-ink-800">{acts.length} · {totalSteps} steps</p>
         </div>
         <div class="rounded-md border border-ink-100 bg-paper p-4">
           <p class="eyebrow text-ink-400">Duration</p>
-          <p class="mt-1 text-sm text-ink-800">{durationSec}s</p>
+          <p class="mt-1 text-sm text-ink-800">{durationSec}s end-to-end</p>
         </div>
         <div class="rounded-md border border-ink-100 bg-paper p-4">
           <p class="eyebrow text-ink-400">Outcome</p>
-          <p class={`mt-1 text-sm font-medium uppercase tracking-wide ${outcomeTone}`}>{run.outcome}</p>
+          <div class="mt-1"><StatusPill status={run.outcome} /></div>
+        </div>
+        <div class="rounded-md border border-ink-100 bg-paper p-4">
+          <p class="eyebrow text-ink-400">Open blockers</p>
+          <p class="mt-1 text-sm font-medium text-amber-800">{blockerCount} cited</p>
         </div>
       </div>
     </Container>
@@ -51,17 +56,32 @@ const outcomeTone = {
 
   <section class="py-section-sm md:py-section">
     <Container width="wide">
-      <div class="mb-8 max-w-prose">
+      <div class="mb-10 max-w-prose">
         <p class="text-sm leading-relaxed text-ink-600">{run.summary}</p>
       </div>
 
-      <ReplayConsole run={run} steps={steps} client:load />
+      <ReplayConsole run={run} acts={acts} client:load />
 
-      <Callout kind="architecture" title="What this replay is — and isn't">
-        <p>
-          v1 plays back a pre-captured run from <code>src/data/pipeline-run.json</code>. It is not a live backend call. The audit-trail shape, escalation flow, and null-passthrough discipline shown here match the upstream pipeline's real contract.
-        </p>
-      </Callout>
+      <div class="mt-12 space-y-6">
+        <StatementCallout eyebrow="Status vocabulary">
+          The run uses five status values where the conceptual scenario used four and the implementation uses three. Preserving both is the honest move — the distinction drove the design even where the impl folded PROVISIONAL into ESCALATED.
+        </StatementCallout>
+
+        <div class="grid gap-3 md:grid-cols-5">
+          {run.statusVocabulary.map((entry) => (
+            <div class="rounded-md border border-ink-100 bg-paper p-4">
+              <StatusPill status={entry.key} />
+              <p class="mt-3 text-xs leading-relaxed text-ink-600">{entry.meaning}</p>
+            </div>
+          ))}
+        </div>
+
+        <Callout kind="architecture" title="What this replay is — and isn't">
+          <p>
+            v1 plays back a pre-captured run from <code>src/data/pipeline-run.json</code>. It is not a live backend call. The act structure, citation discipline, escalation flow, and null-passthrough behavior shown here match the upstream pipeline's real contract. The point is the <em>shape</em> of the output — an actionable approval package with cited blockers, not a fabricated &ldquo;complete.&rdquo;
+          </p>
+        </Callout>
+      </div>
     </Container>
   </section>
 </BaseLayout>
