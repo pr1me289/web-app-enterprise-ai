@@ -53,7 +53,7 @@ The site is primarily a portfolio artifact and will live at a custom domain link
 
 The site is structured as seven content parts across three deployable pages:
 
-**Main page (long-scroll, parts 1–5):**
+This is subject to change, do not use this presentation flow as the source-of-truth
 1. **Title** — news-headline framing of the enterprise AI paradox; McKinsey quote on the gap between AI investment and impact
 2. **Introduction** — the working title framing of the approach (currently "A Spec-Driven Approach to Enterprise Context Engineering"); byline
 3. **Problem & Landscape** — current approaches to enterprise AI; the players, their perspectives, their constraints

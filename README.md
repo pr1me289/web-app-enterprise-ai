@@ -27,6 +27,14 @@ Every section uses progressive disclosure — a plain-language default view with
 
 ---
 
+## Prior To Working (IMPORTANT)
+
+Read presentation_flow.md
+
+This is our current working (subject to change) presentation flow and ideation doc 
+
+---
+
 ## What This Site Presents
 
 The subject is a governance philosophy and architecture for enterprise AI: how to deploy LLM agents over sensitive enterprise data with auditability, role-based access, and determinism built in from the start rather than retrofitted. The approach is demonstrated end-to-end through a working pipeline, but the principles generalize across enterprise workflows and are not tied to any particular business function.
