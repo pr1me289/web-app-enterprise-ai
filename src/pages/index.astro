@@ -10,6 +10,7 @@ import PrincipleList from '../components/astro/PrincipleList.astro';
 import SpecHierarchy from '../components/astro/SpecHierarchy.astro';
 import TakeawayCard from '../components/astro/TakeawayCard.astro';
 import Quote from '../components/astro/Quote.astro';
+import StatBlock from '../components/astro/StatBlock.astro';
 import DetailExpander from '../components/react/DetailExpander';
 
 const parts = (await getCollection('parts')).sort((a, b) => a.data.order - b.data.order);
@@ -24,12 +25,6 @@ const IntroBody = await intro.render();
 const ProblemBody = await problem.render();
 const ApproachBody = await approach.render();
 const ScenarioBody = await scenario.render();
-
-const heroMetrics = [
-  { value: '80%', label: 'of enterprises believe AI will be transformative' },
-  { value: '80%', label: 'say those investments still lack bottom-line impact' },
-  { value: '15+', label: 'adversarial fixtures used to probe behavioral failures' },
-];
 
 const framingCards = [
   {
@@ -215,31 +210,26 @@ const scenarioActs = [
           </Quote>
         </div>
 
-        <div class="space-y-4">
-          <div class="panel p-6">
-            <p class="eyebrow mb-4">The paradox</p>
-            <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
-              {
-                heroMetrics.map((metric) => (
-                  <div class="rounded-2xl border border-ink-100 bg-paper-muted/70 p-4">
-                    <p class="metric-value">{metric.value}</p>
-                    <p class="mt-2 text-sm leading-relaxed text-ink-600">{metric.label}</p>
-                  </div>
-                ))
-              }
-            </div>
-          </div>
-
-          <div class="panel p-6">
-            <p class="eyebrow mb-4">Positioning</p>
-            <p class="font-serif text-2xl leading-tight text-ink-900">
-              This model centers the governed translation from enterprise intent into agent-usable
-              context.
-            </p>
-            <p class="mt-4 text-sm leading-relaxed text-ink-600">
-              The system is intentionally practical: deterministic orchestration, source-aware
-              retrieval, and LLM reasoning confined to clear behavioral contracts.
-            </p>
+        <div class="panel p-6">
+          <p class="eyebrow mb-6">The paradox</p>
+          <div class="grid gap-4">
+            <StatBlock
+              value="80%"
+              label="of enterprises believe in the transformative impact of AI and have invested accordingly."
+              source="McKinsey · The State of AI"
+              emphasis
+            />
+            <StatBlock
+              value="80%"
+              label="of those same enterprises say they have not yet seen the investment reflected in the bottom line."
+              source="McKinsey · The State of AI"
+              emphasis
+            />
+            <StatBlock
+              value="19.36%"
+              label="Pass@1 on multi-file agentic coding tasks — down from 87.2% on single-function benchmarks."
+              source="Multi-file agentic coding benchmark"
+            />
           </div>
         </div>
       </div>

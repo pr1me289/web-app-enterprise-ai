@@ -1,0 +1,33 @@
+---
+interface Props {
+  value: string;
+  label: string;
+  source?: string;
+  emphasis?: boolean;
+}
+
+const { value, label, source, emphasis = false } = Astro.props;
+---
+
+<article
+  class:list={[
+    'flex h-full flex-col justify-between rounded-lg border p-6 transition-colors',
+    emphasis
+      ? 'border-ink-900 bg-paper-muted shadow-soft'
+      : 'border-ink-100 bg-paper',
+  ]}
+>
+  <div>
+    <p
+      class:list={[
+        'font-bold tracking-tight text-ink-900',
+        emphasis ? 'text-5xl md:text-6xl' : 'text-4xl md:text-5xl',
+      ]}
+      style="font-family: Georgia, serif;"
+    >
+      {value}
+    </p>
+    <p class="mt-4 text-sm leading-relaxed text-ink-700">{label}</p>
+  </div>
+  {source && <p class="mt-6 eyebrow text-ink-400">{source}</p>}
+</article>
