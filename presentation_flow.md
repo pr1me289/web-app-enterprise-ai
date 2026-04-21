@@ -1,4 +1,4 @@
-***Presentation Layout***
+**_Presentation Layout_**
 
 **Part 1 (Title Page):**
 News, article headlines "Enterprise AI", "building agentic infrastructure", "how can AI agents use enterprise data safely & effectively?", etc.
@@ -30,7 +30,7 @@ Spec-Driven Development philosophy for context engineering
     How I've innovated on top of their some of their frameworks
 
 Hybrid Agentic Retrieval w/ static Python state machine orchestration layer
-    
+
     My reasoning, pros & cons
     Why deterministic supervisor makes sense? What cases would an LLM supervisor make sense?
     Other organization methods for an orchestration layer - like LangGraph
@@ -53,6 +53,7 @@ LLM domain agents - receive context bundle / fulfill output contract
 
     As monitored by the supervisor for expected output
     Emit status signals which are handled by the supervisor
+
 Checklist Assembler showcases results of the run, Checkoff Agent routes necessary items to proper department / document owners
 
 **Part 5 (Briefly Describing the Proposed Business Scenario):**

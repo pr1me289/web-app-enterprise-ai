@@ -1,4 +1,5 @@
 # Agent Spec — Checkoff Agent
+
 ## SPEC-AGENT-CHK-001 v0.3
 
 **Document ID:** SPEC-AGENT-CHK-001
@@ -24,14 +25,14 @@ The Checkoff Agent is **downstream-only**. It has no independent evidence-discov
 
 ## 1. Agent Identity
 
-| Field | Value |
-|---|---|
-| **Agent ID** | `checkoff_agent` |
-| **Pipeline Step** | STEP-06 — R-06: Stakeholder Guidance and Checkoff Support |
-| **Assigned By** | Supervisor Agent |
-| **Upstream Dependency** | STEP-05 must be in terminal state `COMPLETE`. STEP-06 does not run when STEP-05 is `ESCALATED` or `BLOCKED`. |
-| **Parallel With** | — |
-| **Downstream Dependents** | None. STEP-06 is the terminal pipeline step. |
+| Field                     | Value                                                                                                        |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Agent ID**              | `checkoff_agent`                                                                                             |
+| **Pipeline Step**         | STEP-06 — R-06: Stakeholder Guidance and Checkoff Support                                                    |
+| **Assigned By**           | Supervisor Agent                                                                                             |
+| **Upstream Dependency**   | STEP-05 must be in terminal state `COMPLETE`. STEP-06 does not run when STEP-05 is `ESCALATED` or `BLOCKED`. |
+| **Parallel With**         | —                                                                                                            |
+| **Downstream Dependents** | None. STEP-06 is the terminal pipeline step.                                                                 |
 
 ---
 
@@ -58,6 +59,7 @@ The agent does not retrieve evidence independently. It reads pipeline state and 
 The Supervisor assembles this bundle before the agent runs. The agent must treat the bundle as its complete and exclusive input base for this step.
 
 **Bundle composition (assembly priority order per ORCH-PLAN-001 STEP-06):**
+
 1. Finalized checklist output from STEP-05 — primary input
 2. Stakeholder role-to-guidance map — from pipeline config
 3. Required approver list — from checklist `required_approvals[]`
@@ -68,6 +70,7 @@ The Supervisor assembles this bundle before the agent runs. The agent must treat
 **Required inputs for an admissible STEP-06 bundle:**
 
 From STEP-05 (finalized checklist):
+
 - `overall_status`
 - `blockers`
 - `required_approvals`
@@ -77,6 +80,7 @@ From STEP-05 (finalized checklist):
 - `approval_path`
 
 From pipeline config:
+
 - `stakeholder_map`
 - `approver_contacts`
 - `escalation_owners`
@@ -91,13 +95,13 @@ The Checkoff Agent does not receive raw source documents. It does not receive in
 
 Derived from CC-001 §6.1 and the CHECKOFF AGENT ACCESS RULE stated therein.
 
-| Index Endpoint | Access |
-|---|---|
-| `idx_security_policy` | — No access |
-| `idx_dpa_matrix` | — No access |
-| `idx_procurement_matrix` | — No access |
-| `vq_direct_access` | — No active use (permission exists in CC-001 §6.1 table but no ORCH-PLAN-001 STEP-06 subquery is defined for it; all required vendor information is already present in the finalized checklist) |
-| `idx_slack_notes` | — No access |
+| Index Endpoint           | Access                                                                                                                                                                                          |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `idx_security_policy`    | — No access                                                                                                                                                                                     |
+| `idx_dpa_matrix`         | — No access                                                                                                                                                                                     |
+| `idx_procurement_matrix` | — No access                                                                                                                                                                                     |
+| `vq_direct_access`       | — No active use (permission exists in CC-001 §6.1 table but no ORCH-PLAN-001 STEP-06 subquery is defined for it; all required vendor information is already present in the finalized checklist) |
+| `idx_slack_notes`        | — No access                                                                                                                                                                                     |
 
 **Architectural constraint:** The Checkoff Agent is prohibited from querying any index endpoint. This prohibition is defined in CC-001 §6.1 (CHECKOFF AGENT ACCESS RULE) and repeated in ORCH-PLAN-001 STEP-06. Any attempt to issue an index query must fail closed and be logged as an access violation in the audit log. This is not a behavioral guideline that the agent may override under any circumstances.
 
@@ -141,25 +145,25 @@ Roles that appear across multiple sources are consolidated into a single guidanc
 
 ### 6.2 Field Population per Guidance Document
 
-| Guidance Document Field | Population Rule |
-|---|---|
-| `stakeholder_role` | The role label (e.g., "Legal / General Counsel", "IT Security", "Procurement Director") |
-| `domain` | The domain this stakeholder operates in (`legal`, `security`, `procurement`) |
-| `instructions` | Composed from the checklist fields applicable to this role: overall_status context, what this role must approve or resolve, and the specific conditions (ESCALATED or COMPLETE) that govern their required action |
-| `blockers_owned` | Filtered from checklist `blockers[]` where `resolution_owner` matches this stakeholder role. Empty array if none. |
-| `required_security_actions` | Filtered from checklist `required_security_actions` where `owner` matches this stakeholder role. Empty array if none. |
-| `next_steps` | Assembled from: outstanding approvals this role owes (from `required_approvals[]`), active blockers they own, and escalation actions assigned to them. Each next step should reference the specific checklist field that drives it. |
-| `citations` | Filtered from checklist `citations[]` where `agent_id` corresponds to the domain most relevant to this stakeholder role. |
+| Guidance Document Field     | Population Rule                                                                                                                                                                                                                     |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `stakeholder_role`          | The role label (e.g., "Legal / General Counsel", "IT Security", "Procurement Director")                                                                                                                                             |
+| `domain`                    | The domain this stakeholder operates in (`legal`, `security`, `procurement`)                                                                                                                                                        |
+| `instructions`              | Composed from the checklist fields applicable to this role: overall_status context, what this role must approve or resolve, and the specific conditions (ESCALATED or COMPLETE) that govern their required action                   |
+| `blockers_owned`            | Filtered from checklist `blockers[]` where `resolution_owner` matches this stakeholder role. Empty array if none.                                                                                                                   |
+| `required_security_actions` | Filtered from checklist `required_security_actions` where `owner` matches this stakeholder role. Empty array if none.                                                                                                               |
+| `next_steps`                | Assembled from: outstanding approvals this role owes (from `required_approvals[]`), active blockers they own, and escalation actions assigned to them. Each next step should reference the specific checklist field that drives it. |
+| `citations`                 | Filtered from checklist `citations[]` where `agent_id` corresponds to the domain most relevant to this stakeholder role.                                                                                                            |
 
 ### 6.3 Overall Status Representation
 
 The checklist `overall_status` must be accurately represented in every guidance document. The following table governs how it is surfaced in `instructions`:
 
-| `overall_status` | Representation in guidance `instructions` |
-|---|---|
-| `COMPLETE` | Guidance indicates the pipeline assessment is complete. Stakeholder must complete their required approvals to close out onboarding. |
-| `ESCALATED` | The Checkoff Agent does not run when the finalized checklist is not in a COMPLETE terminal state. ESCALATED checklists do not trigger STEP-06. |
-| `BLOCKED` | The Checkoff Agent does not run when overall_status is BLOCKED at the run level — STEP-06 is itself blocked in that case. |
+| `overall_status` | Representation in guidance `instructions`                                                                                                      |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `COMPLETE`       | Guidance indicates the pipeline assessment is complete. Stakeholder must complete their required approvals to close out onboarding.            |
+| `ESCALATED`      | The Checkoff Agent does not run when the finalized checklist is not in a COMPLETE terminal state. ESCALATED checklists do not trigger STEP-06. |
+| `BLOCKED`        | The Checkoff Agent does not run when overall_status is BLOCKED at the run level — STEP-06 is itself blocked in that case.                      |
 
 ---
 
@@ -189,9 +193,7 @@ The agent must return a single schema-valid JSON object. No other output format 
           "owner": "string"
         }
       ],
-      "next_steps": [
-        "string"
-      ],
+      "next_steps": ["string"],
       "citations": [
         {
           "source_name": "string",
@@ -211,15 +213,15 @@ The agent must return a single schema-valid JSON object. No other output format 
 
 ### Output Field Constraints
 
-| Field | Constraint |
-|---|---|
-| `guidance_documents` | Must be present and contain at least one entry on every non-blocked run. Absent on blocked runs (§7.1). Must contain one document per distinct stakeholder role identified per §6.1. |
-| `stakeholder_role` | Must be non-null on every guidance document entry. |
-| `instructions` | Must be composed from structured checklist fields. Must accurately represent `overall_status`. Must not assert that conditions are resolved when they are not. |
-| `blockers_owned` | Must include all checklist `blockers[]` entries whose `resolution_owner` matches this stakeholder role. May be `[]` if no blockers are assigned to this role. |
-| `next_steps` | Must be non-empty on every guidance document where the stakeholder has outstanding approvals, owned blockers, or assigned escalation actions. May be `[]` only if this stakeholder has no actionable items in the current pipeline state. |
-| `citations` | Carries through from the finalized checklist. The Checkoff Agent does not introduce new citations. |
-| `status` | Lowercase. Either `complete` (guidance documents successfully produced) or `blocked` (agent cannot produce guidance). The Checkoff Agent does not use `escalated` — escalation is irrelevant for this agent because it only runs when the upstream checklist is COMPLETE. |
+| Field                | Constraint                                                                                                                                                                                                                                                                |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `guidance_documents` | Must be present and contain at least one entry on every non-blocked run. Absent on blocked runs (§7.1). Must contain one document per distinct stakeholder role identified per §6.1.                                                                                      |
+| `stakeholder_role`   | Must be non-null on every guidance document entry.                                                                                                                                                                                                                        |
+| `instructions`       | Must be composed from structured checklist fields. Must accurately represent `overall_status`. Must not assert that conditions are resolved when they are not.                                                                                                            |
+| `blockers_owned`     | Must include all checklist `blockers[]` entries whose `resolution_owner` matches this stakeholder role. May be `[]` if no blockers are assigned to this role.                                                                                                             |
+| `next_steps`         | Must be non-empty on every guidance document where the stakeholder has outstanding approvals, owned blockers, or assigned escalation actions. May be `[]` only if this stakeholder has no actionable items in the current pipeline state.                                 |
+| `citations`          | Carries through from the finalized checklist. The Checkoff Agent does not introduce new citations.                                                                                                                                                                        |
+| `status`             | Lowercase. Either `complete` (guidance documents successfully produced) or `blocked` (agent cannot produce guidance). The Checkoff Agent does not use `escalated` — escalation is irrelevant for this agent because it only runs when the upstream checklist is COMPLETE. |
 
 ### 7.1 Blocked Output Shape
 
@@ -235,12 +237,12 @@ When the agent derives `status = blocked`, it MUST emit the following output sha
 
 **`blocked_reason`** — enum array. Lists the specific admissibility failure(s) that caused the block. Multiple values are permitted when multiple inputs are missing simultaneously. Defined enum values for the Checkoff Agent:
 
-| Enum Value | Condition |
-|---|---|
-| `MISSING_CHECKLIST_OUTPUT` | The finalized STEP-05 checklist is entirely absent. This is the Checkoff Agent's primary input and the only thing it routes from. Without it the agent has nothing to facilitate. |
-| `CHECKLIST_NOT_COMPLETE` | The finalized checklist is present but its `overall_status` is not `COMPLETE` (it is `ESCALATED` or `BLOCKED`). A present but non-COMPLETE checklist is a gate condition failure that the Supervisor should have caught before STEP-06 was triggered. This tells the Supervisor it triggered STEP-06 prematurely — a different resolution path than a missing checklist entirely. |
-| `MISSING_STAKEHOLDER_MAP` | The role-to-stakeholder routing map is absent from pipeline config. The Checkoff Agent cannot address guidance documents to the correct individuals without knowing who owns each approval. Generic unaddressed guidance is not a valid output. |
-| `MISSING_REQUIRED_APPROVER_LIST` | The `required_approvals[]` array from the checklist output is absent or empty. The Checkoff Agent has no one to route guidance to. The checklist arrived but is structurally insufficient for routing purposes. |
+| Enum Value                       | Condition                                                                                                                                                                                                                                                                                                                                                                         |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `MISSING_CHECKLIST_OUTPUT`       | The finalized STEP-05 checklist is entirely absent. This is the Checkoff Agent's primary input and the only thing it routes from. Without it the agent has nothing to facilitate.                                                                                                                                                                                                 |
+| `CHECKLIST_NOT_COMPLETE`         | The finalized checklist is present but its `overall_status` is not `COMPLETE` (it is `ESCALATED` or `BLOCKED`). A present but non-COMPLETE checklist is a gate condition failure that the Supervisor should have caught before STEP-06 was triggered. This tells the Supervisor it triggered STEP-06 prematurely — a different resolution path than a missing checklist entirely. |
+| `MISSING_STAKEHOLDER_MAP`        | The role-to-stakeholder routing map is absent from pipeline config. The Checkoff Agent cannot address guidance documents to the correct individuals without knowing who owns each approval. Generic unaddressed guidance is not a valid output.                                                                                                                                   |
+| `MISSING_REQUIRED_APPROVER_LIST` | The `required_approvals[]` array from the checklist output is absent or empty. The Checkoff Agent has no one to route guidance to. The checklist arrived but is structurally insufficient for routing purposes.                                                                                                                                                                   |
 
 **`blocked_fields`** — string array. Lists the specific fields or capabilities that were absent from the input, causing the block. This array is what makes the audit log entry useful: it names exactly what the Supervisor needs to surface to the resolution owner.
 
@@ -254,13 +256,13 @@ When the agent derives `status = blocked`, it MUST emit the following output sha
 
 The Checkoff Agent uses a binary status model. It runs only after STEP-05 reaches terminal state `COMPLETE` and does not inherit the three-status model used by domain agents. `escalated` is not a valid status for this agent.
 
-| Condition | `status` |
-|---|---|
-| Finalized checklist absent from bundle | `blocked` — emit §7.1 with `MISSING_CHECKLIST_OUTPUT` |
-| Finalized checklist present but `overall_status` is not `COMPLETE` | `blocked` — emit §7.1 with `CHECKLIST_NOT_COMPLETE` (Supervisor sequencing error) |
-| Stakeholder map absent from pipeline config | `blocked` — emit §7.1 with `MISSING_STAKEHOLDER_MAP` |
-| `required_approvals[]` absent or empty in the checklist | `blocked` — emit §7.1 with `MISSING_REQUIRED_APPROVER_LIST` |
-| Finalized checklist present, STEP-05 status is `COMPLETE`, stakeholder map present, `required_approvals[]` non-empty, and at least one guidance document successfully produced | `complete` |
+| Condition                                                                                                                                                                      | `status`                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
+| Finalized checklist absent from bundle                                                                                                                                         | `blocked` — emit §7.1 with `MISSING_CHECKLIST_OUTPUT`                             |
+| Finalized checklist present but `overall_status` is not `COMPLETE`                                                                                                             | `blocked` — emit §7.1 with `CHECKLIST_NOT_COMPLETE` (Supervisor sequencing error) |
+| Stakeholder map absent from pipeline config                                                                                                                                    | `blocked` — emit §7.1 with `MISSING_STAKEHOLDER_MAP`                              |
+| `required_approvals[]` absent or empty in the checklist                                                                                                                        | `blocked` — emit §7.1 with `MISSING_REQUIRED_APPROVER_LIST`                       |
+| Finalized checklist present, STEP-05 status is `COMPLETE`, stakeholder map present, `required_approvals[]` non-empty, and at least one guidance document successfully produced | `complete`                                                                        |
 
 **Output shape switching rule:** The agent must first evaluate the blocked conditions above in order. If any blocked condition is met, emit the §7.1 blocked output shape with all applicable `blocked_reason` values. If no blocked condition is met, emit the standard guidance output with `status: complete`.
 
@@ -270,44 +272,44 @@ The Checkoff Agent uses a binary status model. It runs only after STEP-05 reache
 
 ## 9. Exception Handling
 
-| Condition | Required Behavior |
-|---|---|
-| Finalized checklist absent | Bundle is inadmissible. Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_CHECKLIST_OUTPUT"]`. Do not produce guidance documents. Do not emit `guidance_documents`. |
-| Finalized checklist present but `overall_status` is not `COMPLETE` | Supervisor sequencing error. Emit the §7.1 blocked output shape with `blocked_reason: ["CHECKLIST_NOT_COMPLETE"]`. Do not produce guidance documents. Log the premature STEP-06 trigger. |
-| Stakeholder map absent | Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_STAKEHOLDER_MAP"]`. Do not produce guidance documents. Generic unaddressed guidance is not a valid output. |
-| `required_approvals[]` absent or empty in checklist | Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_REQUIRED_APPROVER_LIST"]`. The checklist arrived but is structurally insufficient for routing — the agent has no one to route guidance to. |
-| Multiple blocked conditions simultaneously | Emit the §7.1 blocked output shape with all applicable `blocked_reason` values and combined `blocked_fields`. |
-| Stakeholder role has no outstanding approvals, blockers, or actions | Generate guidance document with empty `next_steps`. Confirm in `instructions` that no action is required from this role at this stage. |
-| Bundle contains content from a prohibited source | Log anomaly. Exclude that content. Continue only if the remaining bundle is admissible; otherwise emit the §7.1 blocked output shape. |
+| Condition                                                           | Required Behavior                                                                                                                                                                                             |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Finalized checklist absent                                          | Bundle is inadmissible. Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_CHECKLIST_OUTPUT"]`. Do not produce guidance documents. Do not emit `guidance_documents`.                          |
+| Finalized checklist present but `overall_status` is not `COMPLETE`  | Supervisor sequencing error. Emit the §7.1 blocked output shape with `blocked_reason: ["CHECKLIST_NOT_COMPLETE"]`. Do not produce guidance documents. Log the premature STEP-06 trigger.                      |
+| Stakeholder map absent                                              | Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_STAKEHOLDER_MAP"]`. Do not produce guidance documents. Generic unaddressed guidance is not a valid output.                                 |
+| `required_approvals[]` absent or empty in checklist                 | Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_REQUIRED_APPROVER_LIST"]`. The checklist arrived but is structurally insufficient for routing — the agent has no one to route guidance to. |
+| Multiple blocked conditions simultaneously                          | Emit the §7.1 blocked output shape with all applicable `blocked_reason` values and combined `blocked_fields`.                                                                                                 |
+| Stakeholder role has no outstanding approvals, blockers, or actions | Generate guidance document with empty `next_steps`. Confirm in `instructions` that no action is required from this role at this stage.                                                                        |
+| Bundle contains content from a prohibited source                    | Log anomaly. Exclude that content. Continue only if the remaining bundle is admissible; otherwise emit the §7.1 blocked output shape.                                                                         |
 
 ---
 
 ## 10. Critical Acceptance Checks
 
-| # | Constraint | Pass Condition |
-|---|---|---|
-| A-01 | One guidance document produced per distinct stakeholder role | `guidance_documents` array contains one entry per role identified per §6.1 |
-| A-02 | No checklist field re-derived or modified | `overall_status`, `data_classification`, `approval_path`, and all other upstream checklist fields are represented accurately and unchanged in guidance content |
-| A-03 | All active blockers surfaced in the owning stakeholder's guidance document | Every checklist `blockers[]` entry appears in `blockers_owned` of the guidance document for the matching `resolution_owner` |
-| A-04 | Guidance produced only from a COMPLETE finalized checklist | STEP-06 does not run when STEP-05 is `ESCALATED` or `BLOCKED`. If triggered prematurely, agent emits `blocked` with `CHECKLIST_NOT_COMPLETE`. |
-| A-05 | No index endpoint queried | Checkoff Agent has no evidence-discovery authority; any index query attempt fails closed and is logged |
-| A-06 | Blocked output uses §7.1 shape with no guidance documents | When `status = blocked`: output contains only `status`, `blocked_reason`, and `blocked_fields`. `guidance_documents` is entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of field/capability names. |
-| A-07 | No new citations introduced | `citations` in each guidance document are a filtered subset of the finalized checklist `citations[]`; no new source references are added |
-| A-08 | Missing stakeholder map blocks the run | When `stakeholder_map` is absent, agent emits `blocked` with `MISSING_STAKEHOLDER_MAP` — generic unaddressed guidance is not a valid output |
-| A-09 | Empty required approvals blocks the run | When `required_approvals[]` is absent or empty, agent emits `blocked` with `MISSING_REQUIRED_APPROVER_LIST` — the checklist is structurally insufficient for routing |
+| #    | Constraint                                                                 | Pass Condition                                                                                                                                                                                                                                                              |
+| ---- | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A-01 | One guidance document produced per distinct stakeholder role               | `guidance_documents` array contains one entry per role identified per §6.1                                                                                                                                                                                                  |
+| A-02 | No checklist field re-derived or modified                                  | `overall_status`, `data_classification`, `approval_path`, and all other upstream checklist fields are represented accurately and unchanged in guidance content                                                                                                              |
+| A-03 | All active blockers surfaced in the owning stakeholder's guidance document | Every checklist `blockers[]` entry appears in `blockers_owned` of the guidance document for the matching `resolution_owner`                                                                                                                                                 |
+| A-04 | Guidance produced only from a COMPLETE finalized checklist                 | STEP-06 does not run when STEP-05 is `ESCALATED` or `BLOCKED`. If triggered prematurely, agent emits `blocked` with `CHECKLIST_NOT_COMPLETE`.                                                                                                                               |
+| A-05 | No index endpoint queried                                                  | Checkoff Agent has no evidence-discovery authority; any index query attempt fails closed and is logged                                                                                                                                                                      |
+| A-06 | Blocked output uses §7.1 shape with no guidance documents                  | When `status = blocked`: output contains only `status`, `blocked_reason`, and `blocked_fields`. `guidance_documents` is entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of field/capability names. |
+| A-07 | No new citations introduced                                                | `citations` in each guidance document are a filtered subset of the finalized checklist `citations[]`; no new source references are added                                                                                                                                    |
+| A-08 | Missing stakeholder map blocks the run                                     | When `stakeholder_map` is absent, agent emits `blocked` with `MISSING_STAKEHOLDER_MAP` — generic unaddressed guidance is not a valid output                                                                                                                                 |
+| A-09 | Empty required approvals blocks the run                                    | When `required_approvals[]` is absent or empty, agent emits `blocked` with `MISSING_REQUIRED_APPROVER_LIST` — the checklist is structurally insufficient for routing                                                                                                        |
 
 ---
 
 ## 11. What This Agent Does Not Own
 
-| Item | Governed By |
-|---|---|
-| Data classification | IT Security Agent (STEP-02) |
-| DPA and NDA determinations | Legal Agent (STEP-03) |
-| Approval path routing | Procurement Agent (STEP-04) |
-| Finalized checklist and overall_status | Checklist Assembler (STEP-05) |
-| Blocker resolution | Human stakeholders; pipeline identifies and routes, does not resolve |
-| Approval waiver authority | Human-owned; this pipeline routes and notifies but does not waive |
-| Source authority hierarchy | CC-001 §5 |
-| Bundle assembly | Supervisor / ORCH-PLAN-001 STEP-06 |
-| Output schema authority | Design Doc §10 |
+| Item                                   | Governed By                                                          |
+| -------------------------------------- | -------------------------------------------------------------------- |
+| Data classification                    | IT Security Agent (STEP-02)                                          |
+| DPA and NDA determinations             | Legal Agent (STEP-03)                                                |
+| Approval path routing                  | Procurement Agent (STEP-04)                                          |
+| Finalized checklist and overall_status | Checklist Assembler (STEP-05)                                        |
+| Blocker resolution                     | Human stakeholders; pipeline identifies and routes, does not resolve |
+| Approval waiver authority              | Human-owned; this pipeline routes and notifies but does not waive    |
+| Source authority hierarchy             | CC-001 §5                                                            |
+| Bundle assembly                        | Supervisor / ORCH-PLAN-001 STEP-06                                   |
+| Output schema authority                | Design Doc §10                                                       |

@@ -1,4 +1,5 @@
 # Agent Spec — Legal Agent
+
 ## SPEC-AGENT-LEG-001 v0.12
 
 **Document ID:** SPEC-AGENT-LEG-001
@@ -30,14 +31,14 @@ The Legal Agent does not originate legal facts. It applies Tier 1 DPA trigger ma
 
 ## 1. Agent Identity
 
-| Field | Value |
-|---|---|
-| **Agent ID** | `legal_agent` |
-| **Pipeline Step** | STEP-03 — R-03: Legal and Compliance Trigger Determination |
-| **Assigned By** | Supervisor Agent |
-| **Upstream Dependency** | STEP-02 must be COMPLETE. `data_classification` field must be present in STEP-02 output. |
-| **Parallel With** | — |
-| **Downstream Dependents** | STEP-04 (Procurement Agent), then STEP-05 (Checklist Assembler) |
+| Field                     | Value                                                                                    |
+| ------------------------- | ---------------------------------------------------------------------------------------- |
+| **Agent ID**              | `legal_agent`                                                                            |
+| **Pipeline Step**         | STEP-03 — R-03: Legal and Compliance Trigger Determination                               |
+| **Assigned By**           | Supervisor Agent                                                                         |
+| **Upstream Dependency**   | STEP-02 must be COMPLETE. `data_classification` field must be present in STEP-02 output. |
+| **Parallel With**         | —                                                                                        |
+| **Downstream Dependents** | STEP-04 (Procurement Agent), then STEP-05 (Checklist Assembler)                          |
 
 ---
 
@@ -64,6 +65,7 @@ The Design Doc, Context Contract, and Orchestration Plan govern how the system i
 The Supervisor assembles this bundle before the agent runs. The agent must treat the bundle as its complete and exclusive evidence base for this step.
 
 **Bundle composition (assembly priority order):**
+
 1. IT Security Agent output — `data_classification` field only
 2. Questionnaire EU personal data fields — `eu_personal_data_flag`, `data_subjects_eu`
 3. Questionnaire NDA field — `existing_nda_status`
@@ -72,6 +74,7 @@ The Supervisor assembles this bundle before the agent runs. The agent must treat
 6. ISP-001 NDA clause chunk — §12.1.4 only
 
 **Required fields for an admissible STEP-03 bundle:**
+
 - `data_classification` from STEP-02 IT Security output (required; bundle is inadmissible without it)
 - `eu_personal_data_flag` from questionnaire
 - `data_subjects_eu` from questionnaire
@@ -87,13 +90,13 @@ If `data_classification` is absent or the STEP-02 output is schema-invalid, the 
 
 Derived from CC-001 §6.1. The agent must treat this as a hard access list, not a guideline.
 
-| Index Endpoint | Access |
-|---|---|
-| `idx_security_policy` | ✓ Read-only (NDA clause only) |
-| `idx_dpa_matrix` | ✓ Full |
-| `idx_procurement_matrix` | ✗ No access |
-| `vq_direct_access` | ✓ Full |
-| `idx_slack_notes` | ✗ No access |
+| Index Endpoint           | Access                        |
+| ------------------------ | ----------------------------- |
+| `idx_security_policy`    | ✓ Read-only (NDA clause only) |
+| `idx_dpa_matrix`         | ✓ Full                        |
+| `idx_procurement_matrix` | ✗ No access                   |
+| `vq_direct_access`       | ✓ Full                        |
+| `idx_slack_notes`        | ✗ No access                   |
 
 **The Legal Agent does not query indices independently.** The Supervisor performs all retrieval and bundle assembly. If the agent detects that its bundle contains evidence from a prohibited index, it must log the anomaly, exclude that evidence from reasoning and citation, and continue only if the remaining bundle is still admissible. If excluding the prohibited evidence leaves the bundle inadmissible, the agent must emit `blocked`.
 
@@ -128,13 +131,13 @@ The architectural system may enforce retrieval permissions upstream. This spec r
 
 The Legal Agent is the **sole owner** of the following determinations. Downstream agents consume these as authoritative inputs and may not redefine or override them.
 
-| Determination | Owned By |
-|---|---|
-| `dpa_required` | Legal Agent |
-| `dpa_blocker` | Legal Agent |
-| `nda_status` | Legal Agent — normalized from questionnaire `existing_nda_status` against the ISP-001 §12.1.4 clause |
-| `nda_blocker` | Legal Agent |
-| `trigger_rule_cited` | Legal Agent — DPA trigger row citations only |
+| Determination        | Owned By                                                                                             |
+| -------------------- | ---------------------------------------------------------------------------------------------------- |
+| `dpa_required`       | Legal Agent                                                                                          |
+| `dpa_blocker`        | Legal Agent                                                                                          |
+| `nda_status`         | Legal Agent — normalized from questionnaire `existing_nda_status` against the ISP-001 §12.1.4 clause |
+| `nda_blocker`        | Legal Agent                                                                                          |
+| `trigger_rule_cited` | Legal Agent — DPA trigger row citations only                                                         |
 
 **Upstream consumption rule:** The Legal Agent consumes `data_classification` from STEP-02 as a read-only authoritative input. It may not reinterpret or override that field.
 
@@ -193,12 +196,12 @@ This ordering is mandatory. `dpa_blocker` and `nda_blocker` must not be emitted 
 
 The DPA determination applies DPA-TM-001 trigger rows to the confirmed data profile. The relevant triggering conditions for this pipeline are:
 
-| Condition | `dpa_required` |
-|---|---|
-| `eu_personal_data_confirmed = YES` AND at least one trigger matrix row matches (e.g., row A-01) | `true` |
-| `data_classification = REGULATED` AND data profile matches one or more trigger conditions | `true` |
-| `data_classification = UNREGULATED` AND `eu_personal_data_confirmed = NO` AND no trigger row matches | `false` |
-| Data profile warrants DPA review but no trigger matrix row covers the pattern | Cannot determine — emit `escalated` |
+| Condition                                                                                            | `dpa_required`                      |
+| ---------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `eu_personal_data_confirmed = YES` AND at least one trigger matrix row matches (e.g., row A-01)      | `true`                              |
+| `data_classification = REGULATED` AND data profile matches one or more trigger conditions            | `true`                              |
+| `data_classification = UNREGULATED` AND `eu_personal_data_confirmed = NO` AND no trigger row matches | `false`                             |
+| Data profile warrants DPA review but no trigger matrix row covers the pattern                        | Cannot determine — emit `escalated` |
 
 A `dpa_required = true` determination requires at least one explicitly cited trigger matrix row. A `dpa_required = false` determination as COMPLETE requires all three of the following: `(a)` `data_classification = UNREGULATED`, `(b)` questionnaire evidence confirms `eu_personal_data_confirmed = NO`, and `(c)` the evaluated trigger set contains no matching row.
 
@@ -206,22 +209,22 @@ A `dpa_required = true` determination requires at least one explicitly cited tri
 
 The blocker derivation consumes the questionnaire `existing_dpa_status` field (canonical values `EXECUTED | PENDING | NOT_STARTED | UNKNOWN` per CC-001 §14). Absence of the field in the bundle is treated as equivalent to a non-EXECUTED status.
 
-| Condition | `dpa_blocker` |
-|---|---|
+| Condition                                                                                                        | `dpa_blocker`                    |
+| ---------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `dpa_required = true` AND `existing_dpa_status != EXECUTED` (including when the field is absent from the bundle) | `true` — hard downstream blocker |
-| `dpa_required = true` AND `existing_dpa_status = EXECUTED` | `false` |
-| `dpa_required = false` | `false` |
+| `dpa_required = true` AND `existing_dpa_status = EXECUTED`                                                       | `false`                          |
+| `dpa_required = false`                                                                                           | `false`                          |
 
 `dpa_blocker = true` is an evidentially COMPLETE determination — the evidence supports the trigger conclusion. The blocker is a workflow consequence, not an evidence gap. The terminal STEP-03 status is `escalated` when `dpa_blocker = true`, because human legal execution is explicitly required before downstream completion.
 
 ### 8.4 NDA Status and Blocker Derivation
 
 | `nda_status_raw` from questionnaire | `nda_status` (normalized) | `nda_blocker` |
-|---|---|---|
-| `EXECUTED` | `EXECUTED` | `false` |
-| `PENDING` | `PENDING` | `true` |
-| `NOT_STARTED` | `NOT_STARTED` | `true` |
-| Field absent or value unrecognized | `UNKNOWN` | `true` |
+| ----------------------------------- | ------------------------- | ------------- |
+| `EXECUTED`                          | `EXECUTED`                | `false`       |
+| `PENDING`                           | `PENDING`                 | `true`        |
+| `NOT_STARTED`                       | `NOT_STARTED`             | `true`        |
+| Field absent or value unrecognized  | `UNKNOWN`                 | `true`        |
 
 `nda_blocker = true` is a valid, complete determination — the NDA status has been assessed from questionnaire evidence and the blocker is a workflow consequence requiring human action, not an evidence gap. `nda_blocker = false` requires a confirmed `EXECUTED` status from questionnaire evidence. When the ISP-001 §12.1.4 clause is present in the bundle it must be cited; if absent, emit `escalated`.
 
@@ -231,14 +234,14 @@ The blocker derivation consumes the questionnaire `existing_dpa_status` field (c
 
 The Legal Agent's terminal step status is derived from the combination of DPA and NDA determination outcomes. Apply these conditions in the order shown:
 
-| Condition | Emitted `status` |
-|---|---|
-| `upstream_data_classification` absent or STEP-02 schema-invalid | `blocked` |
-| Tier 1 DPA sources conflict on the same trigger question | `escalated` — conflicting authoritative legal sources |
-| No trigger matrix row retrieved for a data profile that warrants DPA review | `escalated` — evidence insufficient; no defined rule covers this pattern |
-| `dpa_required = true` AND `dpa_blocker = true` | `escalated` — human legal execution is explicitly required by policy |
-| `nda_clause_chunks` absent from bundle and no escalation condition above has fired | `escalated` — NDA clause evidence absent; citation cannot be completed |
-| All required evidence present and no escalation or blocked condition applies | `complete` |
+| Condition                                                                          | Emitted `status`                                                         |
+| ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `upstream_data_classification` absent or STEP-02 schema-invalid                    | `blocked`                                                                |
+| Tier 1 DPA sources conflict on the same trigger question                           | `escalated` — conflicting authoritative legal sources                    |
+| No trigger matrix row retrieved for a data profile that warrants DPA review        | `escalated` — evidence insufficient; no defined rule covers this pattern |
+| `dpa_required = true` AND `dpa_blocker = true`                                     | `escalated` — human legal execution is explicitly required by policy     |
+| `nda_clause_chunks` absent from bundle and no escalation condition above has fired | `escalated` — NDA clause evidence absent; citation cannot be completed   |
+| All required evidence present and no escalation or blocked condition applies       | `complete`                                                               |
 
 > **Note on conflict definition.** "Conflict on the same trigger question" means two or more Tier 1 rows whose trigger conditions both evaluate to true against the same confirmed fact pattern and disagree on the DPA outcome. It does not mean two rows that address related but disjoint fact patterns (e.g., one row covering PII retention and another explicitly covering anonymized derivatives) — those are complementary rules, not conflicts, and the agent should apply whichever row matches the confirmed evidence. A conflict exists only when both rows fire on the same evidence and cannot be reconciled by reading their trigger conditions as mutually exclusive.
 
@@ -301,17 +304,17 @@ The agent must return a single schema-valid JSON object. No other output format 
 
 ### Output field constraints
 
-| Field | Constraint |
-|---|---|
-| `dpa_required` | Must be present on every non-blocked run. Absent on blocked runs (§9.1). On escalated runs, set to `null` if the agent cannot resolve the DPA determination (§9.2). |
-| `dpa_blocker` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` if `dpa_required` is `null` (cannot derive a blocker from an unresolved determination). Must be `true` whenever `dpa_required = true` and questionnaire `existing_dpa_status != EXECUTED` (including when the field is absent from the bundle). |
-| `nda_status` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` only if the NDA determination itself cannot be resolved (§9.2). Must be one of the four defined enum values or `null`. |
-| `nda_blocker` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` if `nda_status` is `null`. Must be `true` whenever `nda_status != EXECUTED`. |
-| `trigger_rule_cited` | DPA trigger citations only. Must contain at least one entry when `dpa_required = true`. May be `[]` only when `dpa_required = false` as COMPLETE. On escalated runs where `dpa_required` is `null`, set to `null`. |
-| `trigger_rule_cited` entries | Each entry must carry `source_id`, `version`, `row_id`, and `trigger_condition`. Generic matrix references without row IDs are not permitted. |
-| `policy_citations` | Must include at least one PRIMARY DPA-TM-001 row citation when `dpa_required = true`. When `nda_clause_chunks` are present in the bundle, must include at least one PRIMARY ISP-001 §12.1.4 citation for the NDA determination. On escalated runs, include citations for determinations that were resolved; omit citations for determinations that could not be resolved (the corresponding determination field will be `null`). |
-| `status = escalated` | All determination fields must be present (not absent). Fields the agent resolved carry their derived values. Fields the agent could not resolve are `null`. See §9.2. When escalation is clause-level, `policy_citations` must cite both conflicting chunks. Full escalation payload captured in audit log per CC-001 §13.1. |
-| `status` | Lowercase. One of `complete`, `escalated`, or `blocked`. |
+| Field                        | Constraint                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dpa_required`               | Must be present on every non-blocked run. Absent on blocked runs (§9.1). On escalated runs, set to `null` if the agent cannot resolve the DPA determination (§9.2).                                                                                                                                                                                                                                                              |
+| `dpa_blocker`                | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` if `dpa_required` is `null` (cannot derive a blocker from an unresolved determination). Must be `true` whenever `dpa_required = true` and questionnaire `existing_dpa_status != EXECUTED` (including when the field is absent from the bundle).                                                                               |
+| `nda_status`                 | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` only if the NDA determination itself cannot be resolved (§9.2). Must be one of the four defined enum values or `null`.                                                                                                                                                                                                        |
+| `nda_blocker`                | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` if `nda_status` is `null`. Must be `true` whenever `nda_status != EXECUTED`.                                                                                                                                                                                                                                                  |
+| `trigger_rule_cited`         | DPA trigger citations only. Must contain at least one entry when `dpa_required = true`. May be `[]` only when `dpa_required = false` as COMPLETE. On escalated runs where `dpa_required` is `null`, set to `null`.                                                                                                                                                                                                               |
+| `trigger_rule_cited` entries | Each entry must carry `source_id`, `version`, `row_id`, and `trigger_condition`. Generic matrix references without row IDs are not permitted.                                                                                                                                                                                                                                                                                    |
+| `policy_citations`           | Must include at least one PRIMARY DPA-TM-001 row citation when `dpa_required = true`. When `nda_clause_chunks` are present in the bundle, must include at least one PRIMARY ISP-001 §12.1.4 citation for the NDA determination. On escalated runs, include citations for determinations that were resolved; omit citations for determinations that could not be resolved (the corresponding determination field will be `null`). |
+| `status = escalated`         | All determination fields must be present (not absent). Fields the agent resolved carry their derived values. Fields the agent could not resolve are `null`. See §9.2. When escalation is clause-level, `policy_citations` must cite both conflicting chunks. Full escalation payload captured in audit log per CC-001 §13.1.                                                                                                     |
+| `status`                     | Lowercase. One of `complete`, `escalated`, or `blocked`.                                                                                                                                                                                                                                                                                                                                                                         |
 
 ### 9.1 Blocked Output Shape
 
@@ -327,12 +330,12 @@ When the agent derives `status = blocked` from §8.5, it MUST emit the following
 
 **`blocked_reason`** — enum array. Lists the specific gate-condition or admissibility failure(s) that caused the block. Multiple values are permitted when multiple inputs are missing simultaneously. Defined enum values for the Legal Agent:
 
-| Enum Value | Condition |
-|---|---|
-| `MISSING_UPSTREAM_IT_SECURITY_OUTPUT` | STEP-02 output is absent or schema-invalid — `data_classification` cannot be consumed |
-| `MISSING_QUESTIONNAIRE_EU_FIELDS` | `eu_personal_data_flag` or `data_subjects_eu` absent from the bundle when required for admissibility |
-| `MISSING_DPA_TRIGGER_MATRIX` | No DPA-TM-001 rows delivered in the bundle when the data profile requires trigger evaluation |
-| `MISSING_NDA_CLAUSE` | `nda_clause_chunks` absent from the bundle when NDA determination requires the ISP-001 §12.1.4 clause |
+| Enum Value                            | Condition                                                                                             |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `MISSING_UPSTREAM_IT_SECURITY_OUTPUT` | STEP-02 output is absent or schema-invalid — `data_classification` cannot be consumed                 |
+| `MISSING_QUESTIONNAIRE_EU_FIELDS`     | `eu_personal_data_flag` or `data_subjects_eu` absent from the bundle when required for admissibility  |
+| `MISSING_DPA_TRIGGER_MATRIX`          | No DPA-TM-001 rows delivered in the bundle when the data profile requires trigger evaluation          |
+| `MISSING_NDA_CLAUSE`                  | `nda_clause_chunks` absent from the bundle when NDA determination requires the ISP-001 §12.1.4 clause |
 
 **`blocked_fields`** — string array. Lists the specific canonical field names (per CC-001 §15) that were absent or null in the upstream input, causing the block. This array is what makes the audit log entry useful: it names exactly what the Supervisor needs to surface to the resolution owner.
 
@@ -346,14 +349,14 @@ When the agent derives `status = escalated` from §8.5, it emits the same determ
 
 **Per-field escalated null rules:**
 
-| Field | When `null` on an escalated run |
-|---|---|
-| `dpa_required` | Agent cannot determine DPA requirement — e.g., no trigger matrix row covers the data profile, or Tier 1 sources conflict on the same trigger question |
-| `dpa_blocker` | `dpa_required` is `null` — cannot derive a blocker from an unresolved upstream determination |
-| `nda_status` | Agent cannot resolve the NDA determination — e.g., questionnaire `existing_nda_status` absent AND `nda_clause_chunks` absent, leaving no evidence to assess |
-| `nda_blocker` | `nda_status` is `null` — cannot derive a blocker from an unresolved upstream determination |
-| `trigger_rule_cited` | `dpa_required` is `null` — no citation can be made for an unresolved determination |
-| `policy_citations` | All determination-supporting citations are unresolvable — set to `null`. If some citations are resolvable (e.g., NDA citation is valid but DPA citation is not), include the resolvable citations and omit the unresolvable ones |
+| Field                | When `null` on an escalated run                                                                                                                                                                                                  |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `dpa_required`       | Agent cannot determine DPA requirement — e.g., no trigger matrix row covers the data profile, or Tier 1 sources conflict on the same trigger question                                                                            |
+| `dpa_blocker`        | `dpa_required` is `null` — cannot derive a blocker from an unresolved upstream determination                                                                                                                                     |
+| `nda_status`         | Agent cannot resolve the NDA determination — e.g., questionnaire `existing_nda_status` absent AND `nda_clause_chunks` absent, leaving no evidence to assess                                                                      |
+| `nda_blocker`        | `nda_status` is `null` — cannot derive a blocker from an unresolved upstream determination                                                                                                                                       |
+| `trigger_rule_cited` | `dpa_required` is `null` — no citation can be made for an unresolved determination                                                                                                                                               |
+| `policy_citations`   | All determination-supporting citations are unresolvable — set to `null`. If some citations are resolvable (e.g., NDA citation is valid but DPA citation is not), include the resolvable citations and omit the unresolvable ones |
 
 **Fields that are resolved on escalated runs carry their normal values.** For example, when `dpa_required = true` and `dpa_blocker = true` produces `escalated` (human legal execution required), all fields are populated — `dpa_required: true`, `dpa_blocker: true`, `nda_status` from questionnaire, `nda_blocker` derived, `trigger_rule_cited` with the matching rows, `policy_citations` with the supporting citations. No fields are `null` because the agent resolved everything; the escalation is a workflow consequence, not an evidence gap.
 
@@ -445,17 +448,17 @@ Per CC-001 §14:
 
 ## 12. Exception Handling
 
-| Condition | Required Behavior |
-|---|---|
-| Bundle is empty or missing | Emit the §9.1 blocked output shape. Do not produce a determination. Do not emit any determination fields. |
-| `data_classification` absent from STEP-02 output | Bundle is inadmissible. Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_UPSTREAM_IT_SECURITY_OUTPUT"]` and `blocked_fields` listing the absent upstream fields. Do not proceed. Do not emit any determination fields. |
-| STEP-02 output is `AMBIGUOUS` on `data_classification` | DPA check must still proceed using available questionnaire EU personal data evidence. Flag `data_classification` ambiguity explicitly. Emit `escalated` if no matrix row can be matched. |
-| `eu_personal_data_flag` or `data_subjects_eu` absent | Flag the specific missing field by canonical name. Emit `escalated`. |
-| No DPA trigger matrix row retrieved for a profile expecting a match | Emit `status: escalated`. Log no-matrix-match condition. Do not assert `dpa_required = false`. |
-| `nda_clause_chunks` not retrieved | Emit `status: escalated`. Log the missing clause evidence. |
-| Bundle contains evidence from a prohibited index | Log anomaly. Exclude the prohibited evidence from reasoning and citation. Continue only if the remaining bundle is still admissible; otherwise emit the §9.1 blocked output shape. |
-| Malformed or schema-invalid bundle | Emit the §9.1 blocked output shape. Do not attempt to reason over partial input. Do not emit any determination fields. |
-| Two DPA-TM-001 rows directly conflict on the same trigger question | Emit `status: escalated`. Cite both conflicting rows in `trigger_rule_cited`. Full escalation payload written to audit log. |
+| Condition                                                           | Required Behavior                                                                                                                                                                                                                        |
+| ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bundle is empty or missing                                          | Emit the §9.1 blocked output shape. Do not produce a determination. Do not emit any determination fields.                                                                                                                                |
+| `data_classification` absent from STEP-02 output                    | Bundle is inadmissible. Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_UPSTREAM_IT_SECURITY_OUTPUT"]` and `blocked_fields` listing the absent upstream fields. Do not proceed. Do not emit any determination fields. |
+| STEP-02 output is `AMBIGUOUS` on `data_classification`              | DPA check must still proceed using available questionnaire EU personal data evidence. Flag `data_classification` ambiguity explicitly. Emit `escalated` if no matrix row can be matched.                                                 |
+| `eu_personal_data_flag` or `data_subjects_eu` absent                | Flag the specific missing field by canonical name. Emit `escalated`.                                                                                                                                                                     |
+| No DPA trigger matrix row retrieved for a profile expecting a match | Emit `status: escalated`. Log no-matrix-match condition. Do not assert `dpa_required = false`.                                                                                                                                           |
+| `nda_clause_chunks` not retrieved                                   | Emit `status: escalated`. Log the missing clause evidence.                                                                                                                                                                               |
+| Bundle contains evidence from a prohibited index                    | Log anomaly. Exclude the prohibited evidence from reasoning and citation. Continue only if the remaining bundle is still admissible; otherwise emit the §9.1 blocked output shape.                                                       |
+| Malformed or schema-invalid bundle                                  | Emit the §9.1 blocked output shape. Do not attempt to reason over partial input. Do not emit any determination fields.                                                                                                                   |
+| Two DPA-TM-001 rows directly conflict on the same trigger question  | Emit `status: escalated`. Cite both conflicting rows in `trigger_rule_cited`. Full escalation payload written to audit log.                                                                                                              |
 
 ---
 
@@ -673,18 +676,18 @@ STEP-02 emits `data_classification = AMBIGUOUS`. Questionnaire confirms `eu_pers
 
 These are the must-pass checks for this spec. They belong here as implementation-critical acceptance checks, not as a full evaluation program.
 
-| # | Constraint | Pass Condition |
-|---|---|---|
-| A-01 | `dpa_required` backed by at least one Tier 1 trigger matrix row when true | `trigger_rule_cited` contains at least one PRIMARY DPA-TM-001 entry with `row_id` |
-| A-02 | `dpa_blocker = true` whenever `dpa_required = true` and questionnaire `existing_dpa_status != EXECUTED` (including absence of the field) | Hard rule — no exceptions |
-| A-03 | `nda_blocker = true` whenever `nda_status != EXECUTED` | Hard rule — no exceptions |
-| A-04 | No Tier 3 (Slack) source cited as PRIMARY | All Tier 3 citations remain SUPPLEMENTARY |
-| A-05 | `dpa_required = false` as COMPLETE only when classification is UNREGULATED, EU personal data is confirmed absent, and no evaluated trigger row matches | Agent does not assert `false` when data profile warrants DPA review but no matrix row was retrieved |
-| A-06 | All required output fields present and structurally valid | Schema-valid JSON. On `complete` runs: `dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`, `status` must be non-null. On `escalated` runs: all determination fields must be present (not absent); resolved fields are non-null, unresolvable fields are `null` per §9.2. `trigger_rule_cited` may be `[]` only when `dpa_required = false` as COMPLETE. `policy_citations` must contain at least one entry on any complete, non-trivial run. |
-| A-07 | `dpa_blocker = true` produces `status = escalated` | Agent does not emit `complete` when a DPA blocker is confirmed — `escalated` is the only valid terminal status in that case |
-| A-08 | Upstream `data_classification` not re-derived or overridden | Legal Agent output reflects STEP-02 classification without reinterpretation |
-| A-09 | Blocked output uses §9.1 shape with no determination fields | When `status = blocked`: output contains only `status`, `blocked_reason`, and `blocked_fields`. Determination fields (`dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`, `trigger_rule_cited`, `policy_citations`) are entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of canonical field names. |
-| A-10 | Escalated output has all determination fields present per §9.2 | When `status = escalated`: all six determination fields (`dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`, `trigger_rule_cited`, `policy_citations`) are present (not absent). Resolved fields carry their derived values. Unresolvable fields are `null`. No field is absent. |
+| #    | Constraint                                                                                                                                             | Pass Condition                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A-01 | `dpa_required` backed by at least one Tier 1 trigger matrix row when true                                                                              | `trigger_rule_cited` contains at least one PRIMARY DPA-TM-001 entry with `row_id`                                                                                                                                                                                                                                                                                                                                                                    |
+| A-02 | `dpa_blocker = true` whenever `dpa_required = true` and questionnaire `existing_dpa_status != EXECUTED` (including absence of the field)               | Hard rule — no exceptions                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| A-03 | `nda_blocker = true` whenever `nda_status != EXECUTED`                                                                                                 | Hard rule — no exceptions                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| A-04 | No Tier 3 (Slack) source cited as PRIMARY                                                                                                              | All Tier 3 citations remain SUPPLEMENTARY                                                                                                                                                                                                                                                                                                                                                                                                            |
+| A-05 | `dpa_required = false` as COMPLETE only when classification is UNREGULATED, EU personal data is confirmed absent, and no evaluated trigger row matches | Agent does not assert `false` when data profile warrants DPA review but no matrix row was retrieved                                                                                                                                                                                                                                                                                                                                                  |
+| A-06 | All required output fields present and structurally valid                                                                                              | Schema-valid JSON. On `complete` runs: `dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`, `status` must be non-null. On `escalated` runs: all determination fields must be present (not absent); resolved fields are non-null, unresolvable fields are `null` per §9.2. `trigger_rule_cited` may be `[]` only when `dpa_required = false` as COMPLETE. `policy_citations` must contain at least one entry on any complete, non-trivial run. |
+| A-07 | `dpa_blocker = true` produces `status = escalated`                                                                                                     | Agent does not emit `complete` when a DPA blocker is confirmed — `escalated` is the only valid terminal status in that case                                                                                                                                                                                                                                                                                                                          |
+| A-08 | Upstream `data_classification` not re-derived or overridden                                                                                            | Legal Agent output reflects STEP-02 classification without reinterpretation                                                                                                                                                                                                                                                                                                                                                                          |
+| A-09 | Blocked output uses §9.1 shape with no determination fields                                                                                            | When `status = blocked`: output contains only `status`, `blocked_reason`, and `blocked_fields`. Determination fields (`dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`, `trigger_rule_cited`, `policy_citations`) are entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of canonical field names.                                                                   |
+| A-10 | Escalated output has all determination fields present per §9.2                                                                                         | When `status = escalated`: all six determination fields (`dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker`, `trigger_rule_cited`, `policy_citations`) are present (not absent). Resolved fields carry their derived values. Unresolvable fields are `null`. No field is absent.                                                                                                                                                             |
 
 A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation artifact.
 
@@ -692,14 +695,14 @@ A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation 
 
 ## 15. What This Agent Does Not Own
 
-| Item | Governed By |
-|---|---|
-| Data classification and security posture | IT Security Agent (STEP-02) |
-| Approval path routing | Procurement Agent (STEP-04) |
-| STEP-03 → STEP-04 execution order and gate sequencing | Design Doc / ORCH-PLAN-001 |
-| Source authority hierarchy | CC-001 §5 |
-| Retrieval routing and bundle assembly | Supervisor / ORCH-PLAN-001 STEP-03 |
-| Output schema authority | Design Doc §10 |
-| Checklist composition | Checklist Assembler (STEP-05) |
-| DPA execution | Legal / General Counsel (human-owned; pipeline triggers but does not execute) |
-| NDA execution | Procurement / Legal (human-owned; pipeline flags but does not execute) |
+| Item                                                  | Governed By                                                                   |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Data classification and security posture              | IT Security Agent (STEP-02)                                                   |
+| Approval path routing                                 | Procurement Agent (STEP-04)                                                   |
+| STEP-03 → STEP-04 execution order and gate sequencing | Design Doc / ORCH-PLAN-001                                                    |
+| Source authority hierarchy                            | CC-001 §5                                                                     |
+| Retrieval routing and bundle assembly                 | Supervisor / ORCH-PLAN-001 STEP-03                                            |
+| Output schema authority                               | Design Doc §10                                                                |
+| Checklist composition                                 | Checklist Assembler (STEP-05)                                                 |
+| DPA execution                                         | Legal / General Counsel (human-owned; pipeline triggers but does not execute) |
+| NDA execution                                         | Procurement / Legal (human-owned; pipeline flags but does not execute)        |

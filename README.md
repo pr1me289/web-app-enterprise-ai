@@ -13,6 +13,7 @@ The underlying pipeline was built in a separate repository. This repository pres
 This site is a narrative web application structured around seven content parts, split across three deployable pages:
 
 **Main page (long-scroll, parts 1–5):**
+
 1. **Title** — framing the enterprise AI paradox: investment vs. impact
 2. **Introduction** — a spec-driven approach to enterprise context engineering
 3. **Problem & Landscape** — current approaches, players, and constraints in enterprise AI
@@ -31,7 +32,7 @@ Every section uses progressive disclosure — a plain-language default view with
 
 Read presentation_flow.md
 
-This is our current working (subject to change) presentation flow and ideation doc 
+This is our current working (subject to change) presentation flow and ideation doc
 
 ---
 
@@ -65,21 +66,21 @@ A few principles drive how this site is built:
 
 ## Tech Stack
 
-| Layer | Tool | Purpose |
-|---|---|---|
-| **Framework** | [Astro](https://astro.build) | Content-first static site generator with React island support. Fast to build, low framework overhead, MDX-native — ideal for narrative sites with interactive bits. |
-| **Styling** | [Tailwind CSS](https://tailwindcss.com) | Utility-first CSS framework. Inline classes mean fast iteration, no separate CSS files to maintain, pairs natively with Astro. |
-| **Content** | [MDX](https://mdxjs.com) | Markdown with embedded JSX components. Prose as markdown, React components inline wherever interactivity is needed. Native Astro support. |
-| **UI primitives** | [Radix UI](https://www.radix-ui.com) | Headless accessible component primitives (accordions, modals, tabs, dialogs). Tailwind styling on top. Comprehensive and battle-tested. |
-| **Component patterns** | [shadcn/ui](https://ui.shadcn.com) | Copy-paste component patterns built on Radix + Tailwind. You own the code. Excellent starting points for expanders, tabs, dialogs. |
-| **Animation** | [Framer Motion](https://motion.dev) | React animation library. Wrap elements in `<motion.div>`, add props. Handles scroll-driven reveals, state transitions, gestures. |
-| **Data visualization** | [D3.js](https://d3js.org) | Low-level visualization library for the orchestration graph, retrieval flow, and any custom data viz. |
-| **Diagrams** | [Mermaid](https://mermaid.js.org) | Text-to-diagram rendering (flowcharts, sequence diagrams, state machines). Write diagrams as code. |
-| **Hosting** | [Vercel](https://vercel.com) | One-command deploys, automatic preview URLs on every push, free tier covers portfolio traffic. Native Astro integration. |
-| **Runtime** | [Node.js 20+](https://nodejs.org) | Required by Astro. Managed via `nvm`. |
-| **Package manager** | [pnpm](https://pnpm.io) | Faster than npm, disk-efficient, clean workspace support. |
-| **Editor** | [VSCode](https://code.visualstudio.com) | With Astro, MDX, and Tailwind IntelliSense extensions. |
-| **AI pair** | [Claude Code](https://www.anthropic.com/claude-code) | Agentic coding for scaffolding and iteration. Driven by `CLAUDE.md`. |
+| Layer                  | Tool                                                 | Purpose                                                                                                                                                             |
+| ---------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Framework**          | [Astro](https://astro.build)                         | Content-first static site generator with React island support. Fast to build, low framework overhead, MDX-native — ideal for narrative sites with interactive bits. |
+| **Styling**            | [Tailwind CSS](https://tailwindcss.com)              | Utility-first CSS framework. Inline classes mean fast iteration, no separate CSS files to maintain, pairs natively with Astro.                                      |
+| **Content**            | [MDX](https://mdxjs.com)                             | Markdown with embedded JSX components. Prose as markdown, React components inline wherever interactivity is needed. Native Astro support.                           |
+| **UI primitives**      | [Radix UI](https://www.radix-ui.com)                 | Headless accessible component primitives (accordions, modals, tabs, dialogs). Tailwind styling on top. Comprehensive and battle-tested.                             |
+| **Component patterns** | [shadcn/ui](https://ui.shadcn.com)                   | Copy-paste component patterns built on Radix + Tailwind. You own the code. Excellent starting points for expanders, tabs, dialogs.                                  |
+| **Animation**          | [Framer Motion](https://motion.dev)                  | React animation library. Wrap elements in `<motion.div>`, add props. Handles scroll-driven reveals, state transitions, gestures.                                    |
+| **Data visualization** | [D3.js](https://d3js.org)                            | Low-level visualization library for the orchestration graph, retrieval flow, and any custom data viz.                                                               |
+| **Diagrams**           | [Mermaid](https://mermaid.js.org)                    | Text-to-diagram rendering (flowcharts, sequence diagrams, state machines). Write diagrams as code.                                                                  |
+| **Hosting**            | [Vercel](https://vercel.com)                         | One-command deploys, automatic preview URLs on every push, free tier covers portfolio traffic. Native Astro integration.                                            |
+| **Runtime**            | [Node.js 20+](https://nodejs.org)                    | Required by Astro. Managed via `nvm`.                                                                                                                               |
+| **Package manager**    | [pnpm](https://pnpm.io)                              | Faster than npm, disk-efficient, clean workspace support.                                                                                                           |
+| **Editor**             | [VSCode](https://code.visualstudio.com)              | With Astro, MDX, and Tailwind IntelliSense extensions.                                                                                                              |
+| **AI pair**            | [Claude Code](https://www.anthropic.com/claude-code) | Agentic coding for scaffolding and iteration. Driven by `CLAUDE.md`.                                                                                                |
 
 ---
 

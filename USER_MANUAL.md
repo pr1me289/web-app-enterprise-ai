@@ -1,6 +1,6 @@
 # USER_MANUAL
 
-Operator reference for the `web-app-enterprise-ai` repo. For *why* over *how*, see `README.md` and `CLAUDE.md`.
+Operator reference for the `web-app-enterprise-ai` repo. For _why_ over _how_, see `README.md` and `CLAUDE.md`.
 
 ## Stack at a glance
 
@@ -32,20 +32,20 @@ Root docs: `README.md` (external-facing), `CLAUDE.md` (engineering protocol), `A
 
 ## Entry points
 
-- `/`        → `src/pages/index.astro` — long-scroll narrative (parts 1–5, from `src/content/parts/`)
-- `/demo`    → `src/pages/demo.astro` — replay interface, data from `src/data/pipeline-run.json`
+- `/` → `src/pages/index.astro` — long-scroll narrative (parts 1–5, from `src/content/parts/`)
+- `/demo` → `src/pages/demo.astro` — replay interface, data from `src/data/pipeline-run.json`
 - `/findings` → `src/pages/findings.astro` — findings / limitations / reflections / future work
 
 ## Key configuration files
 
-| File | What it does |
-|---|---|
-| `astro.config.mjs` | Astro integrations: `@astrojs/react`, `@astrojs/mdx`, `@astrojs/tailwind`. |
-| `tailwind.config.cjs` | Extended theme — `ink` / `paper` / `accent` palette, display/lede fonts, section spacing. |
-| `tsconfig.json` | Extends `astro/tsconfigs/strict`; `@/*` alias → `src/*`. |
-| `.eslintrc.cjs`, `.prettierrc.json` | Lint + format rules (with `prettier-plugin-astro`, `prettier-plugin-tailwindcss`). |
-| `.nvmrc` | Pins Node 20. |
-| `.env.example` | Placeholder; no secrets required in v1. |
+| File                                | What it does                                                                              |
+| ----------------------------------- | ----------------------------------------------------------------------------------------- |
+| `astro.config.mjs`                  | Astro integrations: `@astrojs/react`, `@astrojs/mdx`, `@astrojs/tailwind`.                |
+| `tailwind.config.cjs`               | Extended theme — `ink` / `paper` / `accent` palette, display/lede fonts, section spacing. |
+| `tsconfig.json`                     | Extends `astro/tsconfigs/strict`; `@/*` alias → `src/*`.                                  |
+| `.eslintrc.cjs`, `.prettierrc.json` | Lint + format rules (with `prettier-plugin-astro`, `prettier-plugin-tailwindcss`).        |
+| `.nvmrc`                            | Pins Node 20.                                                                             |
+| `.env.example`                      | Placeholder; no secrets required in v1.                                                   |
 
 ## Commands (run from repo root)
 

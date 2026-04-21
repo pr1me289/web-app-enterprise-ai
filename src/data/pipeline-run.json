@@ -5,76 +5,396 @@
     "startedAt": "2026-04-21T14:02:11Z",
     "completedAt": "2026-04-21T14:04:38Z",
     "outcome": "escalated",
-    "summary": "Run completed with two escalations: one policy/questionnaire conflict on data residency, one procurement precondition unmet."
+    "summary": "The replay follows a governed onboarding run from intake gate through final checklist package. The system correctly preserves prerequisite failure, regulated-path classification, legal escalation, security ambiguity, and final stakeholder guidance."
   },
   "steps": [
     {
       "index": 1,
-      "id": "ingest",
-      "title": "Ingest & route",
+      "id": "r01-intake",
+      "title": "R-01 Intake gate",
       "state": "complete",
       "agent": "Supervisor",
-      "summary": "Source documents validated and routed to per-source Chroma + BM25 collections.",
-      "evidence": [
-        "policy_it_sec_v4.pdf",
-        "optichain_questionnaire.json",
-        "procurement_matrix.xlsx",
-        "slack_export_it_sec.json"
+      "trigger": "A vendor onboarding request arrives before the required questionnaire submission is present in the intake package.",
+      "summary": "The run starts in a blocked posture, waits for human intervention, and resumes only after the required questionnaire is submitted.",
+      "questions": [
+        "Is a prerequisite missing?",
+        "Should any downstream domain review be allowed to continue?"
       ],
-      "rationale": "All sources passed integrity checks. Row-targeted matrix loaded for downstream agents."
+      "subqueries": [
+        {
+          "label": "Check required-intake manifest",
+          "route": "Structured manifest lookup",
+          "reason": "Prerequisite presence is a deterministic gate; it should not be inferred from semantic retrieval."
+        },
+        {
+          "label": "Confirm questionnaire status",
+          "route": "Questionnaire registry",
+          "reason": "The system checks for a concrete submission event, not a paraphrase."
+        }
+      ],
+      "evidence": [
+        {
+          "citation": "REQ-INTAKE-001 §1.2",
+          "sourceType": "Required-source policy",
+          "authority": "Tier 1",
+          "lane": "Structured",
+          "note": "Defines questionnaire submission as a hard prerequisite for vendor review."
+        },
+        {
+          "citation": "INTAKE-MANIFEST run record",
+          "sourceType": "Runtime state",
+          "authority": "Tier 1",
+          "lane": "Structured",
+          "note": "Shows that the request arrived without the questionnaire and was later updated after procurement follow-up."
+        }
+      ],
+      "bundle": [
+        "Required-source checklist",
+        "Questionnaire submission registry",
+        "Pipeline state mutation rules"
+      ],
+      "rationale": "The correct behavior is to halt, emit BLOCKED, and wait. The system should not improvise around a missing source.",
+      "determination": {
+        "status": "Resolved after initial BLOCKED state",
+        "owner": "Supervisor with procurement handoff",
+        "downstream": "Resume classification once the questionnaire is submitted and the run state flips back to active.",
+        "output": [
+          "BLOCKER: questionnaire missing at intake",
+          "Human action logged: procurement requested submission",
+          "R-01 marked RESOLVED after submission landed"
+        ]
+      },
+      "audit": [
+        "Initial run emitted BLOCKED and halted downstream execution",
+        "Human intervention recorded outside the agent loop",
+        "Pipeline state reopened after submission timestamp was verified"
+      ]
     },
     {
       "index": 2,
-      "id": "it-security",
-      "title": "IT Security determination",
-      "state": "escalated",
-      "agent": "IT Security Agent",
-      "summary": "Policy over questionnaire conflict on data residency (EU-only policy vs. US-hosted vendor claim).",
-      "evidence": [
-        "policy_it_sec_v4.pdf §4.2",
-        "optichain_questionnaire.json Q17"
+      "id": "r02-classification",
+      "title": "R-02 Path classification",
+      "state": "complete",
+      "agent": "Supervisor",
+      "trigger": "The questionnaire is now available, so the supervisor can classify the onboarding path and decide whether fast-track remains possible.",
+      "summary": "The run classifies as REGULATED because the questionnaire indicates EU employee scheduling data and ERP-adjacent data movement.",
+      "questions": [
+        "Does the vendor touch regulated or sensitive data?",
+        "Does ERP adjacency alter review posture?",
+        "Can fast-track remain eligible?"
       ],
-      "rationale": "Policy precedence applied. Escalation raised to human reviewer per Context Contract §3."
+      "subqueries": [
+        {
+          "label": "Determine data class exposure",
+          "route": "Questionnaire direct access + DPA matrix",
+          "reason": "Data-class facts live in the questionnaire, but their implications live in the legal matrix."
+        },
+        {
+          "label": "Check integration posture",
+          "route": "Security policy + questionnaire",
+          "reason": "ERP adjacency changes the downstream review shape even when the exact tier is unresolved."
+        }
+      ],
+      "evidence": [
+        {
+          "citation": "VQ-OC-001 Q12/Q17/Q22",
+          "sourceType": "Vendor questionnaire",
+          "authority": "Tier 2",
+          "lane": "Direct structured access",
+          "note": "Shows EU employee scheduling data and SAP S/4HANA-related exports in scope."
+        },
+        {
+          "citation": "DPA-TM-001 Row A-01",
+          "sourceType": "DPA trigger matrix",
+          "authority": "Tier 1",
+          "lane": "Matrix row retrieval",
+          "note": "Maps EU personal data exposure to DPA requirement."
+        },
+        {
+          "citation": "ISP-001 §12.2",
+          "sourceType": "IT security policy",
+          "authority": "Tier 1",
+          "lane": "Dense + lexical",
+          "note": "Provides the ERP integration review posture referenced by security."
+        }
+      ],
+      "bundle": [
+        "Questionnaire facts",
+        "Legal trigger rows",
+        "Security policy section for integration posture",
+        "Path-classification rules"
+      ],
+      "rationale": "The regulated classification is structural. It does not require model creativity once the evidence bundle is assembled correctly.",
+      "determination": {
+        "status": "COMPLETE",
+        "owner": "Supervisor",
+        "downstream": "Launch domain reviews with fast-track disabled and regulated-path semantics attached to the bundle.",
+        "output": [
+          "Path classification: REGULATED",
+          "Fast-track eligibility: false",
+          "ERP adjacency raises downstream review posture"
+        ]
+      },
+      "audit": [
+        "Questionnaire facts read via direct structured access rather than embedding lane",
+        "Regulated-path status attached to downstream state object",
+        "Fast-track disabled before domain agents ran"
+      ]
     },
     {
       "index": 3,
-      "id": "legal",
-      "title": "Legal determination",
-      "state": "complete",
+      "id": "r03-legal",
+      "title": "R-03 Legal review",
+      "state": "escalated",
       "agent": "Legal Agent",
-      "summary": "Contractual posture aligns with standard MSA template; no redlines required.",
-      "evidence": ["msa_template_v7.pdf", "optichain_proposed_terms.pdf"],
-      "rationale": "Vendor terms fall within pre-approved posture band."
+      "trigger": "The regulated path requires legal review of DPA obligations and NDA execution status before information exchange can proceed.",
+      "summary": "Legal determines that a GDPR Art. 28 DPA is required and that NDA execution remains unresolved, so human-owned legal work is still open.",
+      "questions": [
+        "Does the evidence fire a DPA requirement?",
+        "Is NDA execution confirmed strongly enough to allow information exchange?"
+      ],
+      "subqueries": [
+        {
+          "label": "Retrieve DPA trigger rows",
+          "route": "Matrix row retrieval",
+          "reason": "Legal obligations hinge on exact rows and carveouts, not fuzzy semantic similarity."
+        },
+        {
+          "label": "Check NDA execution requirement",
+          "route": "Policy PDF + precedent record",
+          "reason": "The system needs the formal clause first and precedent only as supporting context."
+        }
+      ],
+      "evidence": [
+        {
+          "citation": "DPA-TM-001 Rows A-01 and E-01",
+          "sourceType": "DPA trigger matrix",
+          "authority": "Tier 1",
+          "lane": "Matrix row retrieval",
+          "note": "These rows make DPA execution mandatory before data exchange for this data class."
+        },
+        {
+          "citation": "ISP-001 §12.1.4",
+          "sourceType": "Information security policy",
+          "authority": "Tier 1",
+          "lane": "Dense + lexical",
+          "note": "States that NDA execution must be confirmed before sensitive information exchange."
+        },
+        {
+          "citation": "PVD-001 Record 3",
+          "sourceType": "Precedent record",
+          "authority": "Tier 2",
+          "lane": "Dense",
+          "note": "Supports the interpretation but does not outrank the policy clause."
+        }
+      ],
+      "bundle": [
+        "Regulated-path classification",
+        "DPA matrix trigger rows",
+        "NDA clause from security policy",
+        "Relevant precedent record"
+      ],
+      "rationale": "This is not a model failure. The system is doing the correct enterprise thing by surfacing unresolved legal ownership rather than manufacturing closure.",
+      "determination": {
+        "status": "ESCALATED",
+        "owner": "Legal",
+        "downstream": "Checklist must preserve both the DPA blocker and the unresolved NDA requirement.",
+        "output": [
+          "BLOCKER: execute GDPR Art. 28 DPA before data exchange",
+          "BLOCKER: NDA execution not yet confirmed",
+          "Status remains escalated because resolution is human-owned"
+        ]
+      },
+      "audit": [
+        "Tier 1 legal sources outranked questionnaire claims and precedent notes",
+        "No attempt made to convert unresolved legal work into a complete status",
+        "Escalation payload forwarded unchanged to checklist assembly"
+      ]
     },
     {
       "index": 4,
-      "id": "procurement",
-      "title": "Procurement determination",
+      "id": "r03-security",
+      "title": "R-03 IT Security review",
       "state": "escalated",
-      "agent": "Procurement Agent",
-      "summary": "Precondition unmet — procurement matrix shows no signed SOW for the current fiscal year.",
-      "evidence": ["procurement_matrix.xlsx row 42"],
-      "rationale": "Escalated rather than blocked; SOW can be resolved outside the pipeline."
+      "agent": "IT Security Agent",
+      "trigger": "Security receives the regulated-path bundle and must determine integration posture and any additional follow-up required before implementation can begin.",
+      "summary": "Security cannot cleanly assign the integration tier from questionnaire evidence alone, so the run preserves the ambiguity and requests architecture artifacts.",
+      "questions": [
+        "Does the questionnaire satisfy a named ERP integration tier?",
+        "What follow-up evidence is required to resolve the ambiguity?"
+      ],
+      "subqueries": [
+        {
+          "label": "Retrieve integration tier table",
+          "route": "Policy section retrieval",
+          "reason": "Tier definitions live in a specific policy section and must be matched exactly."
+        },
+        {
+          "label": "Compare vendor integration description",
+          "route": "Questionnaire direct access",
+          "reason": "The vendor's wording is needed, but it should not outrank the policy table."
+        }
+      ],
+      "evidence": [
+        {
+          "citation": "ISP-001 §12.2 ERP Integration Tier Table",
+          "sourceType": "IT security policy",
+          "authority": "Tier 1",
+          "lane": "Dense + lexical",
+          "note": "Defines the conditions for mediated, indirect, and higher-risk integration tiers."
+        },
+        {
+          "citation": "VQ-OC-001 Q18/Q24",
+          "sourceType": "Vendor questionnaire",
+          "authority": "Tier 2",
+          "lane": "Direct structured access",
+          "note": "Describes exports and middleware but leaves the actual technical path ambiguous."
+        },
+        {
+          "citation": "PVD-001 Record 2",
+          "sourceType": "Precedent record",
+          "authority": "Tier 2",
+          "lane": "Dense",
+          "note": "Shows a prior case where questionnaire evidence looked sufficient but required architecture review to resolve."
+        }
+      ],
+      "bundle": [
+        "Regulated-path state",
+        "ERP integration tier table",
+        "Questionnaire integration answers",
+        "Security follow-up request template"
+      ],
+      "rationale": "This is the demo's key ambiguity case. The right answer is not to guess. It is to preserve uncertainty and route the missing evidence request to a human owner.",
+      "determination": {
+        "status": "ESCALATED",
+        "owner": "IT Security",
+        "downstream": "Checklist must request architecture diagram and data-flow documentation within the stated follow-up window.",
+        "output": [
+          "BLOCKER: integration tier remains unclassified pending review",
+          "Request architecture diagram and data-flow documents",
+          "Fast-track remains false while ambiguity is unresolved"
+        ]
+      },
+      "audit": [
+        "Questionnaire facts were treated as claims, not authoritative classification",
+        "Policy tier table remained the governing source",
+        "Security ambiguity propagated instead of being softened into a maybe-complete result"
+      ]
     },
     {
       "index": 5,
-      "id": "assemble",
-      "title": "Checklist assembly",
+      "id": "r04-procurement",
+      "title": "R-04 Procurement review",
       "state": "complete",
-      "agent": "Checklist Assembler",
-      "summary": "Bundle composed with authority weighting; escalated items preserved in null-passthrough state.",
-      "evidence": [],
-      "rationale": "No silent-swallow. Escalated upstream items remain escalated downstream."
+      "agent": "Procurement Agent",
+      "trigger": "Procurement evaluates approval routing and whether the regulated path forces an executive or exceptional commercial workflow.",
+      "summary": "Procurement resolves the approval path as standard and confirms that executive approval is not required, while still respecting the escalated items from legal and security.",
+      "questions": [
+        "Which approval path fires for this vendor posture?",
+        "Does the regulated path force executive approval?"
+      ],
+      "subqueries": [
+        {
+          "label": "Retrieve approval matrix row",
+          "route": "Matrix row retrieval",
+          "reason": "Approval path should be decided by the matrix row, not inferred from narrative descriptions."
+        }
+      ],
+      "evidence": [
+        {
+          "citation": "PAM-001 Standard Approval Row",
+          "sourceType": "Procurement approval matrix",
+          "authority": "Tier 1",
+          "lane": "Matrix row retrieval",
+          "note": "Maps this posture to the standard approval path without executive sign-off."
+        }
+      ],
+      "bundle": [
+        "Approval matrix row",
+        "Regulated-path state",
+        "Current escalations from legal and security"
+      ],
+      "rationale": "A complete procurement answer can coexist with escalations elsewhere. The pipeline needs that nuance rather than flattening everything into one status.",
+      "determination": {
+        "status": "COMPLETE",
+        "owner": "Procurement",
+        "downstream": "Pass the resolved approval path into checklist assembly while preserving all upstream blockers.",
+        "output": [
+          "Approval path: STANDARD",
+          "Executive approval required: false",
+          "Procurement result complete but overall pipeline still open"
+        ]
+      },
+      "audit": [
+        "Matrix row targeted directly rather than retrieved from a flat index",
+        "Procurement completion did not overwrite legal or security escalations",
+        "Approval-path result attached to the checklist package"
+      ]
     },
     {
       "index": 6,
-      "id": "checkoff",
-      "title": "Checkoff",
+      "id": "r05-r06-checklist",
+      "title": "R-05/R-06 Checklist and stakeholder guidance",
       "state": "escalated",
-      "agent": "Checkoff Agent",
-      "summary": "Final determination: escalated. Two items require human disposition before the run can close as complete.",
-      "evidence": [],
-      "rationale": "Run ends in escalated state per design — no fabricated 'complete' output."
+      "agent": "Checklist Assembler + Checkoff",
+      "trigger": "All domain outputs are available, so the system assembles the final package and determines whether the run can close.",
+      "summary": "The final package keeps all three blockers visible, cites their sources, and routes next-step guidance to the correct owners. The run ends escalated by design.",
+      "questions": [
+        "What remains unresolved?",
+        "Which items are resolved and safe to present as complete?",
+        "Who owns the remaining work?"
+      ],
+      "subqueries": [
+        {
+          "label": "Collect upstream determinations",
+          "route": "Structured agent outputs",
+          "reason": "Checklist assembly should consume already-governed outputs rather than re-reason over raw documents."
+        }
+      ],
+      "evidence": [
+        {
+          "citation": "Legal escalated output payload",
+          "sourceType": "Structured agent output",
+          "authority": "Tier 1 runtime",
+          "lane": "Structured",
+          "note": "Carries DPA and NDA blockers forward unchanged."
+        },
+        {
+          "citation": "Security escalated output payload",
+          "sourceType": "Structured agent output",
+          "authority": "Tier 1 runtime",
+          "lane": "Structured",
+          "note": "Carries integration-tier ambiguity and architecture-document request forward unchanged."
+        },
+        {
+          "citation": "Procurement complete output payload",
+          "sourceType": "Structured agent output",
+          "authority": "Tier 1 runtime",
+          "lane": "Structured",
+          "note": "Provides the standard approval path and no-executive-signoff resolution."
+        }
+      ],
+      "bundle": [
+        "All upstream structured outputs",
+        "Checklist formatting rules",
+        "Stakeholder guidance template"
+      ],
+      "rationale": "This is where null-passthrough matters most. A polished final answer that erases upstream ambiguity would be worse than an escalation.",
+      "determination": {
+        "status": "ESCALATED",
+        "owner": "Checklist Assembler + Checkoff",
+        "downstream": "Deliver blocker list and next-step guidance to Legal, IT Security, Procurement, and the business owner.",
+        "output": [
+          "BLOCKER: execute GDPR Art. 28 DPA",
+          "BLOCKER: confirm NDA execution before information exchange",
+          "BLOCKER: classify ERP integration tier after architecture review"
+        ]
+      },
+      "audit": [
+        "Escalated upstream states preserved with null-passthrough discipline",
+        "Checklist package split resolved items from blocking items explicitly",
+        "Final outcome emitted as ESCALATED rather than forcing a synthetic COMPLETE"
+      ]
     }
   ]
 }

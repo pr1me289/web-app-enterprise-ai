@@ -30,6 +30,17 @@ module.exports = {
         parser: '@typescript-eslint/parser',
         extraFileExtensions: ['.astro'],
       },
+      rules: {
+        'react/no-unknown-property': 'off',
+        'react/jsx-key': 'off',
+        'no-undef': 'off',
+      },
+    },
+    {
+      files: ['src/env.d.ts'],
+      rules: {
+        '@typescript-eslint/triple-slash-reference': 'off',
+      },
     },
   ],
   ignorePatterns: ['node_modules/', 'dist/', '.astro/', '.vercel/'],

@@ -1,4 +1,5 @@
 # Agent Spec — Checklist Assembler
+
 ## SPEC-AGENT-CLA-001 v0.3
 
 **Document ID:** SPEC-AGENT-CLA-001
@@ -24,14 +25,14 @@ The Checklist Assembler does **not** perform domain reasoning. It does not evalu
 
 ## 1. Agent Identity
 
-| Field | Value |
-|---|---|
-| **Agent ID** | `checklist_assembler` |
-| **Pipeline Step** | STEP-05 — R-05: Approval Checklist Generation |
-| **Assigned By** | Supervisor Agent |
-| **Upstream Dependency** | STEP-01 through STEP-04 must all be in terminal states. All domain agent outputs must be present and schema-valid. |
-| **Parallel With** | — |
-| **Downstream Dependents** | STEP-06 (Checkoff Agent) |
+| Field                     | Value                                                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **Agent ID**              | `checklist_assembler`                                                                                              |
+| **Pipeline Step**         | STEP-05 — R-05: Approval Checklist Generation                                                                      |
+| **Assigned By**           | Supervisor Agent                                                                                                   |
+| **Upstream Dependency**   | STEP-01 through STEP-04 must all be in terminal states. All domain agent outputs must be present and schema-valid. |
+| **Parallel With**         | —                                                                                                                  |
+| **Downstream Dependents** | STEP-06 (Checkoff Agent)                                                                                           |
 
 ---
 
@@ -59,6 +60,7 @@ The agent does not retrieve evidence independently. It reads pipeline state and 
 The Supervisor assembles this bundle before the agent runs. The agent must treat the bundle as its complete and exclusive input base for this step.
 
 **Bundle composition (assembly priority order):**
+
 1. All domain agent structured outputs — IT Security (STEP-02), Legal (STEP-03), Procurement (STEP-04) — schema-valid JSON only
 2. Audit log entries for this pipeline run
 3. Raw source documents — **excluded entirely**
@@ -66,6 +68,7 @@ The Supervisor assembles this bundle before the agent runs. The agent must treat
 **Required inputs for an admissible STEP-05 bundle:**
 
 From STEP-02 (IT Security Agent):
+
 - `data_classification`
 - `fast_track_eligible`
 - `required_security_actions`
@@ -73,20 +76,23 @@ From STEP-02 (IT Security Agent):
 - `status`
 
 From STEP-03 (Legal Agent):
+
 - `dpa_required`
-- `dpa_blocker` *(required input — consumed into `blockers[]` per §6.2; not a top-level output field; see §6.1)*
+- `dpa_blocker` _(required input — consumed into `blockers[]` per §6.2; not a top-level output field; see §6.1)_
 - `nda_status`
-- `nda_blocker` *(required input — consumed into `blockers[]` per §6.2; not a top-level output field; see §6.1)*
+- `nda_blocker` _(required input — consumed into `blockers[]` per §6.2; not a top-level output field; see §6.1)_
 - `trigger_rule_cited`
 - `policy_citations`
 - `status`
 
 From STEP-04 (Procurement Agent):
+
 - `approval_path`
 - `required_approvals`
 - `status`
 
 From audit log:
+
 - `entry_id`, `event_type`, `agent_id`, `source_queried`, `chunks_retrieved`, `timestamp`
 
 If any domain agent output is absent or schema-invalid, the bundle is inadmissible and the agent must emit the §7.1 blocked output shape with the appropriate `blocked_reason` and `blocked_fields`. Do not produce any assembly fields. If audit log entries are absent or empty, the agent must emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_AUDIT_LOG"]` — a checklist with no citations violates the pipeline's auditability guarantee per CC-001 §8.4.
@@ -101,13 +107,13 @@ The Checklist Assembler does not receive raw source documents. It does not recei
 
 Derived from CC-001 §6.1. The agent must treat this as a hard access list, not a guideline.
 
-| Index Endpoint | Access |
-|---|---|
-| `idx_security_policy` | — No access |
-| `idx_dpa_matrix` | — No access |
-| `idx_procurement_matrix` | — No access |
-| `vq_direct_access` | ✓ Full (vendor_name and pipeline_run_id only) |
-| `idx_slack_notes` | — No access |
+| Index Endpoint           | Access                                        |
+| ------------------------ | --------------------------------------------- |
+| `idx_security_policy`    | — No access                                   |
+| `idx_dpa_matrix`         | — No access                                   |
+| `idx_procurement_matrix` | — No access                                   |
+| `vq_direct_access`       | ✓ Full (vendor_name and pipeline_run_id only) |
+| `idx_slack_notes`        | — No access                                   |
 
 **`vq_direct_access` scope:** The Checklist Assembler's access to the questionnaire is limited to reading `vendor_name` and `pipeline_run_id` for checklist header population. It does not re-read domain-relevant questionnaire fields — those were read and consumed by the domain agents in earlier steps.
 
@@ -146,19 +152,19 @@ The Checklist Assembler has no access to any indexed evidence source. If the age
 
 Every checklist field has an authoritative source. The Checklist Assembler must not substitute, infer, or modify these sources.
 
-| Checklist Field                  | Source                                                                  |
-| -------------------------------- | ----------------------------------------------------------------------- |
-| `pipeline_run_id`                | Pipeline run state                                                      |
-| `vendor_name`                    | `vq_direct_access` — direct field lookup                                |
-| `overall_status`                 | Derived by the Checklist Assembler per §8.1 — the only field it derives |
-| `data_classification`            | IT Security Agent (STEP-02) output — passthrough                        |
-| `fast_track_eligible`            | IT Security Agent (STEP-02) output — passthrough                        |
-| `required_security_actions`      | IT Security Agent (STEP-02) output — passthrough                        |
-| `dpa_required`                   | Legal Agent (STEP-03) output — passthrough                              |
-| `approval_path`                  | Procurement Agent (STEP-04) output — passthrough                        |
-| `required_approvals[]`           | Procurement Agent (STEP-04) output — passthrough                        |
-| `blockers[]`                     | Assembled per §6.2                                                      |
-| `citations[]`                    | Assembled per §6.3                                                      |
+| Checklist Field             | Source                                                                  |
+| --------------------------- | ----------------------------------------------------------------------- |
+| `pipeline_run_id`           | Pipeline run state                                                      |
+| `vendor_name`               | `vq_direct_access` — direct field lookup                                |
+| `overall_status`            | Derived by the Checklist Assembler per §8.1 — the only field it derives |
+| `data_classification`       | IT Security Agent (STEP-02) output — passthrough                        |
+| `fast_track_eligible`       | IT Security Agent (STEP-02) output — passthrough                        |
+| `required_security_actions` | IT Security Agent (STEP-02) output — passthrough                        |
+| `dpa_required`              | Legal Agent (STEP-03) output — passthrough                              |
+| `approval_path`             | Procurement Agent (STEP-04) output — passthrough                        |
+| `required_approvals[]`      | Procurement Agent (STEP-04) output — passthrough                        |
+| `blockers[]`                | Assembled per §6.2                                                      |
+| `citations[]`               | Assembled per §6.3                                                      |
 
 > **Consumed into `blockers[]`, not emitted at top level:** `dpa_blocker` and `nda_blocker` are required inputs from STEP-03 (see §3) but do **not** appear as top-level checklist fields. Their truth values flow into `blockers[]` via the §6.2 mapping. The output contract in §7 deliberately omits them at top level to avoid duplicating signal across two places. An output that emits top-level `dpa_blocker` or `nda_blocker` is non-conforming.
 
@@ -166,12 +172,12 @@ Every checklist field has an authoritative source. The Checklist Assembler must 
 
 `blockers[]` is assembled from upstream blocker flags and step conditions. Each entry must include `blocker_type`, `description`, `resolution_owner`, and `citation`.
 
-| Upstream Condition | `blocker_type` | `resolution_owner` | `citation` source |
-|---|---|---|---|
-| `legal_agent.dpa_blocker = true` | `DPA_REQUIRED` | Legal (General Counsel) | Legal Agent audit log entry for DPA determination |
-| `legal_agent.nda_blocker = true` | `NDA_UNCONFIRMED` | Procurement | Legal Agent audit log entry for NDA determination |
-| Any upstream step_status = `BLOCKED` | `UPSTREAM_STEP_BLOCKED` | Per the blocking step's defined resolution owner | Audit log STATUS_CHANGE entry for the blocked step |
-| Any upstream step_status = `ESCALATED` | `ESCALATION_PENDING` | Per the escalating step's defined resolution owner | Audit log ESCALATION entry for the escalated step |
+| Upstream Condition                     | `blocker_type`          | `resolution_owner`                                 | `citation` source                                  |
+| -------------------------------------- | ----------------------- | -------------------------------------------------- | -------------------------------------------------- |
+| `legal_agent.dpa_blocker = true`       | `DPA_REQUIRED`          | Legal (General Counsel)                            | Legal Agent audit log entry for DPA determination  |
+| `legal_agent.nda_blocker = true`       | `NDA_UNCONFIRMED`       | Procurement                                        | Legal Agent audit log entry for NDA determination  |
+| Any upstream step_status = `BLOCKED`   | `UPSTREAM_STEP_BLOCKED` | Per the blocking step's defined resolution owner   | Audit log STATUS_CHANGE entry for the blocked step |
+| Any upstream step_status = `ESCALATED` | `ESCALATION_PENDING`    | Per the escalating step's defined resolution owner | Audit log ESCALATION entry for the escalated step  |
 
 If no upstream blocker conditions are present and `overall_status = COMPLETE`, `blockers[]` is an empty array.
 
@@ -179,13 +185,13 @@ If no upstream blocker conditions are present and `overall_status = COMPLETE`, `
 
 `citations[]` is assembled from the `policy_citations[]` arrays of all three domain agent outputs. Each citation entry is tagged with the `agent_id` that produced it so the checklist is fully traceable to the originating determination.
 
-| Entry Field | Source |
-|---|---|
-| `source_name` | From the originating agent's `policy_citations[].source_id` |
-| `version` | From the originating agent's `policy_citations[].version` |
-| `section` | From the originating agent's `policy_citations[].section_id` or `chunk_id` |
+| Entry Field           | Source                                                                                                                        |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `source_name`         | From the originating agent's `policy_citations[].source_id`                                                                   |
+| `version`             | From the originating agent's `policy_citations[].version`                                                                     |
+| `section`             | From the originating agent's `policy_citations[].section_id` or `chunk_id`                                                    |
 | `retrieval_timestamp` | From the originating agent's `policy_citations[].retrieval_timestamp` (via audit log entry if not present in citation object) |
-| `agent_id` | The agent that produced the citation (e.g., `it_security_agent`, `legal_agent`, `procurement_agent`) |
+| `agent_id`            | The agent that produced the citation (e.g., `it_security_agent`, `legal_agent`, `procurement_agent`)                          |
 
 The Checklist Assembler does not add new citations. It does not introduce citations from sources it has not received through upstream agent outputs. Tier 3 (Slack) citations tagged as SUPPLEMENTARY by the Procurement Agent may be included in `citations[]` but must preserve their SUPPLEMENTARY classification.
 
@@ -244,19 +250,19 @@ The agent must return a single schema-valid JSON object. No other output format 
 
 ### Output Field Constraints
 
-| Field | Constraint |
-|---|---|
-| `overall_status` | Must be emitted on every run. Derived from upstream step statuses per §8.1. Must be one of the three defined enum values. |
-| `pipeline_run_id` | Must be emitted on every run including blocked runs. |
-| `vendor_name` | Must be emitted on every run when available. If unavailable, use `pipeline_run_id` as fallback. |
-| `data_classification` | Must be present on every non-blocked run. Absent on blocked runs (§7.1). Passthrough from STEP-02. On escalated runs, carries whatever STEP-02 produced — may be `null` if STEP-02 escalated with an unresolved classification (§7.2). |
-| `fast_track_eligible` | Must be present on every non-blocked run. Absent on blocked runs. Passthrough from STEP-02. On escalated runs, carries whatever STEP-02 produced — may be `null` if STEP-02 escalated with unresolved eligibility (§7.2). |
+| Field                       | Constraint                                                                                                                                                                                                                               |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `overall_status`            | Must be emitted on every run. Derived from upstream step statuses per §8.1. Must be one of the three defined enum values.                                                                                                                |
+| `pipeline_run_id`           | Must be emitted on every run including blocked runs.                                                                                                                                                                                     |
+| `vendor_name`               | Must be emitted on every run when available. If unavailable, use `pipeline_run_id` as fallback.                                                                                                                                          |
+| `data_classification`       | Must be present on every non-blocked run. Absent on blocked runs (§7.1). Passthrough from STEP-02. On escalated runs, carries whatever STEP-02 produced — may be `null` if STEP-02 escalated with an unresolved classification (§7.2).   |
+| `fast_track_eligible`       | Must be present on every non-blocked run. Absent on blocked runs. Passthrough from STEP-02. On escalated runs, carries whatever STEP-02 produced — may be `null` if STEP-02 escalated with unresolved eligibility (§7.2).                |
 | `required_security_actions` | Must be present on every non-blocked run. Absent on blocked runs. Passthrough from STEP-02. On escalated runs, carries whatever STEP-02 produced — may be `null` if STEP-02 escalated with an unresolved follow-up determination (§7.2). |
-| `dpa_required` | Must be present on every non-blocked run. Absent on blocked runs. Passthrough from STEP-03. On escalated runs, carries whatever STEP-03 produced — may be `null` if STEP-03 escalated with an unresolved DPA determination (§7.2). |
-| `approval_path` | Must be present on every non-blocked run. Absent on blocked runs. Passthrough from STEP-04. On escalated runs, carries whatever STEP-04 produced — may be `null` if STEP-04 escalated with an undetermined path (§7.2). |
-| `required_approvals[]` | Must be present on every non-blocked run. Absent on blocked runs. Must contain at least one entry on COMPLETE runs. On escalated runs, carries whatever STEP-04 produced — may be `null` if STEP-04 could not assemble approvals (§7.2). |
-| `blockers[]` | Must be present on every non-blocked run. Absent on blocked runs. Must be populated for every ESCALATED run. Must be `[]` only on COMPLETE runs with no active blocker flags. |
-| `citations[]` | Must be present on every non-blocked run. Absent on blocked runs. Must contain at least one entry on every non-blocked run. Must include at least one citation per domain agent that produced a non-blocked determination. |
+| `dpa_required`              | Must be present on every non-blocked run. Absent on blocked runs. Passthrough from STEP-03. On escalated runs, carries whatever STEP-03 produced — may be `null` if STEP-03 escalated with an unresolved DPA determination (§7.2).       |
+| `approval_path`             | Must be present on every non-blocked run. Absent on blocked runs. Passthrough from STEP-04. On escalated runs, carries whatever STEP-04 produced — may be `null` if STEP-04 escalated with an undetermined path (§7.2).                  |
+| `required_approvals[]`      | Must be present on every non-blocked run. Absent on blocked runs. Must contain at least one entry on COMPLETE runs. On escalated runs, carries whatever STEP-04 produced — may be `null` if STEP-04 could not assemble approvals (§7.2). |
+| `blockers[]`                | Must be present on every non-blocked run. Absent on blocked runs. Must be populated for every ESCALATED run. Must be `[]` only on COMPLETE runs with no active blocker flags.                                                            |
+| `citations[]`               | Must be present on every non-blocked run. Absent on blocked runs. Must contain at least one entry on every non-blocked run. Must include at least one citation per domain agent that produced a non-blocked determination.               |
 
 ### 7.1 Blocked Output Shape
 
@@ -274,12 +280,12 @@ When the agent derives `overall_status = BLOCKED` from §8.1, it MUST emit the f
 
 **`blocked_reason`** — enum array. Lists the specific admissibility failure(s) that caused the block. Multiple values are permitted when multiple inputs are missing simultaneously. Defined enum values for the Checklist Assembler:
 
-| Enum Value | Condition |
-|---|---|
-| `MISSING_IT_SECURITY_OUTPUT` | IT Security Agent (STEP-02) structured output is absent or schema-invalid. `data_classification`, `fast_track_eligible`, and `eu_personal_data_present` cannot be populated in the checklist. The assembler has no basis for the security row of the approval package. |
-| `MISSING_LEGAL_OUTPUT` | Legal Agent (STEP-03) structured output is absent or schema-invalid. `dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker` cannot be populated. The compliance row of the checklist is empty. This also means `blockers[]` cannot be correctly assembled — if the Legal output is absent the assembler cannot know whether DPA or NDA blockers exist. |
-| `MISSING_PROCUREMENT_OUTPUT` | Procurement Agent (STEP-04) structured output is absent or schema-invalid. `approval_path`, `required_approvals`, `estimated_timeline` cannot be populated. This is the most consequential missing input because `approval_path` is the primary human-facing output of the entire pipeline. |
-| `MISSING_AUDIT_LOG` | The audit log is absent or empty. The Checklist Assembler is the only agent that explicitly requires the audit log as a bundle input per CC-001 §8.4. Without it, `citations[]` cannot be assembled. An empty or absent audit log is a blocked condition because citation completeness is a hard output contract requirement — a checklist with no citations violates the pipeline's auditability guarantee. |
+| Enum Value                   | Condition                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `MISSING_IT_SECURITY_OUTPUT` | IT Security Agent (STEP-02) structured output is absent or schema-invalid. `data_classification`, `fast_track_eligible`, and `eu_personal_data_present` cannot be populated in the checklist. The assembler has no basis for the security row of the approval package.                                                                                                                                       |
+| `MISSING_LEGAL_OUTPUT`       | Legal Agent (STEP-03) structured output is absent or schema-invalid. `dpa_required`, `dpa_blocker`, `nda_status`, `nda_blocker` cannot be populated. The compliance row of the checklist is empty. This also means `blockers[]` cannot be correctly assembled — if the Legal output is absent the assembler cannot know whether DPA or NDA blockers exist.                                                   |
+| `MISSING_PROCUREMENT_OUTPUT` | Procurement Agent (STEP-04) structured output is absent or schema-invalid. `approval_path`, `required_approvals`, `estimated_timeline` cannot be populated. This is the most consequential missing input because `approval_path` is the primary human-facing output of the entire pipeline.                                                                                                                  |
+| `MISSING_AUDIT_LOG`          | The audit log is absent or empty. The Checklist Assembler is the only agent that explicitly requires the audit log as a bundle input per CC-001 §8.4. Without it, `citations[]` cannot be assembled. An empty or absent audit log is a blocked condition because citation completeness is a hard output contract requirement — a checklist with no citations violates the pipeline's auditability guarantee. |
 
 **`blocked_fields`** — string array. Lists the specific canonical field names (per CC-001 §15) that were absent from the upstream input, causing the block. This array is what makes the audit log entry useful: it names exactly what the Supervisor needs to surface to the resolution owner.
 
@@ -293,16 +299,16 @@ When the agent derives `overall_status = ESCALATED` from §8.1, it emits the sam
 
 **Passthrough null rules:**
 
-| Field | When `null` on an escalated run |
-|---|---|
-| `data_classification` | STEP-02 returned `null` — IT Security Agent escalated with an unresolved classification |
-| `fast_track_eligible` | STEP-02 returned `null` — IT Security Agent escalated with unresolved eligibility |
-| `required_security_actions` | STEP-02 returned `null` — IT Security Agent escalated with an unresolved follow-up determination |
-| `dpa_required` | STEP-03 returned `null` — Legal Agent escalated with an unresolved DPA determination |
-| `approval_path` | STEP-04 returned `null` — Procurement Agent escalated with an undetermined path |
-| `required_approvals` | STEP-04 returned `null` — Procurement Agent escalated and could not assemble approvals |
-| `blockers[]` | Never `null` on escalated runs — the assembler always populates this from upstream blocker flags and escalation conditions |
-| `citations[]` | Never `null` on escalated runs — the assembler always assembles available citations from upstream `policy_citations[]` arrays |
+| Field                       | When `null` on an escalated run                                                                                               |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `data_classification`       | STEP-02 returned `null` — IT Security Agent escalated with an unresolved classification                                       |
+| `fast_track_eligible`       | STEP-02 returned `null` — IT Security Agent escalated with unresolved eligibility                                             |
+| `required_security_actions` | STEP-02 returned `null` — IT Security Agent escalated with an unresolved follow-up determination                              |
+| `dpa_required`              | STEP-03 returned `null` — Legal Agent escalated with an unresolved DPA determination                                          |
+| `approval_path`             | STEP-04 returned `null` — Procurement Agent escalated with an undetermined path                                               |
+| `required_approvals`        | STEP-04 returned `null` — Procurement Agent escalated and could not assemble approvals                                        |
+| `blockers[]`                | Never `null` on escalated runs — the assembler always populates this from upstream blocker flags and escalation conditions    |
+| `citations[]`               | Never `null` on escalated runs — the assembler always assembles available citations from upstream `policy_citations[]` arrays |
 
 **Fields that are resolved upstream carry their normal values.** For example, when STEP-03 escalated because `dpa_blocker = true` (all Legal fields resolved, no nulls), the Checklist Assembler passes through `dpa_required: true` and populates a `DPA_REQUIRED` entry in `blockers[]`. Only fields that the upstream agent set to `null` appear as `null` in the checklist.
 
@@ -314,13 +320,13 @@ When the agent derives `overall_status = ESCALATED` from §8.1, it emits the sam
 
 `overall_status` is the only field the Checklist Assembler derives. It is derived from upstream step statuses using the following precedence-ordered rules. Apply in the order shown — stop at the first matching condition.
 
-| Condition | `overall_status` |
-|---|---|
-| Any required domain agent output is absent or schema-invalid | `BLOCKED` |
-| Audit log entries absent or empty | `BLOCKED` |
-| Any upstream step_status is `blocked` | `BLOCKED` |
-| Any upstream step_status is `escalated` | `ESCALATED` |
-| All upstream step statuses are `complete` | `COMPLETE` |
+| Condition                                                    | `overall_status` |
+| ------------------------------------------------------------ | ---------------- |
+| Any required domain agent output is absent or schema-invalid | `BLOCKED`        |
+| Audit log entries absent or empty                            | `BLOCKED`        |
+| Any upstream step_status is `blocked`                        | `BLOCKED`        |
+| Any upstream step_status is `escalated`                      | `ESCALATED`      |
+| All upstream step statuses are `complete`                    | `COMPLETE`       |
 
 **Output shape switching rule:** The agent must first derive the `overall_status` from this table, then emit the output shape corresponding to that status:
 
@@ -334,48 +340,48 @@ When the agent derives `overall_status = ESCALATED` from §8.1, it emits the sam
 
 ## 9. Exception Handling
 
-| Condition | Required Behavior |
-|---|---|
-| IT Security Agent output absent or schema-invalid | Bundle is inadmissible. Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_IT_SECURITY_OUTPUT"]` and `blocked_fields` listing the absent upstream fields. Do not produce a partial checklist. Do not emit any assembly fields. Halt STEP-06. |
-| Legal Agent output absent or schema-invalid | Bundle is inadmissible. Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_LEGAL_OUTPUT"]` and `blocked_fields` listing the absent upstream fields. Do not produce a partial checklist. Do not emit any assembly fields. Halt STEP-06. |
-| Procurement Agent output absent or schema-invalid | Bundle is inadmissible. Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_PROCUREMENT_OUTPUT"]` and `blocked_fields` listing the absent upstream fields. Do not produce a partial checklist. Do not emit any assembly fields. Halt STEP-06. |
-| Audit log entries absent or empty | Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_AUDIT_LOG"]` and `blocked_fields: ["citations"]`. A checklist with no citations violates the pipeline's auditability guarantee per CC-001 §8.4. Do not produce a partial checklist. Halt STEP-06. |
-| Multiple upstream outputs absent simultaneously | Emit the §7.1 blocked output shape with all applicable `blocked_reason` values and combined `blocked_fields`. |
-| `vendor_name` not found via `vq_direct_access` | Use `pipeline_run_id` as a fallback identifier. Log the absence. Do not halt. |
-| Upstream step is ESCALATED with no matching audit log escalation entry | Surface the ESCALATED condition in `blockers[]` using available upstream determination fields. Log the audit gap. Populate all assembly fields per §7.2. |
-| Upstream agent returned `null` for a field per that agent's escalated output rules | Pass through the `null` value unchanged per §7.2. Do not attempt to infer or substitute a value. |
-| Bundle contains content from a prohibited index | Log anomaly. Exclude that content. Continue only if the remaining bundle is admissible; otherwise emit the §7.1 blocked output shape. |
+| Condition                                                                          | Required Behavior                                                                                                                                                                                                                                                    |
+| ---------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IT Security Agent output absent or schema-invalid                                  | Bundle is inadmissible. Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_IT_SECURITY_OUTPUT"]` and `blocked_fields` listing the absent upstream fields. Do not produce a partial checklist. Do not emit any assembly fields. Halt STEP-06.         |
+| Legal Agent output absent or schema-invalid                                        | Bundle is inadmissible. Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_LEGAL_OUTPUT"]` and `blocked_fields` listing the absent upstream fields. Do not produce a partial checklist. Do not emit any assembly fields. Halt STEP-06.               |
+| Procurement Agent output absent or schema-invalid                                  | Bundle is inadmissible. Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_PROCUREMENT_OUTPUT"]` and `blocked_fields` listing the absent upstream fields. Do not produce a partial checklist. Do not emit any assembly fields. Halt STEP-06.         |
+| Audit log entries absent or empty                                                  | Emit the §7.1 blocked output shape with `blocked_reason: ["MISSING_AUDIT_LOG"]` and `blocked_fields: ["citations"]`. A checklist with no citations violates the pipeline's auditability guarantee per CC-001 §8.4. Do not produce a partial checklist. Halt STEP-06. |
+| Multiple upstream outputs absent simultaneously                                    | Emit the §7.1 blocked output shape with all applicable `blocked_reason` values and combined `blocked_fields`.                                                                                                                                                        |
+| `vendor_name` not found via `vq_direct_access`                                     | Use `pipeline_run_id` as a fallback identifier. Log the absence. Do not halt.                                                                                                                                                                                        |
+| Upstream step is ESCALATED with no matching audit log escalation entry             | Surface the ESCALATED condition in `blockers[]` using available upstream determination fields. Log the audit gap. Populate all assembly fields per §7.2.                                                                                                             |
+| Upstream agent returned `null` for a field per that agent's escalated output rules | Pass through the `null` value unchanged per §7.2. Do not attempt to infer or substitute a value.                                                                                                                                                                     |
+| Bundle contains content from a prohibited index                                    | Log anomaly. Exclude that content. Continue only if the remaining bundle is admissible; otherwise emit the §7.1 blocked output shape.                                                                                                                                |
 
 ---
 
 ## 10. Critical Acceptance Checks
 
-| # | Constraint | Pass Condition |
-|---|---|---|
-| A-01 | `overall_status` derived strictly from upstream step statuses using the §8.1 precedence rule | Agent does not assert COMPLETE when any upstream step is ESCALATED or BLOCKED |
-| A-02 | No domain-owned field re-derived or modified | `data_classification`, `dpa_required`, `approval_path`, `fast_track_eligible`, and all other upstream-owned fields pass through unchanged |
-| A-03 | `blockers[]` populated for every ESCALATED run | Every active `dpa_blocker`, `nda_blocker`, and upstream BLOCKED/ESCALATED step condition appears as a blocker entry with a `citation` |
-| A-04 | `citations[]` includes entries from all domain agents that produced non-blocked determinations | Every domain agent's `policy_citations[]` is represented; each entry is tagged with the originating `agent_id` |
-| A-05 | All required assembly fields present and structurally valid | Schema-valid JSON. On `COMPLETE` runs: all assembly fields must be non-null. On `ESCALATED` runs: all assembly fields must be present (not absent); fields carry their upstream values, which may be `null` if the upstream agent escalated per §7.2. `blockers[]` and `citations[]` are never `null` on non-blocked runs. |
-| A-06 | No index endpoint queried | Checklist Assembler has no evidence-discovery authority; all inputs come from pipeline state reads and `vq_direct_access` for header fields only |
-| A-07 | Blocked output uses §7.1 shape with no assembly fields | When `overall_status = BLOCKED`: output contains only `pipeline_run_id`, `vendor_name` (if available), `overall_status`, `blocked_reason`, and `blocked_fields`. Assembly fields (`data_classification`, `fast_track_eligible`, `required_security_actions`, `dpa_required`, `approval_path`, `required_approvals`, `blockers`, `citations`) are entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of canonical field names. |
-| A-08 | Escalated output has all assembly fields present per §7.2 | When `overall_status = ESCALATED`: all assembly fields are present (not absent). Fields with resolved upstream values carry those values. Fields whose upstream owner returned `null` are passed through as `null`. No field is absent. |
-| A-09 | Audit log absence blocks the run | When audit log entries are absent or empty, agent emits `BLOCKED` with `blocked_reason: ["MISSING_AUDIT_LOG"]` rather than producing a checklist with no citations |
+| #    | Constraint                                                                                     | Pass Condition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A-01 | `overall_status` derived strictly from upstream step statuses using the §8.1 precedence rule   | Agent does not assert COMPLETE when any upstream step is ESCALATED or BLOCKED                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| A-02 | No domain-owned field re-derived or modified                                                   | `data_classification`, `dpa_required`, `approval_path`, `fast_track_eligible`, and all other upstream-owned fields pass through unchanged                                                                                                                                                                                                                                                                                                                                                           |
+| A-03 | `blockers[]` populated for every ESCALATED run                                                 | Every active `dpa_blocker`, `nda_blocker`, and upstream BLOCKED/ESCALATED step condition appears as a blocker entry with a `citation`                                                                                                                                                                                                                                                                                                                                                               |
+| A-04 | `citations[]` includes entries from all domain agents that produced non-blocked determinations | Every domain agent's `policy_citations[]` is represented; each entry is tagged with the originating `agent_id`                                                                                                                                                                                                                                                                                                                                                                                      |
+| A-05 | All required assembly fields present and structurally valid                                    | Schema-valid JSON. On `COMPLETE` runs: all assembly fields must be non-null. On `ESCALATED` runs: all assembly fields must be present (not absent); fields carry their upstream values, which may be `null` if the upstream agent escalated per §7.2. `blockers[]` and `citations[]` are never `null` on non-blocked runs.                                                                                                                                                                          |
+| A-06 | No index endpoint queried                                                                      | Checklist Assembler has no evidence-discovery authority; all inputs come from pipeline state reads and `vq_direct_access` for header fields only                                                                                                                                                                                                                                                                                                                                                    |
+| A-07 | Blocked output uses §7.1 shape with no assembly fields                                         | When `overall_status = BLOCKED`: output contains only `pipeline_run_id`, `vendor_name` (if available), `overall_status`, `blocked_reason`, and `blocked_fields`. Assembly fields (`data_classification`, `fast_track_eligible`, `required_security_actions`, `dpa_required`, `approval_path`, `required_approvals`, `blockers`, `citations`) are entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of canonical field names. |
+| A-08 | Escalated output has all assembly fields present per §7.2                                      | When `overall_status = ESCALATED`: all assembly fields are present (not absent). Fields with resolved upstream values carry those values. Fields whose upstream owner returned `null` are passed through as `null`. No field is absent.                                                                                                                                                                                                                                                             |
+| A-09 | Audit log absence blocks the run                                                               | When audit log entries are absent or empty, agent emits `BLOCKED` with `blocked_reason: ["MISSING_AUDIT_LOG"]` rather than producing a checklist with no citations                                                                                                                                                                                                                                                                                                                                  |
 
 ---
 
 ## 11. What This Agent Does Not Own
 
-| Item | Governed By |
-|---|---|
-| Data classification | IT Security Agent (STEP-02) |
-| Fast-track eligibility | IT Security Agent (STEP-02) |
-| DPA and NDA requirement determination | Legal Agent (STEP-03) |
-| DPA and NDA blocker flags | Legal Agent (STEP-03) |
-| Approval path routing | Procurement Agent (STEP-04) |
-| Required approvals list | Procurement Agent (STEP-04) |
-| Source authority hierarchy | CC-001 §5 |
+| Item                                  | Governed By                        |
+| ------------------------------------- | ---------------------------------- |
+| Data classification                   | IT Security Agent (STEP-02)        |
+| Fast-track eligibility                | IT Security Agent (STEP-02)        |
+| DPA and NDA requirement determination | Legal Agent (STEP-03)              |
+| DPA and NDA blocker flags             | Legal Agent (STEP-03)              |
+| Approval path routing                 | Procurement Agent (STEP-04)        |
+| Required approvals list               | Procurement Agent (STEP-04)        |
+| Source authority hierarchy            | CC-001 §5                          |
 | Bundle assembly and retrieval routing | Supervisor / ORCH-PLAN-001 STEP-05 |
-| Output schema authority | Design Doc §10 |
-| Stakeholder guidance and checkoff | Checkoff Agent (STEP-06) |
-| Any domain determination | All domain agents upstream |
+| Output schema authority               | Design Doc §10                     |
+| Stakeholder guidance and checkoff     | Checkoff Agent (STEP-06)           |
+| Any domain determination              | All domain agents upstream         |

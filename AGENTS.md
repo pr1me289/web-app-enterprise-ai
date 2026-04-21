@@ -13,6 +13,7 @@ This repository must NEVER contain:
 - Any hard-coded credentials
 
 Authentication must be handled via:
+
 - `gh auth login`
 - SSH keys
 - Environment variables stored outside the repository
@@ -54,17 +55,16 @@ The site is primarily a portfolio artifact and will live at a custom domain link
 The site is structured as seven content parts across three deployable pages:
 
 **Main page (long-scroll, parts 1–5):**
+
 1. **Title** — news-headline framing of the enterprise AI paradox; McKinsey quote on the gap between AI investment and impact
 2. **Introduction** — the working title framing of the approach (currently "A Spec-Driven Approach to Enterprise Context Engineering"); byline
 3. **Problem & Landscape** — current approaches to enterprise AI; the players, their perspectives, their constraints
 4. **Approach** — spec-driven development philosophy, comparison to adjacent frameworks (Kiro, GitHub Spec Kit), deterministic supervisor rationale, hybrid agentic retrieval architecture, domain agent model, chunking/embedding choices
 5. **Business Scenario** — introduction to the mock scenario used for demonstration (Lichen Manufacturing as the onboarding organization, a candidate vendor as the subject), stakeholders, problem shape
 
-**/demo page (part 6):**
-6. **Demo in action** — interactive replay of a captured pipeline run on the mock scenario (or video fallback)
+**/demo page (part 6):** 6. **Demo in action** — interactive replay of a captured pipeline run on the mock scenario (or video fallback)
 
-**/findings page (part 7):**
-7. **Findings** — what was learned, evaluation results, reflections
+**/findings page (part 7):** 7. **Findings** — what was learned, evaluation results, reflections
 
 Progressive disclosure is the site's core interaction pattern. Default views are plain-language. A consistent expander component reveals spec excerpts, architectural detail, or design rationale. The demo is a pre-captured run played back by a React component — not a live backend call in v1.
 
@@ -154,6 +154,7 @@ project-root/
 ```
 
 Rules:
+
 - Page files live in `src/pages/` — one per route.
 - Content (MDX) lives in `src/content/` organized by section.
 - React components go in `src/components/react/` and are only used where interactivity is required.
@@ -173,6 +174,7 @@ Rules:
 - Avoid premature abstraction — extract a component only when it's used in two or more places.
 
 CI must:
+
 - Install dependencies via `pnpm install --frozen-lockfile`
 - Run `pnpm lint`
 - Run `pnpm format:check`
@@ -205,6 +207,7 @@ Never commit:
 Record all meaningful changes in `master_log.md` at the project root.
 
 **Entry format:**
+
 ```
 ### [#N] YYYY-MM-DD | {Claude Code | Codex | Manual}
 **Task:** What was requested
@@ -215,7 +218,7 @@ Record all meaningful changes in `master_log.md` at the project root.
 ```
 
 - Session number is ever-incrementing from `#1` — never reset it.
-- Log *before* starting long tasks (plan) and *after* completing them (result).
+- Log _before_ starting long tasks (plan) and _after_ completing them (result).
 - Content-only edits (copy tweaks, typo fixes) don't need full entries — batch them as "copy pass" entries.
 - Infrastructure changes, component additions, and structural decisions always get their own entry.
 
@@ -226,6 +229,7 @@ Record all meaningful changes in `master_log.md` at the project root.
 The README is for external readers (recruiters clicking through the GitHub repo, engineers evaluating the work). Keep it accurate and oriented around what the project is and how to run it locally.
 
 Update it when you change:
+
 - How to install, run, or build the project
 - The tech stack (add/remove major dependencies)
 - The site structure (add/remove pages)
@@ -279,6 +283,7 @@ When modifying code:
 - Keep changes atomic and logically isolated.
 
 When modifying content (MDX, prose):
+
 - Never rewrite spec-derived content without preserving technical meaning.
 - Flag any change where the semantic accuracy of a technical claim is uncertain.
 - Treat the spec documents in the upstream pipeline repo as source of truth — this repo's content is derivative.
@@ -325,6 +330,7 @@ When CI fails, fix in this order:
 4. Type errors (if TypeScript is in use)
 
 Guidelines:
+
 - Run formatter before lint.
 - Keep changes minimal.
 - Follow existing patterns.

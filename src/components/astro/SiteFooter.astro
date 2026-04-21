@@ -4,10 +4,13 @@ import Container from './Container.astro';
 const year = new Date().getFullYear();
 ---
 
-<footer class="mt-section border-t border-ink-100 py-10 text-sm text-ink-500">
-  <Container width="wide" class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-    <p>&copy; {year} Pierce Nellessen. All rights reserved.</p>
-    <p class="text-ink-400">
+<footer class="mt-section border-t border-ink-100/80 bg-paper-muted/60 py-10 text-sm text-ink-500">
+  <Container width="wide" class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+    <div class="space-y-1">
+      <p class="font-serif text-base text-ink-900">Spec-Driven Context Engineering</p>
+      <p>&copy; {year} Pierce Nellessen. All rights reserved.</p>
+    </div>
+    <p class="max-w-md text-ink-400 md:text-right">
       A narrative presentation of a spec-driven approach to enterprise context engineering.
     </p>
   </Container>

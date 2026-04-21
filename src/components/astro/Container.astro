@@ -6,7 +6,7 @@ interface Props {
 }
 
 const { width = 'narrative', as = 'div', class: className = '' } = Astro.props;
-const Tag = as as keyof HTMLElementTagNameMap;
+const Tag = as;
 const maxWidth = width === 'wide' ? 'max-w-wide' : 'max-w-narrative';
 ---
 

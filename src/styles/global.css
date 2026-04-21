@@ -10,11 +10,12 @@
   }
 
   body {
-    @apply bg-paper text-ink-800 font-sans;
-    font-feature-settings:
-      'kern',
-      'liga',
-      'calt';
+    @apply bg-paper font-sans text-ink-800;
+    font-feature-settings: 'kern', 'liga', 'calt';
+    background-image:
+      radial-gradient(circle at top left, rgba(157, 87, 40, 0.08), transparent 26rem),
+      radial-gradient(circle at top right, rgba(33, 71, 60, 0.08), transparent 24rem),
+      linear-gradient(180deg, rgba(243, 238, 228, 0.6) 0%, rgba(252, 250, 245, 0) 26%);
   }
 
   h1,
@@ -25,11 +26,11 @@
   }
 
   a {
-    @apply underline-offset-4;
+    @apply underline-offset-4 transition-colors;
   }
 
   :focus-visible {
-    @apply outline-none ring-2 ring-accent-ring ring-offset-2 ring-offset-paper rounded-sm;
+    @apply rounded-sm outline-none ring-2 ring-accent-ring ring-offset-2 ring-offset-paper;
   }
 
   ::selection {
@@ -40,11 +41,11 @@
 
 @layer components {
   .eyebrow {
-    @apply text-eyebrow font-mono uppercase text-ink-500 tracking-eyebrow;
+    @apply font-mono text-eyebrow uppercase tracking-eyebrow text-ink-500;
   }
 
   .lede {
-    @apply text-lede text-ink-600 font-sans;
+    @apply font-sans text-lede text-ink-600;
   }
 
   .rule {
@@ -52,7 +53,7 @@
   }
 
   .prose-narrative {
-    @apply max-w-prose text-ink-700 leading-relaxed;
+    @apply max-w-prose leading-relaxed text-ink-700;
   }
 
   .prose-narrative p {
@@ -68,18 +69,38 @@
   }
 
   .prose-narrative h3 {
-    @apply mt-10 mb-3 text-xl;
+    @apply mb-3 mt-10 text-xl;
   }
 
   .prose-narrative ul {
-    @apply my-4 list-disc pl-6 space-y-2;
+    @apply my-4 list-disc space-y-2 pl-6;
   }
 
   .prose-narrative ol {
-    @apply my-4 list-decimal pl-6 space-y-2;
+    @apply my-4 list-decimal space-y-2 pl-6;
   }
 
   .prose-narrative blockquote {
     @apply my-6 border-l-2 border-accent pl-4 italic text-ink-600;
+  }
+
+  .panel {
+    @apply rounded-[1.25rem] border border-ink-100/90 bg-paper/90 shadow-soft backdrop-blur;
+  }
+
+  .panel-muted {
+    @apply panel bg-paper-muted/90;
+  }
+
+  .display-balance {
+    text-wrap: balance;
+  }
+
+  .metric-value {
+    @apply font-serif text-4xl font-semibold tracking-tight text-ink-900;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-ink-100 bg-paper-muted px-3 py-1 text-[0.72rem] uppercase tracking-[0.12em] text-ink-600;
   }
 }

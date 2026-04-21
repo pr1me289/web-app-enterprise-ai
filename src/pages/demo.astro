@@ -10,40 +10,70 @@ const { run, steps } = runData;
 const startedAt = new Date(run.startedAt);
 const completedAt = new Date(run.completedAt);
 const durationSec = Math.round((completedAt.getTime() - startedAt.getTime()) / 1000);
+const escalatedCount = steps.filter((step) => step.state === 'escalated').length;
+const blockers = steps
+  .flatMap((step) => step.determination.output)
+  .filter((item) => item.includes('BLOCKER'));
+const evidenceCount = steps.reduce((sum, step) => sum + step.evidence.length, 0);
 
 const outcomeTone = {
-  complete: 'text-emerald-700',
-  escalated: 'text-amber-700',
-  blocked: 'text-red-700',
+  complete: 'text-spruce-700 bg-spruce-50',
+  escalated: 'text-accent bg-accent-soft',
+  blocked: 'text-rose-700 bg-rose-50',
 }[run.outcome as 'complete' | 'escalated' | 'blocked'];
 ---
 
 <BaseLayout title="Demo · Pipeline replay">
-  <section class="border-b border-ink-100 bg-paper-muted">
+  <section class="border-b border-ink-100">
     <Container width="wide" class="py-16 md:py-20">
-      <SectionHero
-        as="h1"
-        eyebrow="Part 06 · Demo"
-        title="Pipeline replay"
-        lede="A captured run of the vendor-onboarding pipeline on the mock scenario. Step through the six stages to see how the supervisor, retrieval layer, and domain agents produced each determination."
-      />
+      <div class="grid gap-8 xl:grid-cols-[minmax(0,1.1fr)_minmax(19rem,0.9fr)]">
+        <div>
+          <SectionHero
+            as="h1"
+            eyebrow="Part 06 · Demo"
+            title="Three-pane replay of a governed pipeline run"
+            lede="A captured walkthrough of the Lichen Manufacturing and OptiChain scenario. The left rail tracks execution, the center panel shows the active step, and the right rail exposes bundle evidence and audit notes."
+          />
+          <p class="mt-7 max-w-3xl text-sm leading-relaxed text-ink-600">
+            This is where the architecture becomes legible. Instead of narrating abstractly about
+            retrieval and orchestration, the replay shows what triggered each stage, what the
+            supervisor needed to know, which sources were pulled into the bundle, and why the final
+            state remained escalated.
+          </p>
+        </div>
 
-      <div class="mt-10 grid gap-6 md:grid-cols-4">
-        <div class="rounded-md border border-ink-100 bg-paper p-4">
+        <div class="panel p-6">
+          <p class="eyebrow mb-3">Run framing</p>
+          <p class="font-serif text-2xl text-ink-900">{run.scenario}</p>
+          <p class="mt-4 text-sm leading-relaxed text-ink-600">{run.summary}</p>
+          <div class="mt-5 flex flex-wrap gap-2">
+            <span
+              class={`rounded-full px-3 py-1 text-[0.72rem] font-medium uppercase tracking-[0.12em] ${outcomeTone}`}
+            >
+              {run.outcome}
+            </span>
+            <span class="chip">Duration {durationSec}s</span>
+            <span class="chip">{steps.length} steps</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-10 grid gap-4 md:grid-cols-4">
+        <div class="panel p-4">
           <p class="eyebrow text-ink-400">Run ID</p>
-          <p class="mt-1 font-mono text-xs text-ink-700">{run.id}</p>
+          <p class="mt-2 font-mono text-xs text-ink-700">{run.id}</p>
         </div>
-        <div class="rounded-md border border-ink-100 bg-paper p-4">
-          <p class="eyebrow text-ink-400">Scenario</p>
-          <p class="mt-1 text-sm text-ink-800">{run.scenario}</p>
+        <div class="panel p-4">
+          <p class="eyebrow text-ink-400">Escalated steps</p>
+          <p class="mt-2 font-serif text-3xl text-ink-900">{escalatedCount}</p>
         </div>
-        <div class="rounded-md border border-ink-100 bg-paper p-4">
-          <p class="eyebrow text-ink-400">Duration</p>
-          <p class="mt-1 text-sm text-ink-800">{durationSec}s</p>
+        <div class="panel p-4">
+          <p class="eyebrow text-ink-400">Evidence items</p>
+          <p class="mt-2 font-serif text-3xl text-ink-900">{evidenceCount}</p>
         </div>
-        <div class="rounded-md border border-ink-100 bg-paper p-4">
-          <p class="eyebrow text-ink-400">Outcome</p>
-          <p class={`mt-1 text-sm font-medium uppercase tracking-wide ${outcomeTone}`}>{run.outcome}</p>
+        <div class="panel p-4">
+          <p class="eyebrow text-ink-400">Named blockers</p>
+          <p class="mt-2 font-serif text-3xl text-ink-900">{blockers.length}</p>
         </div>
       </div>
     </Container>
@@ -51,15 +81,13 @@ const outcomeTone = {
 
   <section class="py-section-sm md:py-section">
     <Container width="wide">
-      <div class="mb-8 max-w-prose">
-        <p class="text-sm leading-relaxed text-ink-600">{run.summary}</p>
-      </div>
-
       <ReplayConsole run={run} steps={steps} client:load />
 
       <Callout kind="architecture" title="What this replay is — and isn't">
         <p>
-          v1 plays back a pre-captured run from <code>src/data/pipeline-run.json</code>. It is not a live backend call. The audit-trail shape, escalation flow, and null-passthrough discipline shown here match the upstream pipeline's real contract.
+          The replay is driven by a captured JSON artifact in <code>src/data/pipeline-run.json</code
+          >. That is intentional. v1 is about making the architecture and decision trail legible,
+          not about simulating live enterprise execution from the browser.
         </p>
       </Callout>
     </Container>

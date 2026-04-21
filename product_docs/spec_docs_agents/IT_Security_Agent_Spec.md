@@ -1,10 +1,11 @@
 # Agent Spec — IT Security Agent
+
 ## SPEC-AGENT-SEC-001 v0.9
 
 **Document ID:** SPEC-AGENT-SEC-001  
 **Version:** 0.9
 **Owner:** Engineering / IT Architecture  
-**Last Updated:** April 12, 2026  
+**Last Updated:** April 12, 2026
 
 **Document Hierarchy:** PRD → Design Doc → Context Contract → **► Agent Spec ◄**
 
@@ -29,12 +30,12 @@ The IT Security Agent does not originate security facts. It normalizes questionn
 
 ## 1. Agent Identity
 
-| Field | Value |
-|---|---|
-| **Agent ID** | `it_security_agent` |
-| **Pipeline Step** | STEP-02 — R-02: Onboarding Path Classification and Fast-Track Determination |
-| **Assigned By** | Supervisor Agent |
-| **Upstream Dependency** | STEP-01 must be COMPLETE |
+| Field                     | Value                                                                                          |
+| ------------------------- | ---------------------------------------------------------------------------------------------- |
+| **Agent ID**              | `it_security_agent`                                                                            |
+| **Pipeline Step**         | STEP-02 — R-02: Onboarding Path Classification and Fast-Track Determination                    |
+| **Assigned By**           | Supervisor Agent                                                                               |
+| **Upstream Dependency**   | STEP-01 must be COMPLETE                                                                       |
 | **Downstream Dependents** | STEP-03 (Legal Agent), then STEP-04 (Procurement Agent) after STEP-03 reaches a terminal state |
 
 ---
@@ -64,6 +65,7 @@ The Design Doc, Context Contract, and Orchestration Plan govern how the system i
 The Supervisor assembles this bundle before the agent runs. The agent must treat the bundle as its complete and exclusive evidence base for this step.
 
 **Bundle composition (assembly priority order):**
+
 1. Questionnaire fields — integration method, declared data profile, EU personal data, NDA status
 2. IT Security Policy — ERP integration tier sections
 3. IT Security Policy — data classification and access control sections
@@ -71,6 +73,7 @@ The Supervisor assembles this bundle before the agent runs. The agent must treat
 5. Supplemental context — excluded when budget is constrained
 
 **Required questionnaire fields for an admissible STEP-02 bundle:**
+
 - `integration_details.erp_type`
 - `data_classification_self_reported`
 - `regulated_data_types`
@@ -86,13 +89,13 @@ If these required intake fields are missing, the bundle is inadmissible. The age
 
 Derived from CC-001 §6.1. The agent must treat this as a hard access list, not a guideline.
 
-| Index Endpoint | Access |
-|---|---|
-| `idx_security_policy` | ✓ Full |
-| `idx_dpa_matrix` | ✗ No access |
+| Index Endpoint           | Access      |
+| ------------------------ | ----------- |
+| `idx_security_policy`    | ✓ Full      |
+| `idx_dpa_matrix`         | ✗ No access |
 | `idx_procurement_matrix` | ✗ No access |
-| `vq_direct_access` | ✓ Full |
-| `idx_slack_notes` | ✗ No access |
+| `vq_direct_access`       | ✓ Full      |
+| `idx_slack_notes`        | ✗ No access |
 
 **The IT Security Agent does not query indices independently.** The Supervisor performs all retrieval and bundle assembly. If the agent detects that its bundle contains evidence from a prohibited index, it must log the anomaly, exclude that evidence from reasoning and citation, and continue only if the remaining bundle is still admissible. If excluding the prohibited evidence leaves the bundle inadmissible, the agent must emit `blocked`.
 
@@ -123,17 +126,17 @@ The architectural system may enforce retrieval permissions upstream. This spec r
 
 The IT Security Agent is the **sole owner** of the following determinations. Downstream agents consume these as authoritative inputs and may not redefine or override them.
 
-| Determination                    | Owned By                                                                                                                                                                                                  |
-| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `integration_type_normalized`    | IT Security Agent                                                                                                                                                                                         |
-| `integration_tier`               | IT Security Agent                                                                                                                                                                                         |
-| `data_classification`            | IT Security Agent                                                                                                                                                                                         |
-| `eu_personal_data_present`       | IT Security Agent                                                                                                                                                                                         |
-| `fast_track_eligible`            | IT Security Agent                                                                                                                                                                                         |
-| `fast_track_rationale`           | IT Security Agent                                                                                                                                                                                         |
-| `security_followup_required`     | IT Security Agent                                                                                                                                                                                         |
-| `required_security_actions`      | IT Security Agent                                                                                                                                                                                         |
-| `nda_status_from_questionnaire`  | Passthrough — read from questionnaire, normalized, and included in output for downstream use. Not a derived determination. The IT Security Agent does not evaluate NDA adequacy; that belongs to STEP-03. |
+| Determination                   | Owned By                                                                                                                                                                                                  |
+| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `integration_type_normalized`   | IT Security Agent                                                                                                                                                                                         |
+| `integration_tier`              | IT Security Agent                                                                                                                                                                                         |
+| `data_classification`           | IT Security Agent                                                                                                                                                                                         |
+| `eu_personal_data_present`      | IT Security Agent                                                                                                                                                                                         |
+| `fast_track_eligible`           | IT Security Agent                                                                                                                                                                                         |
+| `fast_track_rationale`          | IT Security Agent                                                                                                                                                                                         |
+| `security_followup_required`    | IT Security Agent                                                                                                                                                                                         |
+| `required_security_actions`     | IT Security Agent                                                                                                                                                                                         |
+| `nda_status_from_questionnaire` | Passthrough — read from questionnaire, normalized, and included in output for downstream use. Not a derived determination. The IT Security Agent does not evaluate NDA adequacy; that belongs to STEP-03. |
 
 STEP-04 (Procurement Agent) may **consume** `fast_track_eligible` as a passthrough but may not recalculate or override it. Under the sequential orchestration model, STEP-04 begins only after STEP-03 reaches a terminal state, but that sequencing change does not transfer ownership of `fast_track_eligible` away from STEP-02.
 
@@ -182,48 +185,47 @@ Normalization of `eu_personal_data_present` must occur in the same initial quest
 
 ### 8.2 Integration Tier Assignment
 
-| Condition | Assigned Tier |
-|---|---|
-| Direct API connection to ERP without approved middleware | `TIER_1` |
-| Connection through approved mediated middleware layer | `TIER_2` |
-| Export-only / file-based, no direct system access | `TIER_3` |
+| Condition                                                    | Assigned Tier                 |
+| ------------------------------------------------------------ | ----------------------------- |
+| Direct API connection to ERP without approved middleware     | `TIER_1`                      |
+| Connection through approved mediated middleware layer        | `TIER_2`                      |
+| Export-only / file-based, no direct system access            | `TIER_3`                      |
 | Integration pattern not classifiable from available evidence | `UNCLASSIFIED_PENDING_REVIEW` |
 
 Tier assignment must cite the relevant ISP-001 §12.2 row.
 
 ### 8.3 Data Classification
 
-| Condition | `data_classification` |
-|---|---|
-| `eu_personal_data_present = true` | `REGULATED` |
-| Integration involves regulated, sensitive, or ERP-connected data | `REGULATED` |
-| Integration confirmed export-only, no regulated data types | `UNREGULATED` |
-| Integration type or data scope cannot be confirmed | `AMBIGUOUS` |
+| Condition                                                        | `data_classification` |
+| ---------------------------------------------------------------- | --------------------- |
+| `eu_personal_data_present = true`                                | `REGULATED`           |
+| Integration involves regulated, sensitive, or ERP-connected data | `REGULATED`           |
+| Integration confirmed export-only, no regulated data types       | `UNREGULATED`         |
+| Integration type or data scope cannot be confirmed               | `AMBIGUOUS`           |
 
 ### 8.4 Security Follow-Up Requirement
 
 `security_followup_required` is determined after integration tier and data classification are resolved.
 
-| Condition | `security_followup_required` |
-|---|---|
-| `integration_tier = UNCLASSIFIED_PENDING_REVIEW` | `true` — architecture documentation required |
-| `data_classification = REGULATED` and `integration_tier = TIER_1` | `true` — full security review required |
-| `data_classification = REGULATED` and `integration_tier = TIER_2` | `true` — security review required |
-| `eu_personal_data_present = true` and `integration_tier` is not `TIER_3` | `true` — data handling review required |
-| `integration_type_normalized = AMBIGUOUS` | `true` — integration pattern must be clarified before review can proceed |
-| `data_classification = UNREGULATED` and `integration_tier = TIER_3` and no ambiguity | `false` |
+| Condition                                                                            | `security_followup_required`                                             |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
+| `integration_tier = UNCLASSIFIED_PENDING_REVIEW`                                     | `true` — architecture documentation required                             |
+| `data_classification = REGULATED` and `integration_tier = TIER_1`                    | `true` — full security review required                                   |
+| `data_classification = REGULATED` and `integration_tier = TIER_2`                    | `true` — security review required                                        |
+| `eu_personal_data_present = true` and `integration_tier` is not `TIER_3`             | `true` — data handling review required                                   |
+| `integration_type_normalized = AMBIGUOUS`                                            | `true` — integration pattern must be clarified before review can proceed |
+| `data_classification = UNREGULATED` and `integration_tier = TIER_3` and no ambiguity | `false`                                                                  |
 
 When `security_followup_required = true`, the agent must populate `required_security_actions` with at least one structured entry describing the required action, reason, and responsible owner. An empty `required_security_actions` array is only valid when `security_followup_required = false`.
 
-
 ### 8.5 Fast-Track Eligibility
 
-| Condition | `fast_track_eligible` |
-|---|---|
-| `data_classification = REGULATED` | `false` |
-| `integration_type_normalized = AMBIGUOUS` | `false` |
-| Governing fast-track policy source missing or unconfirmed | `false`, `fast_track_rationale = DISALLOWED_AMBIGUOUS_SCOPE` |
-| All conditions satisfied for low-risk, export-only, unregulated vendor | `true` |
+| Condition                                                              | `fast_track_eligible`                                        |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------ |
+| `data_classification = REGULATED`                                      | `false`                                                      |
+| `integration_type_normalized = AMBIGUOUS`                              | `false`                                                      |
+| Governing fast-track policy source missing or unconfirmed              | `false`, `fast_track_rationale = DISALLOWED_AMBIGUOUS_SCOPE` |
+| All conditions satisfied for low-risk, export-only, unregulated vendor | `true`                                                       |
 
 Fast-track `true` requires `data_classification = UNREGULATED` with a confirmed policy citation. Any ambiguity defaults to `false`.
 
@@ -269,21 +271,21 @@ The agent must return a single schema-valid JSON object. No other output format 
 
 ### Output field constraints
 
-| Field | Constraint |
-|---|---|
-| `integration_type_normalized` | Must be present on every non-blocked run. Absent on blocked runs (§9.1). On escalated runs, set to `null` if the agent cannot resolve the integration type (§9.2). |
-| `integration_tier` | Must be present on every non-blocked run. Absent on blocked runs. Must be derived from Tier 1 policy evidence, not questionnaire self-report. On escalated runs, set to `null` if the agent cannot assign a tier (§9.2). |
-| `data_classification` | Must be present on every non-blocked run. Absent on blocked runs. Must be derived from Tier 1 policy evidence. On escalated runs, set to `null` if the agent cannot resolve the classification (§9.2). |
-| `eu_personal_data_present` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` only if the questionnaire EU fields are ambiguous or unresolvable (§9.2). |
-| `fast_track_eligible` | Must be present on every non-blocked run. Absent on blocked runs. Must be emitted before STEP-04 may begin. On escalated runs, set to `null` if upstream classification fields it depends on are `null` (§9.2). |
-| `fast_track_rationale` | Must be present on every non-blocked run. Absent on blocked runs. Must be non-null whenever `fast_track_eligible = false`, and must contain one of the defined enum values. On escalated runs, set to `null` if `fast_track_eligible` is `null`. |
-| `security_followup_required` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` if upstream classification fields it depends on are `null` (§9.2). |
-| `nda_status_from_questionnaire` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` only if the questionnaire NDA field is absent or unrecognizable. |
-| `required_security_actions` | Must be present on every non-blocked run. Absent on blocked runs. May be an empty array only when `security_followup_required = false`. On escalated runs, set to `null` if `security_followup_required` is `null`. |
-| `policy_citations` | Must be present on every non-blocked run. Absent on blocked runs. At least one PRIMARY ISP-001 citation required for any nontrivial classification determination. On escalated runs, include citations for determinations that were resolved; set to `null` only if all citation-supporting determinations are unresolvable. |
-| `fast_track_eligible = true` | Requires at least one PRIMARY ISP-001 citation supporting low-risk / export-only eligibility |
-| `status = escalated` | All determination fields must be present (not absent). Fields the agent resolved carry their derived values. Fields the agent could not resolve are `null`. See §9.2. When escalation is clause-level, `policy_citations` must cite both conflicting chunks. Full escalation payload is captured in the audit log per CC-001 §13.1. |
-| `status` | Lowercase. One of `complete`, `escalated`, or `blocked`. |
+| Field                           | Constraint                                                                                                                                                                                                                                                                                                                          |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `integration_type_normalized`   | Must be present on every non-blocked run. Absent on blocked runs (§9.1). On escalated runs, set to `null` if the agent cannot resolve the integration type (§9.2).                                                                                                                                                                  |
+| `integration_tier`              | Must be present on every non-blocked run. Absent on blocked runs. Must be derived from Tier 1 policy evidence, not questionnaire self-report. On escalated runs, set to `null` if the agent cannot assign a tier (§9.2).                                                                                                            |
+| `data_classification`           | Must be present on every non-blocked run. Absent on blocked runs. Must be derived from Tier 1 policy evidence. On escalated runs, set to `null` if the agent cannot resolve the classification (§9.2).                                                                                                                              |
+| `eu_personal_data_present`      | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` only if the questionnaire EU fields are ambiguous or unresolvable (§9.2).                                                                                                                                                        |
+| `fast_track_eligible`           | Must be present on every non-blocked run. Absent on blocked runs. Must be emitted before STEP-04 may begin. On escalated runs, set to `null` if upstream classification fields it depends on are `null` (§9.2).                                                                                                                     |
+| `fast_track_rationale`          | Must be present on every non-blocked run. Absent on blocked runs. Must be non-null whenever `fast_track_eligible = false`, and must contain one of the defined enum values. On escalated runs, set to `null` if `fast_track_eligible` is `null`.                                                                                    |
+| `security_followup_required`    | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` if upstream classification fields it depends on are `null` (§9.2).                                                                                                                                                               |
+| `nda_status_from_questionnaire` | Must be present on every non-blocked run. Absent on blocked runs. On escalated runs, set to `null` only if the questionnaire NDA field is absent or unrecognizable.                                                                                                                                                                 |
+| `required_security_actions`     | Must be present on every non-blocked run. Absent on blocked runs. May be an empty array only when `security_followup_required = false`. On escalated runs, set to `null` if `security_followup_required` is `null`.                                                                                                                 |
+| `policy_citations`              | Must be present on every non-blocked run. Absent on blocked runs. At least one PRIMARY ISP-001 citation required for any nontrivial classification determination. On escalated runs, include citations for determinations that were resolved; set to `null` only if all citation-supporting determinations are unresolvable.        |
+| `fast_track_eligible = true`    | Requires at least one PRIMARY ISP-001 citation supporting low-risk / export-only eligibility                                                                                                                                                                                                                                        |
+| `status = escalated`            | All determination fields must be present (not absent). Fields the agent resolved carry their derived values. Fields the agent could not resolve are `null`. See §9.2. When escalation is clause-level, `policy_citations` must cite both conflicting chunks. Full escalation payload is captured in the audit log per CC-001 §13.1. |
+| `status`                        | Lowercase. One of `complete`, `escalated`, or `blocked`.                                                                                                                                                                                                                                                                            |
 
 ### 9.1 Blocked Output Shape
 
@@ -299,11 +301,11 @@ When the agent derives `status = blocked`, it MUST emit the following output sha
 
 **`blocked_reason`** — enum array. Lists the specific gate-condition or admissibility failure(s) that caused the block. Multiple values are permitted when multiple inputs are missing simultaneously. Defined enum values for the IT Security Agent:
 
-| Enum Value | Condition |
-|---|---|
-| `MISSING_QUESTIONNAIRE_CLASSIFICATION_FIELDS` | Core data classification inputs (`data_classification_self_reported`, `regulated_data_types`) are absent from the bundle. The agent cannot make any classification determination without these. Distinct from STEP-01 blocking on a missing questionnaire entirely — STEP-01 validates existence and completeness, but a bundle assembly failure could still deliver a bundle with these fields stripped or null. |
-| `MISSING_ERP_INTEGRATION_FIELDS` | `integration_details.erp_type` is absent from the bundle. The agent cannot assign an integration tier or determine fast-track eligibility without this. Kept separate from classification fields because ERP fields and classification fields drive different downstream outputs. Given that `integration_tier` and `data_classification` are tightly coupled in ISP-001's classification logic, a full block is cleaner than a partial determination. |
-| `MISSING_ISP_001` | The security policy index is entirely unavailable. The agent has questionnaire fields but no authoritative source to cite for its determination. Per CC-001 §11, a determination without at least one Tier 1 citation is insufficient for complete — and unlike supplementary inputs, ISP-001 is the primary governing source for this agent. No ISP-001 means no determination at all. |
+| Enum Value                                    | Condition                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `MISSING_QUESTIONNAIRE_CLASSIFICATION_FIELDS` | Core data classification inputs (`data_classification_self_reported`, `regulated_data_types`) are absent from the bundle. The agent cannot make any classification determination without these. Distinct from STEP-01 blocking on a missing questionnaire entirely — STEP-01 validates existence and completeness, but a bundle assembly failure could still deliver a bundle with these fields stripped or null.                                      |
+| `MISSING_ERP_INTEGRATION_FIELDS`              | `integration_details.erp_type` is absent from the bundle. The agent cannot assign an integration tier or determine fast-track eligibility without this. Kept separate from classification fields because ERP fields and classification fields drive different downstream outputs. Given that `integration_tier` and `data_classification` are tightly coupled in ISP-001's classification logic, a full block is cleaner than a partial determination. |
+| `MISSING_ISP_001`                             | The security policy index is entirely unavailable. The agent has questionnaire fields but no authoritative source to cite for its determination. Per CC-001 §11, a determination without at least one Tier 1 citation is insufficient for complete — and unlike supplementary inputs, ISP-001 is the primary governing source for this agent. No ISP-001 means no determination at all.                                                                |
 
 **`blocked_fields`** — string array. Lists the specific canonical field names (per CC-001 §15) that were absent or null in the upstream input, causing the block. This array is what makes the audit log entry useful: it names exactly what the Supervisor needs to surface to the resolution owner.
 
@@ -317,18 +319,18 @@ When the agent derives `status = escalated`, it emits the same determination sha
 
 **Per-field escalated null rules:**
 
-| Field | When `null` on an escalated run |
-|---|---|
-| `integration_type_normalized` | Agent cannot normalize the integration type from available evidence |
-| `integration_tier` | Agent cannot assign a tier — e.g., ISP-001 ERP tier table not retrieved for the specific integration pattern, or Tier 1 sources conflict |
-| `data_classification` | Agent cannot determine classification from available evidence and policy rules |
-| `eu_personal_data_present` | Questionnaire EU personal data fields are ambiguous or contradictory — agent cannot normalize to a boolean |
-| `fast_track_eligible` | Upstream `data_classification` or `integration_type_normalized` is `null` — cannot evaluate eligibility from an unresolved classification |
-| `fast_track_rationale` | `fast_track_eligible` is `null` — cannot derive rationale from an unresolved eligibility determination |
-| `security_followup_required` | Upstream `integration_tier` and `data_classification` are both `null` — cannot determine follow-up requirement from unresolved classifications |
-| `nda_status_from_questionnaire` | Questionnaire NDA field is absent or value is unrecognizable — cannot normalize to an enum value |
-| `required_security_actions` | `security_followup_required` is `null` — cannot derive actions from an unresolved follow-up determination |
-| `policy_citations` | All citation-supporting determinations are unresolvable — set to `null`. If some citations are resolvable, include the resolvable citations and omit the unresolvable ones |
+| Field                           | When `null` on an escalated run                                                                                                                                            |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `integration_type_normalized`   | Agent cannot normalize the integration type from available evidence                                                                                                        |
+| `integration_tier`              | Agent cannot assign a tier — e.g., ISP-001 ERP tier table not retrieved for the specific integration pattern, or Tier 1 sources conflict                                   |
+| `data_classification`           | Agent cannot determine classification from available evidence and policy rules                                                                                             |
+| `eu_personal_data_present`      | Questionnaire EU personal data fields are ambiguous or contradictory — agent cannot normalize to a boolean                                                                 |
+| `fast_track_eligible`           | Upstream `data_classification` or `integration_type_normalized` is `null` — cannot evaluate eligibility from an unresolved classification                                  |
+| `fast_track_rationale`          | `fast_track_eligible` is `null` — cannot derive rationale from an unresolved eligibility determination                                                                     |
+| `security_followup_required`    | Upstream `integration_tier` and `data_classification` are both `null` — cannot determine follow-up requirement from unresolved classifications                             |
+| `nda_status_from_questionnaire` | Questionnaire NDA field is absent or value is unrecognizable — cannot normalize to an enum value                                                                           |
+| `required_security_actions`     | `security_followup_required` is `null` — cannot derive actions from an unresolved follow-up determination                                                                  |
+| `policy_citations`              | All citation-supporting determinations are unresolvable — set to `null`. If some citations are resolvable, include the resolvable citations and omit the unresolvable ones |
 
 **Fields that are resolved on escalated runs carry their normal values.** For example, when `data_classification = REGULATED` and `integration_type_normalized = AMBIGUOUS` produces `escalated`, the resolved fields are populated: `data_classification: "REGULATED"`, `eu_personal_data_present: true`, `fast_track_eligible: false`, etc. Only `integration_tier` (and fields that depend on it) would be `null` if the tier cannot be assigned. The escalation is about the unresolvable field(s), not about the entire determination.
 
@@ -400,17 +402,17 @@ Per CC-001 §14:
 
 ## 12. Exception Handling
 
-| Condition | Required Behavior |
-|---|---|
-| Bundle is empty or missing | Emit the §9.1 blocked output shape. Do not produce a determination. Do not emit any determination fields. |
+| Condition                                                                                                     | Required Behavior                                                                                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Bundle is empty or missing                                                                                    | Emit the §9.1 blocked output shape. Do not produce a determination. Do not emit any determination fields.                                                                                          |
 | Core classification questionnaire fields absent (`data_classification_self_reported`, `regulated_data_types`) | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_QUESTIONNAIRE_CLASSIFICATION_FIELDS"]` and `blocked_fields` listing the absent fields. Do not produce any determination fields. |
-| ERP integration field absent (`integration_details.erp_type`) | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_ERP_INTEGRATION_FIELDS"]` and `blocked_fields: ["integration_type"]`. Do not produce any determination fields. |
-| ISP-001 entirely unavailable | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_ISP_001"]` and `blocked_fields` listing the policy sections that were expected. Do not produce any determination fields. |
-| ISP-001 ERP tier table not retrieved (ISP-001 partially available) | Emit `status: escalated`. Log retrieval failure. Set `integration_tier` to `null` per §9.2. Populate all other fields the agent can resolve. |
-| Fast-track policy section not retrieved | `fast_track_eligible = false`, `fast_track_rationale = DISALLOWED_AMBIGUOUS_SCOPE`. Emit `status: escalated`. Populate all other fields the agent can resolve. |
-| Bundle contains evidence from a prohibited index | Log anomaly. Exclude the prohibited evidence from reasoning and citation. Continue only if the remaining bundle is still admissible; otherwise emit the §9.1 blocked output shape. |
-| Malformed or schema-invalid bundle | Emit the §9.1 blocked output shape. Do not attempt to reason over partial input. Do not emit any determination fields. |
-| Two ISP-001 clauses directly conflict on the same question | Emit `status: escalated`. Set the conflicting determination field(s) to `null` per §9.2. Cite both conflicting chunks in `policy_citations`. Full escalation payload is written to the audit log. |
+| ERP integration field absent (`integration_details.erp_type`)                                                 | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_ERP_INTEGRATION_FIELDS"]` and `blocked_fields: ["integration_type"]`. Do not produce any determination fields.                  |
+| ISP-001 entirely unavailable                                                                                  | Emit the §9.1 blocked output shape with `blocked_reason: ["MISSING_ISP_001"]` and `blocked_fields` listing the policy sections that were expected. Do not produce any determination fields.        |
+| ISP-001 ERP tier table not retrieved (ISP-001 partially available)                                            | Emit `status: escalated`. Log retrieval failure. Set `integration_tier` to `null` per §9.2. Populate all other fields the agent can resolve.                                                       |
+| Fast-track policy section not retrieved                                                                       | `fast_track_eligible = false`, `fast_track_rationale = DISALLOWED_AMBIGUOUS_SCOPE`. Emit `status: escalated`. Populate all other fields the agent can resolve.                                     |
+| Bundle contains evidence from a prohibited index                                                              | Log anomaly. Exclude the prohibited evidence from reasoning and citation. Continue only if the remaining bundle is still admissible; otherwise emit the §9.1 blocked output shape.                 |
+| Malformed or schema-invalid bundle                                                                            | Emit the §9.1 blocked output shape. Do not attempt to reason over partial input. Do not emit any determination fields.                                                                             |
+| Two ISP-001 clauses directly conflict on the same question                                                    | Emit `status: escalated`. Set the conflicting determination field(s) to `null` per §9.2. Cite both conflicting chunks in `policy_citations`. Full escalation payload is written to the audit log.  |
 
 ---
 
@@ -564,15 +566,15 @@ Questionnaire fields are present but ISP-001 is entirely unavailable — no auth
 
 These are the must-pass checks for this spec. They belong here as implementation-critical acceptance checks, not as a full evaluation program.
 
-| # | Constraint | Pass Condition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
-| ---- | ----------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A-01 | `integration_tier` derived from Tier 1 policy, not self-report | `policy_citations` includes a PRIMARY ISP-001 citation supporting the tier assignment                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
-| A-02 | `data_classification` derived from Tier 1 policy | At least one PRIMARY ISP-001 citation supports the classification                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| A-03 | `fast_track_eligible = false` when `data_classification = REGULATED` or `integration_type_normalized = AMBIGUOUS` | Hard rule satisfied with no exceptions                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| A-04 | No Tier 3 (Slack) source cited as PRIMARY | All Tier 3 citations remain SUPPLEMENTARY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| A-06 | All required output fields present and structurally valid | Schema-valid JSON. On `complete` runs: all determination fields must be non-null. On `escalated` runs: all determination fields must be present (not absent); resolved fields are non-null, unresolvable fields are `null` per §9.2. `status` must be one of `complete`, `escalated`, or `blocked`. `required_security_actions` may be `[]` only when `security_followup_required = false`. `policy_citations` must contain at least one entry on any complete, non-trivial run. |
-| A-07 | Blocked output uses §9.1 shape with no determination fields | When `status = blocked`: output contains only `status`, `blocked_reason`, and `blocked_fields`. Determination fields (`integration_type_normalized`, `integration_tier`, `data_classification`, `eu_personal_data_present`, `fast_track_eligible`, `fast_track_rationale`, `security_followup_required`, `nda_status_from_questionnaire`, `required_security_actions`, `policy_citations`) are entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of canonical field names. |
-| A-08 | Escalated output has all determination fields present per §9.2 | When `status = escalated`: all determination fields are present (not absent). Resolved fields carry their derived values. Unresolvable fields are `null`. No field is absent. |
+| #    | Constraint                                                                                                        | Pass Condition                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ---- | ----------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| A-01 | `integration_tier` derived from Tier 1 policy, not self-report                                                    | `policy_citations` includes a PRIMARY ISP-001 citation supporting the tier assignment                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| A-02 | `data_classification` derived from Tier 1 policy                                                                  | At least one PRIMARY ISP-001 citation supports the classification                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| A-03 | `fast_track_eligible = false` when `data_classification = REGULATED` or `integration_type_normalized = AMBIGUOUS` | Hard rule satisfied with no exceptions                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| A-04 | No Tier 3 (Slack) source cited as PRIMARY                                                                         | All Tier 3 citations remain SUPPLEMENTARY                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| A-06 | All required output fields present and structurally valid                                                         | Schema-valid JSON. On `complete` runs: all determination fields must be non-null. On `escalated` runs: all determination fields must be present (not absent); resolved fields are non-null, unresolvable fields are `null` per §9.2. `status` must be one of `complete`, `escalated`, or `blocked`. `required_security_actions` may be `[]` only when `security_followup_required = false`. `policy_citations` must contain at least one entry on any complete, non-trivial run.                                                                  |
+| A-07 | Blocked output uses §9.1 shape with no determination fields                                                       | When `status = blocked`: output contains only `status`, `blocked_reason`, and `blocked_fields`. Determination fields (`integration_type_normalized`, `integration_tier`, `data_classification`, `eu_personal_data_present`, `fast_track_eligible`, `fast_track_rationale`, `security_followup_required`, `nda_status_from_questionnaire`, `required_security_actions`, `policy_citations`) are entirely absent — not null, not empty. `blocked_reason` is a non-empty enum array. `blocked_fields` is a non-empty array of canonical field names. |
+| A-08 | Escalated output has all determination fields present per §9.2                                                    | When `status = escalated`: all determination fields are present (not absent). Resolved fields carry their derived values. Unresolvable fields are `null`. No field is absent.                                                                                                                                                                                                                                                                                                                                                                     |
 
 A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation artifact.
 
@@ -580,12 +582,12 @@ A fuller CSR / ISR evaluation matrix may be maintained in a separate evaluation 
 
 ## 15. What This Agent Does Not Own
 
-| Item | Governed By |
-|---|---|
-| DPA requirement determination | Legal Agent (STEP-03) |
-| Approval path routing | Procurement Agent (STEP-04) |
-| STEP-03 → STEP-04 execution order and gate sequencing | Design Doc / ORCH-PLAN-001 |
-| Source authority hierarchy | CC-001 §5 |
-| Retrieval routing and bundle assembly | Supervisor / ORCH-PLAN-001 STEP-02 |
-| Output schema authority | Design Doc §10 |
-| Checklist composition | Checklist Assembler (STEP-05) |
+| Item                                                  | Governed By                        |
+| ----------------------------------------------------- | ---------------------------------- |
+| DPA requirement determination                         | Legal Agent (STEP-03)              |
+| Approval path routing                                 | Procurement Agent (STEP-04)        |
+| STEP-03 → STEP-04 execution order and gate sequencing | Design Doc / ORCH-PLAN-001         |
+| Source authority hierarchy                            | CC-001 §5                          |
+| Retrieval routing and bundle assembly                 | Supervisor / ORCH-PLAN-001 STEP-02 |
+| Output schema authority                               | Design Doc §10                     |
+| Checklist composition                                 | Checklist Assembler (STEP-05)      |

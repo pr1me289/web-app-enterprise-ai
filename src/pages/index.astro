@@ -25,170 +25,464 @@ const ProblemBody = await problem.render();
 const ApproachBody = await approach.render();
 const ScenarioBody = await scenario.render();
 
-const principles = [
+const heroMetrics = [
+  { value: '80%', label: 'of enterprises believe AI will be transformative' },
+  { value: '80%', label: 'say those investments still lack bottom-line impact' },
+  { value: '15+', label: 'adversarial fixtures used to probe behavioral failures' },
+];
+
+const framingCards = [
   {
-    title: 'Substance over polish',
-    body: 'The work being presented is the value proposition. Visual refinement matters, but never at the cost of substance.',
+    index: 'Method',
+    title: 'Governed translation',
+    body: 'Turn stakeholder intent, policy, and operational context into something agents can use safely and repeatably.',
   },
   {
-    title: 'Progressive disclosure as core pattern',
-    body: 'Default views stay approachable. Technical detail lives one click away. Applied consistently across every section.',
+    index: 'Workflow',
+    title: 'Vendor onboarding',
+    body: 'Use a real enterprise workflow with compliance, access control, and cross-functional handoffs as the proving ground.',
   },
   {
-    title: 'Specs govern, models reason',
-    body: 'Orchestration is deterministic Python. LLM agents reason inside tightly scoped behavioral contracts.',
-  },
-  {
-    title: 'Retrieval is a first-class citizen',
-    body: 'Per-source dense + lexical collections, row-targeted matrix retrieval, cross-encoder re-ranking. Designed for the agents, not reused from chat UX.',
+    index: 'Instance',
+    title: 'Lichen + OptiChain',
+    body: 'A fictional manufacturer and software vendor make the architecture concrete without pretending the scenario is the headline.',
   },
 ];
 
-const agents = [
-  { name: 'IT Security', role: 'Applies policy; produces blocked / escalated / complete determinations.' },
-  { name: 'Legal', role: 'Applies contractual posture against vendor-supplied terms and redlines.' },
-  { name: 'Procurement', role: 'Evaluates commercial fit, vendor relationship, and procurement-policy alignment.' },
-  { name: 'Checklist Assembler', role: 'Sequences domain agents and composes the checklist bundle.' },
-  { name: 'Checkoff', role: 'Final determination stage — passes, escalates, or blocks with full audit trail.' },
+const landscapeLayers = [
+  {
+    title: 'Spec-driven layer',
+    body: 'GitHub Spec Kit, Kiro, and adjacent tools prove specs matter. This project extends that idea into governed enterprise context.',
+  },
+  {
+    title: 'Context engine layer',
+    body: 'Unblocked, Augment, Sourcegraph, Tabnine, and others focus on organizational memory, permissions, and contextual recall.',
+  },
+  {
+    title: 'Retrieval layer',
+    body: 'Hybrid search, graph approaches, long-context strategies, and instructed retrieval all compete to improve evidence quality.',
+  },
+  {
+    title: 'Runtime layer',
+    body: 'MCP, A2A, and orchestration frameworks shift the question from pure search to controlled access and execution flow.',
+  },
+];
+
+const pressurePoints = [
+  {
+    title: 'Context rot',
+    body: 'More context is not uniformly better. Long prompts bury critical details and make rule adherence less reliable.',
+  },
+  {
+    title: 'Authority conflicts',
+    body: 'Vendor questionnaires, Slack threads, matrices, and policy PDFs are not equivalent sources. The system has to know that.',
+  },
+  {
+    title: 'Temporal drift',
+    body: 'The reason behind a current rule often lives in a prior decision or precedent, not in the latest artifact alone.',
+  },
+  {
+    title: 'Runtime permissions',
+    body: 'Access control is a live execution concern. Retrieval cannot be treated as an ungoverned pre-processing step.',
+  },
+];
+
+const approachPrinciples = [
+  {
+    title: 'Center the translation layer',
+    body: 'GitHub Spec Kit centers the spec. Kiro centers the workflow. This model centers the governed translation from enterprise intent into agent-usable context.',
+  },
+  {
+    title: 'Keep orchestration deterministic',
+    body: 'The supervisor is a plain Python state machine. It owns steps, gates, and mutations so failures stay inspectable.',
+  },
+  {
+    title: 'Make retrieval source-aware',
+    body: 'One giant index hides authority, permissions, and freshness. Per-source lanes keep those dimensions explicit.',
+  },
+  {
+    title: 'Evaluate behavior, not fluency',
+    body: 'A graceful hallucination is still a governance failure. Escalation discipline and evidence traceability are first-class criteria.',
+  },
+];
+
+const retrievalFlow = [
+  'Supervisor receives a pipeline task and decides what must be known.',
+  'The task is decomposed into targeted subqueries rather than one vague search.',
+  'A source router maps each subquery to the right retrieval lane.',
+  'Dense, lexical, and direct structured lookups run in parallel where appropriate.',
+  'Weak evidence is downweighted before anything reaches an agent.',
+  'A scoped context bundle is assembled with authority and permissions intact.',
+  'A domain agent reasons over the bundle and returns a structured determination.',
+  'The supervisor updates pipeline state, preserves escalations, and decides what happens next.',
+];
+
+const executableContext = [
+  'Instructions and non-goals',
+  'Source priorities and authority tiers',
+  'Retrieval endpoints and access bounds',
+  'Examples, stop conditions, and tests',
+  'Output contracts and escalation semantics',
+];
+
+const domainAgents = [
+  {
+    title: 'IT Security',
+    body: 'Interprets policy, integration posture, and evidence sufficiency. Security is where policy precedence becomes operational.',
+  },
+  {
+    title: 'Legal',
+    body: 'Maps vendor facts to legal triggers such as DPA requirements, NDA gating, and contract execution ownership.',
+  },
+  {
+    title: 'Procurement',
+    body: 'Owns approval routing, commercial posture, and the difference between standard and exceptional purchase paths.',
+  },
+  {
+    title: 'Checklist Assembler',
+    body: 'Packages domain outputs without swallowing uncertainty. Escalated upstream items stay escalated here.',
+  },
+  {
+    title: 'Checkoff',
+    body: 'Emits the stakeholder-ready package: blockers, resolved items, owners, citations, and next actions.',
+  },
+];
+
+const scenarioActs = [
+  {
+    index: 'Act 1',
+    title: 'The intake gate fails first',
+    body: 'The run begins blocked because the questionnaire is missing. That is a feature, not a bug. No downstream reasoning is allowed to improvise around a missing prerequisite.',
+  },
+  {
+    index: 'Act 2',
+    title: 'The path classifies as regulated',
+    body: 'EU employee scheduling data plus ERP adjacency push the scenario onto the regulated path. Fast-track is denied early.',
+  },
+  {
+    index: 'Act 3',
+    title: 'Domain agents narrow the unresolved set',
+    body: 'Legal escalates on the DPA and NDA. IT Security cannot cleanly classify the integration tier from questionnaire evidence alone. Procurement resolves approval path.',
+  },
+  {
+    index: 'Act 4',
+    title: 'The checklist preserves open work',
+    body: 'The checklist is not a summary of confidence. It is an explicit package of blockers, resolved items, owners, and citations.',
+  },
+  {
+    index: 'Act 5',
+    title: 'Stakeholders get next-step guidance',
+    body: 'The run ends escalated, not because the system failed, but because it correctly identified where human authority still belongs.',
+  },
 ];
 ---
 
 <BaseLayout title="Spec-Driven Enterprise AI">
-  <!-- Part 1 — Title / Hero -->
-  <section class="border-b border-ink-100">
-    <Container width="wide" class="pt-24 pb-20 md:pt-40 md:pb-28">
-      <p class="eyebrow mb-6">{titlePart.data.eyebrow}</p>
-      <h1 class="max-w-[18ch] font-serif text-display-sm font-semibold tracking-tight text-ink-900 md:text-display">
-        {titlePart.data.title}
-      </h1>
-      {titlePart.data.lede && <p class="mt-8 max-w-prose lede">{titlePart.data.lede}</p>}
-      <div class="mt-10 max-w-prose prose-narrative">
-        <TitleBody.Content />
+  <section class="relative overflow-hidden border-b border-ink-100">
+    <div
+      class="absolute inset-x-0 top-0 h-[32rem] bg-[radial-gradient(circle_at_top_left,rgba(157,87,40,0.18),transparent_40%),radial-gradient(circle_at_top_right,rgba(33,71,60,0.14),transparent_38%)]"
+    >
+    </div>
+    <Container width="wide" class="relative pb-20 pt-16 md:pb-24 md:pt-24">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(19rem,0.75fr)]">
+        <div>
+          <p class="eyebrow mb-5">{titlePart.data.eyebrow}</p>
+          <h1
+            class="display-balance max-w-[13ch] font-serif text-display-sm font-semibold tracking-tight text-ink-900 md:text-display"
+          >
+            {titlePart.data.title}
+          </h1>
+          {titlePart.data.lede && <p class="lede mt-7 max-w-2xl">{titlePart.data.lede}</p>}
+          <div class="prose-narrative mt-8 max-w-2xl text-[1.02rem]">
+            <TitleBody.Content />
+          </div>
+
+          <div class="mt-10 flex flex-wrap gap-3">
+            <a
+              href="/demo"
+              class="inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-3 text-sm font-medium text-paper no-underline shadow-soft transition-colors hover:bg-ink-800"
+            >
+              Open the replay
+              <span aria-hidden>→</span>
+            </a>
+            <a
+              href="/findings"
+              class="inline-flex items-center gap-2 rounded-full border border-ink-200 bg-paper/90 px-5 py-3 text-sm font-medium text-ink-800 no-underline transition-colors hover:border-ink-900"
+            >
+              Read the findings
+            </a>
+          </div>
+
+          <Quote source="Working thesis">
+            The gap is not model capability. It is the governed translation from enterprise intent
+            into executable context.
+          </Quote>
+        </div>
+
+        <div class="space-y-4">
+          <div class="panel p-6">
+            <p class="eyebrow mb-4">The paradox</p>
+            <div class="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
+              {
+                heroMetrics.map((metric) => (
+                  <div class="rounded-2xl border border-ink-100 bg-paper-muted/70 p-4">
+                    <p class="metric-value">{metric.value}</p>
+                    <p class="mt-2 text-sm leading-relaxed text-ink-600">{metric.label}</p>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <div class="panel p-6">
+            <p class="eyebrow mb-4">Positioning</p>
+            <p class="font-serif text-2xl leading-tight text-ink-900">
+              This model centers the governed translation from enterprise intent into agent-usable
+              context.
+            </p>
+            <p class="mt-4 text-sm leading-relaxed text-ink-600">
+              The system is intentionally practical: deterministic orchestration, source-aware
+              retrieval, and LLM reasoning confined to clear behavioral contracts.
+            </p>
+          </div>
+        </div>
       </div>
-      <Quote source="McKinsey, The State of AI 2024">
-        Enterprises have invested heavily in generative AI. Meaningful bottom-line impact remains the exception, not the rule.
-      </Quote>
     </Container>
   </section>
 
-  <!-- Part 2 — Introduction -->
-  <NarrativeSection id="introduction" tone={intro.data.tone}>
-    <SectionHero
-      eyebrow={intro.data.eyebrow}
-      title={intro.data.title}
-      lede={intro.data.lede}
-    />
-    <div class="prose-narrative mt-8">
+  <NarrativeSection id="introduction" tone="default" width="wide">
+    <SectionHero eyebrow={intro.data.eyebrow} title={intro.data.title} lede={intro.data.lede} />
+    <div class="prose-narrative mt-8 max-w-3xl">
       <IntroBody.Content />
     </div>
-    <div class="mt-12 grid gap-4 md:grid-cols-2">
-      <TakeawayCard index={1} title="Governance is a design decision">
-        Role-based access, auditability, and policy precedence are architectural — they do not emerge from prompting.
-      </TakeawayCard>
-      <TakeawayCard index={2} title="The scenario is the vehicle">
-        Vendor onboarding is how we demonstrate the approach. The approach itself is general to enterprise workflows.
-      </TakeawayCard>
-    </div>
-  </NarrativeSection>
 
-  <!-- Part 3 — Problem & Landscape -->
-  <NarrativeSection id="problem" tone={problem.data.tone}>
-    <SectionHero
-      eyebrow={problem.data.eyebrow}
-      title={problem.data.title}
-      lede={problem.data.lede}
-    />
-    <div class="prose-narrative mt-8">
-      <ProblemBody.Content />
-    </div>
-    <ComparisonBlock
-      left={{
-        label: 'Common approach',
-        title: 'Naive RAG',
-        points: [
-          'Single flat index across all documents.',
-          'No role-based access at the retrieval layer.',
-          'Model is asked to reason about policy precedence.',
-          'Retrieval gaps become hallucinations.',
-        ],
-      }}
-      right={{
-        label: 'This project',
-        title: 'Hybrid agentic retrieval',
-        points: [
-          'Per-source Chroma + BM25 collections.',
-          'Row-targeted matrix retrieval over questionnaire data.',
-          'Cross-encoder re-ranking and authority-weighted bundles.',
-          'Retrieval gaps raise escalations — never silently filled.',
-        ],
-      }}
-      emphasis="right"
-    />
-    <DetailExpander summary="Why policy must outrank questionnaire answers" kind="architecture" client:visible>
-      Vendor-supplied questionnaire data describes what a vendor claims to do. Internal policy describes what the enterprise requires. When the two disagree, the system must prefer policy and surface the delta as an escalation — not merge them into a neutral summary. This is enforced at the Context Contract layer, above any single agent's reasoning.
-    </DetailExpander>
-  </NarrativeSection>
-
-  <!-- Part 4 — Approach -->
-  <NarrativeSection id="approach" tone={approach.data.tone}>
-    <SectionHero
-      eyebrow={approach.data.eyebrow}
-      title={approach.data.title}
-      lede={approach.data.lede}
-    />
-    <div class="prose-narrative mt-8">
-      <ApproachBody.Content />
-    </div>
-
-    <h3 class="mt-16 font-serif text-xl text-ink-900">The spec hierarchy</h3>
-    <SpecHierarchy />
-
-    <Callout kind="rationale" title="Why a deterministic supervisor">
-      The supervisor walks six pipeline steps in Python. Each step has explicit gate conditions, subqueries, retrieval routing, and PipelineState mutation rules. This preserves determinism and auditability while still giving each LLM agent latitude to reason inside its scope. The model is never asked to decide the shape of control flow.
-    </Callout>
-
-    <h3 class="mt-16 font-serif text-xl text-ink-900">Operating principles</h3>
-    <PrincipleList items={principles} />
-
-    <h3 class="mt-16 font-serif text-xl text-ink-900">Domain agents</h3>
-    <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-12 grid gap-4 md:grid-cols-3">
       {
-        agents.map((agent) => (
-          <TakeawayCard title={agent.name}>
-            <span>{agent.role}</span>
+        framingCards.map((card) => (
+          <TakeawayCard index={card.index} title={card.title}>
+            {card.body}
           </TakeawayCard>
         ))
       }
     </div>
 
-    <DetailExpander summary="Agent spec output shapes" kind="spec" client:visible>
-      Every domain agent produces one of three output shapes: <code>complete</code> (determination made with citations), <code>escalated</code> (insufficient evidence or policy conflict — routed to a human), <code>blocked</code> (precondition unmet — pipeline halts). Null-passthrough discipline means escalated runs never synthesize a complete output downstream.
+    <Callout kind="rationale" title="The source-of-truth inversion">
+      The PRD remains the human stakeholder anchor, but the source of truth for execution shifts
+      into the spec stack. The real product of governance is not a markdown document. It is an
+      evidence-aware runtime package that tells the system what it may retrieve, how it should
+      behave, and when it must stop.
+    </Callout>
+
+    <DetailExpander summary="What executable context actually contains" kind="spec" client:visible>
+      <ul class="list-disc pl-5">
+        {executableContext.map((item) => <li>{item}</li>)}
+      </ul>
     </DetailExpander>
   </NarrativeSection>
 
-  <!-- Part 5 — Business Scenario -->
-  <NarrativeSection id="scenario" tone={scenario.data.tone}>
+  <NarrativeSection id="problem" tone="muted" width="wide">
+    <SectionHero
+      eyebrow={problem.data.eyebrow}
+      title={problem.data.title}
+      lede={problem.data.lede}
+    />
+    <div class="prose-narrative mt-8 max-w-3xl">
+      <ProblemBody.Content />
+    </div>
+
+    <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      {pressurePoints.map((point) => <TakeawayCard title={point.title}>{point.body}</TakeawayCard>)}
+    </div>
+
+    <h3 class="mt-16 font-serif text-xl text-ink-900">How the landscape is evolving</h3>
+    <div class="mt-6 grid gap-4 md:grid-cols-2">
+      {
+        landscapeLayers.map((layer) => (
+          <article class="panel p-5">
+            <h4 class="font-serif text-lg text-ink-900">{layer.title}</h4>
+            <p class="mt-3 text-sm leading-relaxed text-ink-600">{layer.body}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <ComparisonBlock
+      left={{
+        label: 'Common pattern',
+        title: 'Naive RAG',
+        points: [
+          'One flat searchable corpus with weak source boundaries.',
+          'Questionnaire answers, policy, and informal discussion blend together.',
+          'Similarity search becomes an implicit governance layer.',
+          'Output quality depends on retrieval luck and prompt phrasing.',
+        ],
+      }}
+      right={{
+        label: 'This project',
+        title: 'Governed agentic retrieval',
+        points: [
+          'Per-source lanes with dense, lexical, and direct structured access.',
+          'Authority tiers and permissions preserved before the agent sees anything.',
+          'Supervisor-planned subqueries and bundle assembly replace one-pass search.',
+          'Escalations surface missing or conflicting evidence instead of hiding it.',
+        ],
+      }}
+      emphasis="right"
+    />
+
+    <DetailExpander
+      summary="Enterprise context is not the same as project context"
+      kind="architecture"
+      client:visible
+    >
+      Enterprise context includes security policies, compliance constraints, architecture
+      principles, and access rules. Project context covers APIs, features, and sprint-level tasks.
+      They overlap, but they are not interchangeable, and treating them as one bucket is how
+      supposedly helpful assistants violate enterprise boundaries.
+    </DetailExpander>
+  </NarrativeSection>
+
+  <NarrativeSection id="approach" tone="default" width="wide">
+    <SectionHero
+      eyebrow={approach.data.eyebrow}
+      title={approach.data.title}
+      lede={approach.data.lede}
+    />
+    <div class="prose-narrative mt-8 max-w-3xl">
+      <ApproachBody.Content />
+    </div>
+
+    <div class="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+      <div>
+        <h3 class="font-serif text-xl text-ink-900">The document stack</h3>
+        <SpecHierarchy />
+      </div>
+
+      <div class="panel-muted p-6">
+        <p class="eyebrow mb-3">Load-bearing decision</p>
+        <h3 class="font-serif text-2xl text-ink-900">Keep the supervisor boring</h3>
+        <p class="mt-4 text-sm leading-relaxed text-ink-600">
+          The flashy version would make the supervisor another free-roaming model. The practical
+          version makes orchestration a state machine and leaves interpretation to tightly scoped
+          domain agents. That trade buys auditability, reproducibility, and cleaner failure
+          analysis.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="chip">Deterministic gates</span>
+          <span class="chip">Explicit state mutation</span>
+          <span class="chip">Auditable retries</span>
+        </div>
+      </div>
+    </div>
+
+    <Callout kind="architecture" title="Hybrid search is not the full story">
+      Hybrid search is the engine. Agentic retrieval is the planner, router, judge, and assembler
+      around it. The system does not win because it has vectors and keywords. It wins because those
+      capabilities are put inside a governed runtime path.
+    </Callout>
+
+    <div class="mt-14 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,22rem)]">
+      <div class="panel p-6">
+        <p class="eyebrow mb-4">Retrieval flow</p>
+        <ol class="space-y-3">
+          {
+            retrievalFlow.map((step, index) => (
+              <li class="grid gap-3 rounded-2xl border border-ink-100 bg-paper-muted/70 px-4 py-4 md:grid-cols-[3rem_1fr]">
+                <span class="font-mono text-sm text-ink-500">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <p class="text-sm leading-relaxed text-ink-700">{step}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+
+      <div class="space-y-4">
+        <div class="panel p-6">
+          <p class="eyebrow mb-4">What the bundle carries</p>
+          <ul class="space-y-3 text-sm leading-relaxed text-ink-700">
+            {executableContext.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+
+        <div class="panel p-6">
+          <p class="eyebrow mb-4">Why the embedding step stays boring</p>
+          <p class="text-sm leading-relaxed text-ink-600">
+            The intelligence of the system is not in the embedding call. It is in the later routing,
+            reranking, and bundle assembly where permissions, authority, and source fit are applied
+            deliberately.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="mt-16 font-serif text-xl text-ink-900">Operating principles</h3>
+    <PrincipleList items={approachPrinciples} />
+
+    <h3 class="mt-16 font-serif text-xl text-ink-900">Domain agents in the pipeline</h3>
+    <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+      {domainAgents.map((agent) => <TakeawayCard title={agent.title}>{agent.body}</TakeawayCard>)}
+    </div>
+
+    <DetailExpander
+      summary="Why this is not trying to be a generalized enterprise AI platform"
+      kind="architecture"
+      client:visible
+    >
+      The strength of the work is that it is concrete and governed. The presentation should not
+      overclaim into a universal context engine, a GraphRAG platform, or a living-document
+      automation suite. Those are interesting extensions, but they are not the value proposition
+      demonstrated here.
+    </DetailExpander>
+  </NarrativeSection>
+
+  <NarrativeSection id="scenario" tone="muted" width="wide">
     <SectionHero
       eyebrow={scenario.data.eyebrow}
       title={scenario.data.title}
       lede={scenario.data.lede}
     />
-    <div class="prose-narrative mt-8">
+    <div class="prose-narrative mt-8 max-w-3xl">
       <ScenarioBody.Content />
     </div>
+
+    <div class="mt-10 flex flex-wrap gap-2">
+      <span class="chip">Path: regulated</span>
+      <span class="chip">Outcome: escalated</span>
+      <span class="chip">Fast-track: ineligible</span>
+      <span class="chip">Approval path: standard</span>
+    </div>
+
+    <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+      {
+        scenarioActs.map((act) => (
+          <TakeawayCard index={act.index} title={act.title}>
+            {act.body}
+          </TakeawayCard>
+        ))
+      }
+    </div>
+
+    <Callout kind="rationale" title="Why this scenario works for the presentation">
+      It forces the system to demonstrate prerequisite gating, regulated-path classification,
+      domain-specific evidence use, escalation preservation, and stakeholder-ready next-step
+      guidance. That makes the architecture visible without requiring a live backend.
+    </Callout>
+
     <div class="mt-10 flex flex-wrap gap-3 text-sm">
       <a
         href="/demo"
-        class="inline-flex items-center gap-2 rounded-md bg-ink-900 px-4 py-2 font-medium text-paper no-underline shadow-soft transition-colors hover:bg-ink-800"
+        class="inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-3 font-medium text-paper no-underline shadow-soft transition-colors hover:bg-ink-800"
       >
-        See the pipeline replay
+        See the three-pane replay
         <span aria-hidden>→</span>
       </a>
       <a
         href="/findings"
-        class="inline-flex items-center gap-2 rounded-md border border-ink-200 bg-paper px-4 py-2 font-medium text-ink-800 no-underline transition-colors hover:border-ink-900"
+        class="inline-flex items-center gap-2 rounded-full border border-ink-200 bg-paper px-5 py-3 font-medium text-ink-800 no-underline transition-colors hover:border-ink-900"
       >
-        Read findings
+        Review the findings
       </a>
     </div>
   </NarrativeSection>

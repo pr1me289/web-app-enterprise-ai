@@ -4,6 +4,7 @@ Current state:
 The repo setup and initial scaffolding are already complete.
 
 Already done:
+
 - Astro + React + MDX + Tailwind configured
 - three pages exist: /, /demo, /findings
 - base layout exists
@@ -31,17 +32,19 @@ Build the actual information architecture and reusable page patterns that will s
 Phase 2 priorities:
 
 1. Refine the content architecture
+
 - Review the current page/content structure
 - Improve it if needed so it cleanly supports:
-    - homepage long-scroll narrative (parts 1–5)
-    - /demo page as a replay/explainer experience
-    - /findings page as results/reflections/evaluation
+  - homepage long-scroll narrative (parts 1–5)
+  - /demo page as a replay/explainer experience
+  - /findings page as results/reflections/evaluation
 - Keep MDX as the single source of truth for content wherever possible
 
 2. Turn the homepage into a real narrative composition
    The homepage should no longer feel like placeholder sections. It should begin to reflect the true story arc.
 
 Homepage should clearly progress through:
+
 - title / framing
 - introduction
 - problem & landscape
@@ -52,6 +55,7 @@ For each section, create a stronger content container and presentation pattern s
 
 3. Build reusable presentation primitives
    Create or refine reusable components/patterns for the kinds of content this site will repeatedly use. Examples:
+
 - section hero / section intro block
 - narrative section wrapper
 - progressive disclosure block
@@ -67,6 +71,7 @@ Do not overengineer a design system, but do create a coherent set of reusable pr
 
 4. Improve the site-wide visual language
    Without aiming for final polish yet, establish a stronger default visual identity:
+
 - typography hierarchy
 - spacing rhythm
 - container widths
@@ -76,6 +81,7 @@ Do not overengineer a design system, but do create a coherent set of reusable pr
 - more premium and intentional feel
 
 Tone should be:
+
 - serious
 - technical
 - elegant
@@ -88,6 +94,7 @@ Tone should be:
    Do not build the full final replay yet, but make /demo look like the beginning of a real interactive replay page.
 
 It should anticipate:
+
 - run summary/header
 - pipeline steps rail or step navigation
 - selected step detail panel
@@ -99,6 +106,7 @@ Use placeholder or mock data where needed, but structure the page so it feels li
 
 6. Upgrade /findings into a credible narrative page
    Turn /findings into a thoughtful page scaffold with sections for:
+
 - key findings
 - what the system demonstrated
 - evaluation / test coverage
@@ -109,6 +117,7 @@ Use placeholder or mock data where needed, but structure the page so it feels li
 Again, not final content yet, but real page structure and stronger placeholders.
 
 7. Preserve simplicity
+
 - Prefer Astro for static rendering
 - Use React only where interactivity actually helps
 - Avoid unnecessary complexity
@@ -116,12 +125,14 @@ Again, not final content yet, but real page structure and stronger placeholders.
 - Avoid overbuilding charts/visualizations before content structure is clear
 
 8. Respect current repository state
+
 - Work from the existing scaffold
 - Improve existing components where appropriate instead of duplicating them
 - If a component should be renamed or reorganized, do so cleanly
 - Keep codebase readable and maintainable
 
 Concrete tasks I want from you:
+
 1. Audit the current scaffold and identify what should be kept vs refined
 2. Refactor the homepage into a stronger long-scroll narrative composition
 3. Refine or add reusable presentation primitives
@@ -130,6 +141,7 @@ Concrete tasks I want from you:
 6. Keep the build passing
 
 Deliverables:
+
 1. Updated pages/components/content structure
 2. Brief explanation of the architectural decisions you made
 3. Notes on which reusable patterns now exist
@@ -137,6 +149,7 @@ Deliverables:
 5. Recommendation for the next development phase after this one
 
 Important constraints:
+
 - Do not spend time on Vercel setup yet
 - Do not implement final production polish yet
 - Do not build the full interactive replay logic yet
