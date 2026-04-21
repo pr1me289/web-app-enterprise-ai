@@ -1,0 +1,35 @@
+---
+interface Props {
+  kind?: 'rationale' | 'architecture' | 'note';
+  title?: string;
+}
+
+const { kind = 'note', title } = Astro.props;
+
+const labelMap = {
+  rationale: 'Design rationale',
+  architecture: 'Architecture note',
+  note: 'Note',
+};
+
+const accentMap = {
+  rationale: 'border-l-accent',
+  architecture: 'border-l-ink-700',
+  note: 'border-l-ink-300',
+};
+
+const label = labelMap[kind];
+---
+
+<aside
+  class:list={[
+    'my-8 rounded-r-md border border-ink-100 border-l-4 bg-paper-muted px-5 py-4 shadow-soft',
+    accentMap[kind],
+  ]}
+>
+  <p class="eyebrow mb-2">{label}</p>
+  {title && <p class="font-serif text-lg text-ink-900">{title}</p>}
+  <div class="prose-narrative text-sm">
+    <slot />
+  </div>
+</aside>

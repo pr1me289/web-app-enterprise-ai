@@ -1,11 +1,195 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/astro/Container.astro';
+import NarrativeSection from '../components/astro/NarrativeSection.astro';
+import SectionHero from '../components/astro/SectionHero.astro';
+import Callout from '../components/astro/Callout.astro';
+import ComparisonBlock from '../components/astro/ComparisonBlock.astro';
+import PrincipleList from '../components/astro/PrincipleList.astro';
+import SpecHierarchy from '../components/astro/SpecHierarchy.astro';
+import TakeawayCard from '../components/astro/TakeawayCard.astro';
+import Quote from '../components/astro/Quote.astro';
+import DetailExpander from '../components/react/DetailExpander';
+
+const parts = (await getCollection('parts')).sort((a, b) => a.data.order - b.data.order);
+const titlePart = parts.find((p) => p.data.key === 'title')!;
+const intro = parts.find((p) => p.data.key === 'introduction')!;
+const problem = parts.find((p) => p.data.key === 'problem')!;
+const approach = parts.find((p) => p.data.key === 'approach')!;
+const scenario = parts.find((p) => p.data.key === 'scenario')!;
+
+const TitleBody = await titlePart.render();
+const IntroBody = await intro.render();
+const ProblemBody = await problem.render();
+const ApproachBody = await approach.render();
+const ScenarioBody = await scenario.render();
+
+const principles = [
+  {
+    title: 'Substance over polish',
+    body: 'The work being presented is the value proposition. Visual refinement matters, but never at the cost of substance.',
+  },
+  {
+    title: 'Progressive disclosure as core pattern',
+    body: 'Default views stay approachable. Technical detail lives one click away. Applied consistently across every section.',
+  },
+  {
+    title: 'Specs govern, models reason',
+    body: 'Orchestration is deterministic Python. LLM agents reason inside tightly scoped behavioral contracts.',
+  },
+  {
+    title: 'Retrieval is a first-class citizen',
+    body: 'Per-source dense + lexical collections, row-targeted matrix retrieval, cross-encoder re-ranking. Designed for the agents, not reused from chat UX.',
+  },
+];
+
+const agents = [
+  { name: 'IT Security', role: 'Applies policy; produces blocked / escalated / complete determinations.' },
+  { name: 'Legal', role: 'Applies contractual posture against vendor-supplied terms and redlines.' },
+  { name: 'Procurement', role: 'Evaluates commercial fit, vendor relationship, and procurement-policy alignment.' },
+  { name: 'Checklist Assembler', role: 'Sequences domain agents and composes the checklist bundle.' },
+  { name: 'Checkoff', role: 'Final determination stage — passes, escalates, or blocks with full audit trail.' },
+];
 ---
 
-<BaseLayout title="Enterprise AI Narrative — Main">
-  <main class="mx-auto max-w-3xl px-6 py-16 prose">
-    <h1>Enterprise AI Narrative Web App</h1>
-    <p>Parts 1–5 will live here as MDX content (title, intro, problem & landscape, approach, business scenario).</p>
-    <p>Placeholder scaffold — see <code>src/content/</code>.</p>
-  </main>
+<BaseLayout title="Spec-Driven Enterprise AI">
+  <!-- Part 1 — Title / Hero -->
+  <section class="border-b border-ink-100">
+    <Container width="wide" class="pt-24 pb-20 md:pt-40 md:pb-28">
+      <p class="eyebrow mb-6">{titlePart.data.eyebrow}</p>
+      <h1 class="max-w-[18ch] font-serif text-display-sm font-semibold tracking-tight text-ink-900 md:text-display">
+        {titlePart.data.title}
+      </h1>
+      {titlePart.data.lede && <p class="mt-8 max-w-prose lede">{titlePart.data.lede}</p>}
+      <div class="mt-10 max-w-prose prose-narrative">
+        <TitleBody.Content />
+      </div>
+      <Quote source="McKinsey, The State of AI 2024">
+        Enterprises have invested heavily in generative AI. Meaningful bottom-line impact remains the exception, not the rule.
+      </Quote>
+    </Container>
+  </section>
+
+  <!-- Part 2 — Introduction -->
+  <NarrativeSection id="introduction" tone={intro.data.tone}>
+    <SectionHero
+      eyebrow={intro.data.eyebrow}
+      title={intro.data.title}
+      lede={intro.data.lede}
+    />
+    <div class="prose-narrative mt-8">
+      <IntroBody.Content />
+    </div>
+    <div class="mt-12 grid gap-4 md:grid-cols-2">
+      <TakeawayCard index={1} title="Governance is a design decision">
+        Role-based access, auditability, and policy precedence are architectural — they do not emerge from prompting.
+      </TakeawayCard>
+      <TakeawayCard index={2} title="The scenario is the vehicle">
+        Vendor onboarding is how we demonstrate the approach. The approach itself is general to enterprise workflows.
+      </TakeawayCard>
+    </div>
+  </NarrativeSection>
+
+  <!-- Part 3 — Problem & Landscape -->
+  <NarrativeSection id="problem" tone={problem.data.tone}>
+    <SectionHero
+      eyebrow={problem.data.eyebrow}
+      title={problem.data.title}
+      lede={problem.data.lede}
+    />
+    <div class="prose-narrative mt-8">
+      <ProblemBody.Content />
+    </div>
+    <ComparisonBlock
+      left={{
+        label: 'Common approach',
+        title: 'Naive RAG',
+        points: [
+          'Single flat index across all documents.',
+          'No role-based access at the retrieval layer.',
+          'Model is asked to reason about policy precedence.',
+          'Retrieval gaps become hallucinations.',
+        ],
+      }}
+      right={{
+        label: 'This project',
+        title: 'Hybrid agentic retrieval',
+        points: [
+          'Per-source Chroma + BM25 collections.',
+          'Row-targeted matrix retrieval over questionnaire data.',
+          'Cross-encoder re-ranking and authority-weighted bundles.',
+          'Retrieval gaps raise escalations — never silently filled.',
+        ],
+      }}
+      emphasis="right"
+    />
+    <DetailExpander summary="Why policy must outrank questionnaire answers" kind="architecture" client:visible>
+      Vendor-supplied questionnaire data describes what a vendor claims to do. Internal policy describes what the enterprise requires. When the two disagree, the system must prefer policy and surface the delta as an escalation — not merge them into a neutral summary. This is enforced at the Context Contract layer, above any single agent's reasoning.
+    </DetailExpander>
+  </NarrativeSection>
+
+  <!-- Part 4 — Approach -->
+  <NarrativeSection id="approach" tone={approach.data.tone}>
+    <SectionHero
+      eyebrow={approach.data.eyebrow}
+      title={approach.data.title}
+      lede={approach.data.lede}
+    />
+    <div class="prose-narrative mt-8">
+      <ApproachBody.Content />
+    </div>
+
+    <h3 class="mt-16 font-serif text-xl text-ink-900">The spec hierarchy</h3>
+    <SpecHierarchy />
+
+    <Callout kind="rationale" title="Why a deterministic supervisor">
+      The supervisor walks six pipeline steps in Python. Each step has explicit gate conditions, subqueries, retrieval routing, and PipelineState mutation rules. This preserves determinism and auditability while still giving each LLM agent latitude to reason inside its scope. The model is never asked to decide the shape of control flow.
+    </Callout>
+
+    <h3 class="mt-16 font-serif text-xl text-ink-900">Operating principles</h3>
+    <PrincipleList items={principles} />
+
+    <h3 class="mt-16 font-serif text-xl text-ink-900">Domain agents</h3>
+    <div class="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      {
+        agents.map((agent) => (
+          <TakeawayCard title={agent.name}>
+            <span>{agent.role}</span>
+          </TakeawayCard>
+        ))
+      }
+    </div>
+
+    <DetailExpander summary="Agent spec output shapes" kind="spec" client:visible>
+      Every domain agent produces one of three output shapes: <code>complete</code> (determination made with citations), <code>escalated</code> (insufficient evidence or policy conflict — routed to a human), <code>blocked</code> (precondition unmet — pipeline halts). Null-passthrough discipline means escalated runs never synthesize a complete output downstream.
+    </DetailExpander>
+  </NarrativeSection>
+
+  <!-- Part 5 — Business Scenario -->
+  <NarrativeSection id="scenario" tone={scenario.data.tone}>
+    <SectionHero
+      eyebrow={scenario.data.eyebrow}
+      title={scenario.data.title}
+      lede={scenario.data.lede}
+    />
+    <div class="prose-narrative mt-8">
+      <ScenarioBody.Content />
+    </div>
+    <div class="mt-10 flex flex-wrap gap-3 text-sm">
+      <a
+        href="/demo"
+        class="inline-flex items-center gap-2 rounded-md bg-ink-900 px-4 py-2 font-medium text-paper no-underline shadow-soft transition-colors hover:bg-ink-800"
+      >
+        See the pipeline replay
+        <span aria-hidden>→</span>
+      </a>
+      <a
+        href="/findings"
+        class="inline-flex items-center gap-2 rounded-md border border-ink-200 bg-paper px-4 py-2 font-medium text-ink-800 no-underline transition-colors hover:border-ink-900"
+      >
+        Read findings
+      </a>
+    </div>
+  </NarrativeSection>
 </BaseLayout>

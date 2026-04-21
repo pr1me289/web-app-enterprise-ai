@@ -1,3 +1,16 @@
-# Part 4 — Approach
+---
+order: 4
+key: approach
+eyebrow: 'Part 04 · Approach'
+title: 'Specs govern the system. Agents execute inside that scope.'
+lede: 'A four-document spec hierarchy, a deterministic supervisor, and a hybrid agentic retrieval layer. The model is asked to reason, not to improvise control flow.'
+tone: default
+---
 
-*Placeholder.* Spec-driven development philosophy, deterministic supervisor rationale, hybrid agentic retrieval architecture, domain agent model.
+The approach has three load-bearing pieces:
+
+1. **A spec hierarchy** with non-overlapping jurisdictions — PRD, Design Doc, Context Contract, Agent Specs.
+2. **A deterministic Python supervisor** that walks six pipeline steps with explicit gate conditions. Orchestration is code; reasoning is LLM.
+3. **Hybrid agentic retrieval** — per-source dense (Chroma) + lexical (BM25) collections, row-targeted matrix retrieval, cross-encoder re-ranking, authority-weighted bundle assembly.
+
+The agents themselves are small, tightly scoped LLMs governed by behavioral specs with strict DOs / DON'Ts, output contracts, and distinct blocked / escalated / complete output shapes.

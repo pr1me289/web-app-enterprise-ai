@@ -1,0 +1,31 @@
+---
+interface Item {
+  title: string;
+  body: string;
+}
+
+interface Props {
+  items: Item[];
+  numbered?: boolean;
+}
+
+const { items, numbered = true } = Astro.props;
+---
+
+<ol class="mt-6 divide-y divide-ink-100 border-y border-ink-100">
+  {
+    items.map((item, i) => (
+      <li class="flex gap-5 py-5">
+        {numbered && (
+          <span class="eyebrow w-8 shrink-0 pt-1 text-ink-400">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+        )}
+        <div class="flex-1">
+          <p class="font-serif text-base font-medium text-ink-900">{item.title}</p>
+          <p class="mt-1 text-sm leading-relaxed text-ink-600">{item.body}</p>
+        </div>
+      </li>
+    ))
+  }
+</ol>

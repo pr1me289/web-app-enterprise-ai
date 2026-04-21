@@ -233,6 +233,24 @@ Update it when you change:
 
 ---
 
+## USER_MANUAL.md
+
+Maintain a `USER_MANUAL.md` file at the project root as a lightweight operator reference for the repository.
+
+**Purpose:**
+- Briefly describe the repo structure
+- List key files and scripts with a one-line description of what each does
+- Identify the main files or entry points used to run the system or program
+- Document how to run or use important scripts, including command-line arguments when relevant
+
+**Maintenance rules:**
+- Update `USER_MANUAL.md` only when major repository changes are made, such as meaningful structural changes, new key scripts, changed entry points, or changed run flows
+- Also update it whenever the user explicitly asks for it to be updated
+- Do not make routine minor edits to `USER_MANUAL.md` for small code changes that do not materially affect how a human navigates, runs, or understands the repository
+- Keep it concise, practical, and easy for a human or coding agent to scan quickly
+
+---
+
 ## past_prompts.md
 
 Do not touch past_prompts.md.

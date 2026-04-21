@@ -1,0 +1,23 @@
+---
+interface Props {
+  cite?: string;
+  source?: string;
+}
+
+const { cite, source } = Astro.props;
+---
+
+<figure class="my-10 border-l-2 border-accent pl-6">
+  <blockquote class="font-serif text-xl leading-snug text-ink-800">
+    <slot />
+  </blockquote>
+  {
+    (cite || source) && (
+      <figcaption class="mt-3 text-sm text-ink-500">
+        {cite && <span>{cite}</span>}
+        {cite && source && <span class="mx-1 text-ink-300">·</span>}
+        {source && <cite class="not-italic text-ink-400">{source}</cite>}
+      </figcaption>
+    )
+  }
+</figure>

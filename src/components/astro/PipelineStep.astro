@@ -1,0 +1,42 @@
+---
+interface Props {
+  index: number | string;
+  title: string;
+  state?: 'idle' | 'active' | 'complete' | 'blocked';
+  as?: 'div' | 'button' | 'a';
+  href?: string;
+}
+
+const { index, title, state = 'idle', as = 'div', href } = Astro.props;
+const Tag = as;
+
+const stateDot = {
+  idle: 'bg-ink-200',
+  active: 'bg-accent ring-4 ring-accent/20',
+  complete: 'bg-ink-700',
+  blocked: 'bg-red-500',
+}[state];
+
+const stateLabel = {
+  idle: 'Idle',
+  active: 'Active',
+  complete: 'Complete',
+  blocked: 'Blocked',
+}[state];
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'group flex w-full items-center gap-4 rounded-md border border-ink-100 bg-paper px-4 py-3 text-left transition-colors',
+    state === 'active' ? 'border-ink-900 shadow-soft' : 'hover:border-ink-200',
+    as !== 'div' ? 'cursor-pointer' : '',
+  ]}
+>
+  <span aria-hidden class:list={['inline-block h-2.5 w-2.5 rounded-full', stateDot]}></span>
+  <span class="eyebrow w-8 shrink-0 text-ink-400">
+    {typeof index === 'number' ? String(index).padStart(2, '0') : index}
+  </span>
+  <span class="flex-1 font-serif text-sm font-medium text-ink-900">{title}</span>
+  <span class="text-xs uppercase tracking-wide text-ink-400">{stateLabel}</span>
+</Tag>

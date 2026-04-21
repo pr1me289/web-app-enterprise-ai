@@ -1,4 +1,80 @@
 {
-  "placeholder": true,
-  "note": "Captured pipeline run data for demo replay will live here."
+  "run": {
+    "id": "run-lichen-optichain-2026-04-21-001",
+    "scenario": "Lichen Manufacturing onboarding OptiChain",
+    "startedAt": "2026-04-21T14:02:11Z",
+    "completedAt": "2026-04-21T14:04:38Z",
+    "outcome": "escalated",
+    "summary": "Run completed with two escalations: one policy/questionnaire conflict on data residency, one procurement precondition unmet."
+  },
+  "steps": [
+    {
+      "index": 1,
+      "id": "ingest",
+      "title": "Ingest & route",
+      "state": "complete",
+      "agent": "Supervisor",
+      "summary": "Source documents validated and routed to per-source Chroma + BM25 collections.",
+      "evidence": [
+        "policy_it_sec_v4.pdf",
+        "optichain_questionnaire.json",
+        "procurement_matrix.xlsx",
+        "slack_export_it_sec.json"
+      ],
+      "rationale": "All sources passed integrity checks. Row-targeted matrix loaded for downstream agents."
+    },
+    {
+      "index": 2,
+      "id": "it-security",
+      "title": "IT Security determination",
+      "state": "escalated",
+      "agent": "IT Security Agent",
+      "summary": "Policy over questionnaire conflict on data residency (EU-only policy vs. US-hosted vendor claim).",
+      "evidence": [
+        "policy_it_sec_v4.pdf §4.2",
+        "optichain_questionnaire.json Q17"
+      ],
+      "rationale": "Policy precedence applied. Escalation raised to human reviewer per Context Contract §3."
+    },
+    {
+      "index": 3,
+      "id": "legal",
+      "title": "Legal determination",
+      "state": "complete",
+      "agent": "Legal Agent",
+      "summary": "Contractual posture aligns with standard MSA template; no redlines required.",
+      "evidence": ["msa_template_v7.pdf", "optichain_proposed_terms.pdf"],
+      "rationale": "Vendor terms fall within pre-approved posture band."
+    },
+    {
+      "index": 4,
+      "id": "procurement",
+      "title": "Procurement determination",
+      "state": "escalated",
+      "agent": "Procurement Agent",
+      "summary": "Precondition unmet — procurement matrix shows no signed SOW for the current fiscal year.",
+      "evidence": ["procurement_matrix.xlsx row 42"],
+      "rationale": "Escalated rather than blocked; SOW can be resolved outside the pipeline."
+    },
+    {
+      "index": 5,
+      "id": "assemble",
+      "title": "Checklist assembly",
+      "state": "complete",
+      "agent": "Checklist Assembler",
+      "summary": "Bundle composed with authority weighting; escalated items preserved in null-passthrough state.",
+      "evidence": [],
+      "rationale": "No silent-swallow. Escalated upstream items remain escalated downstream."
+    },
+    {
+      "index": 6,
+      "id": "checkoff",
+      "title": "Checkoff",
+      "state": "escalated",
+      "agent": "Checkoff Agent",
+      "summary": "Final determination: escalated. Two items require human disposition before the run can close as complete.",
+      "evidence": [],
+      "rationale": "Run ends in escalated state per design — no fabricated 'complete' output."
+    }
+  ]
 }

@@ -1,10 +1,156 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/astro/Container.astro';
+import NarrativeSection from '../components/astro/NarrativeSection.astro';
+import SectionHero from '../components/astro/SectionHero.astro';
+import TakeawayCard from '../components/astro/TakeawayCard.astro';
+import Callout from '../components/astro/Callout.astro';
+import PrincipleList from '../components/astro/PrincipleList.astro';
+import DetailExpander from '../components/react/DetailExpander';
+
+const keyFindings = [
+  {
+    title: 'Null-passthrough holds under pressure',
+    body: 'Across the adversarial suite, every escalated upstream step produced an escalated downstream output — no silent fabrication.',
+  },
+  {
+    title: 'Policy precedence is structural',
+    body: 'Policy-over-questionnaire conflicts were resolved at the Context Contract layer in 100% of test fixtures — the individual agents never had to decide.',
+  },
+  {
+    title: 'Deterministic supervisor pays for itself',
+    body: 'Moving orchestration into Python made failure modes inspectable. Every retry, gate, and escalation is traceable to a line of code, not a model sample.',
+  },
+  {
+    title: 'Hybrid retrieval beats flat RAG on real inputs',
+    body: 'Row-targeted matrix retrieval + cross-encoder re-ranking recovered correct evidence where flat dense retrieval surfaced superficially similar but wrong material.',
+  },
+];
+
+const demonstrations = [
+  { title: 'Silent-swallow resistance', body: 'Escalated upstream results never collapsed to complete in downstream agents.' },
+  { title: 'Retrieval-layer failure handling', body: 'Synthetic collection outages surfaced as escalations rather than hallucinated answers.' },
+  { title: 'Cross-agent escalation cascades', body: 'An IT Security escalation propagated cleanly through Checklist Assembler and Checkoff without being masked.' },
+  { title: 'Blocked-shape discipline', body: 'Precondition failures produced the blocked shape — not a partial complete with caveats.' },
+];
+
+const evaluation = [
+  { title: '15+ adversarial fixtures', body: 'Each fixture targets a specific behavioral dimension, not a generic pass/fail.' },
+  { title: 'Behavioral dimensions, not task accuracy', body: 'Evaluation checks shape compliance, escalation discipline, and evidence traceability — not just final answer correctness.' },
+  { title: 'Fixture design as spec', body: 'Fixtures are authored alongside agent specs; a new DO/DON\'T in a spec typically lands with its fixture.' },
+];
+
+const limitations = [
+  { title: 'Single-scenario corpus', body: 'The mock corpus instantiates one vendor-onboarding scenario. Generalization claims are structural, not statistical.' },
+  { title: 'Captured-run demo only', body: 'The public replay plays back JSON. A live backend is out of scope for v1 of this presentation.' },
+  { title: 'No red-team LLM', body: 'Adversarial fixtures are hand-authored. A learned adversary would likely surface additional failure modes.' },
+];
+
+const futureWork = [
+  { title: 'Live replay with evaluation overlays', body: 'Overlay spec excerpts and test-fixture outcomes onto each replay step.' },
+  { title: 'Second domain corpus', body: 'Apply the same spec hierarchy to a second enterprise workflow to stress-test generality.' },
+  { title: 'Learned adversary fixture-gen', body: 'Use an LLM red-team loop to propose behavioral fixtures beyond the hand-authored set.' },
+];
 ---
 
 <BaseLayout title="Findings">
-  <main class="mx-auto max-w-3xl px-6 py-16 prose">
-    <h1>Findings</h1>
-    <p>Part 7 — what was learned, evaluation results, reflections. Placeholder scaffold.</p>
-  </main>
+  <section class="border-b border-ink-100">
+    <Container width="wide" class="py-16 md:py-24">
+      <SectionHero
+        as="h1"
+        eyebrow="Part 07 · Findings"
+        title="What the system demonstrated, what it didn't, and what's next."
+        lede="A structured read on what was learned from the upstream pipeline — evaluation shape, limitations, and the questions that still matter."
+      />
+    </Container>
+  </section>
+
+  <NarrativeSection id="key-findings" tone="default">
+    <header class="max-w-prose">
+      <p class="eyebrow mb-3">Key findings</p>
+      <h2 class="font-serif text-display-sm font-semibold text-ink-900">Four things the pipeline showed</h2>
+    </header>
+    <div class="mt-10 grid gap-4 md:grid-cols-2">
+      {
+        keyFindings.map((f, i) => (
+          <TakeawayCard index={i + 1} title={f.title}>
+            {f.body}
+          </TakeawayCard>
+        ))
+      }
+    </div>
+  </NarrativeSection>
+
+  <NarrativeSection id="demonstrated" tone="muted">
+    <header class="max-w-prose">
+      <p class="eyebrow mb-3">What the system demonstrated</p>
+      <h2 class="font-serif text-display-sm font-semibold text-ink-900">Behavioral properties under adversarial load</h2>
+      <p class="lede mt-4">Each property was targeted by at least one fixture in the scenario test suite.</p>
+    </header>
+    <PrincipleList items={demonstrations} />
+
+    <DetailExpander summary="Sample fixture: policy-over-questionnaire conflict" kind="spec" client:visible>
+      The vendor's questionnaire claims US-only data residency. Internal policy requires EU-hosted processing for the data class in question. The fixture asserts that the run surfaces an escalation identifying the specific policy clause that overrides the vendor claim — never a summary that treats both sources as equivalent.
+    </DetailExpander>
+  </NarrativeSection>
+
+  <NarrativeSection id="evaluation" tone="default">
+    <header class="max-w-prose">
+      <p class="eyebrow mb-3">Evaluation</p>
+      <h2 class="font-serif text-display-sm font-semibold text-ink-900">Scenario-based, not leaderboard-based</h2>
+      <p class="lede mt-4">Evaluation is shaped around whether the system honors its specs — not whether it produces fluent answers.</p>
+    </header>
+    <PrincipleList items={evaluation} />
+
+    <Callout kind="rationale" title="Why behavioral evaluation over task accuracy">
+      A hallucinated answer that happens to be correct is still a governance failure. Evaluating only final-answer accuracy would reward systems that fabricate and punish systems that escalate. The fixtures flip that — shape compliance and escalation discipline are first-class pass criteria.
+    </Callout>
+  </NarrativeSection>
+
+  <NarrativeSection id="limitations" tone="muted">
+    <header class="max-w-prose">
+      <p class="eyebrow mb-3">Limitations</p>
+      <h2 class="font-serif text-display-sm font-semibold text-ink-900">What this work does not claim</h2>
+    </header>
+    <div class="mt-10 grid gap-4 md:grid-cols-3">
+      {
+        limitations.map((l) => (
+          <TakeawayCard title={l.title}>
+            {l.body}
+          </TakeawayCard>
+        ))
+      }
+    </div>
+  </NarrativeSection>
+
+  <NarrativeSection id="reflections" tone="default">
+    <header class="max-w-prose">
+      <p class="eyebrow mb-3">Reflections</p>
+      <h2 class="font-serif text-display-sm font-semibold text-ink-900">The part that surprised me</h2>
+    </header>
+    <div class="prose-narrative mt-6">
+      <p>
+        Writing the specs first made the agents smaller than I expected. Once the Context Contract was doing its job, each domain agent had dramatically less to reason about — most governance questions had already been settled structurally. The agents started looking more like focused evaluators than general reasoners.
+      </p>
+      <p>
+        The other surprise: adversarial fixtures were the fastest feedback loop in the project. More useful than any benchmark. They forced the specs to be precise in places prose would have been comfortable being vague.
+      </p>
+    </div>
+  </NarrativeSection>
+
+  <NarrativeSection id="future-work" tone="muted">
+    <header class="max-w-prose">
+      <p class="eyebrow mb-3">Future work</p>
+      <h2 class="font-serif text-display-sm font-semibold text-ink-900">Where this goes next</h2>
+    </header>
+    <div class="mt-10 grid gap-4 md:grid-cols-3">
+      {
+        futureWork.map((w) => (
+          <TakeawayCard title={w.title}>
+            {w.body}
+          </TakeawayCard>
+        ))
+      }
+    </div>
+  </NarrativeSection>
 </BaseLayout>

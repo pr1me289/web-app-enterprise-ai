@@ -1,0 +1,15 @@
+---
+interface Props {
+  width?: 'narrative' | 'wide';
+  as?: string;
+  class?: string;
+}
+
+const { width = 'narrative', as = 'div', class: className = '' } = Astro.props;
+const Tag = as as keyof HTMLElementTagNameMap;
+const maxWidth = width === 'wide' ? 'max-w-wide' : 'max-w-narrative';
+---
+
+<Tag class={`mx-auto ${maxWidth} px-6 md:px-8 ${className}`}>
+  <slot />
+</Tag>

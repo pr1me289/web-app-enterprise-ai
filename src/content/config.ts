@@ -3,7 +3,12 @@ import { defineCollection, z } from 'astro:content';
 const parts = defineCollection({
   type: 'content',
   schema: z.object({
-    title: z.string().optional(),
+    order: z.number(),
+    key: z.string(),
+    eyebrow: z.string(),
+    title: z.string(),
+    lede: z.string().optional(),
+    tone: z.enum(['default', 'muted', 'inset']).default('default'),
   }),
 });
 

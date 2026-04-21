@@ -1,0 +1,24 @@
+---
+import Container from './Container.astro';
+
+interface Props {
+  id?: string;
+  tone?: 'default' | 'muted' | 'inset';
+  width?: 'narrative' | 'wide';
+  class?: string;
+}
+
+const { id, tone = 'default', width = 'narrative', class: className = '' } = Astro.props;
+
+const toneClass = {
+  default: 'bg-paper',
+  muted: 'bg-paper-muted',
+  inset: 'bg-paper-sunken',
+}[tone];
+---
+
+<section id={id} class:list={['py-section-sm md:py-section', toneClass, className]}>
+  <Container width={width}>
+    <slot />
+  </Container>
+</section>

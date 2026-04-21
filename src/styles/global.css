@@ -1,3 +1,85 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-paper text-ink-800 font-sans;
+    font-feature-settings:
+      'kern',
+      'liga',
+      'calt';
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif text-ink-900;
+  }
+
+  a {
+    @apply underline-offset-4;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent-ring ring-offset-2 ring-offset-paper rounded-sm;
+  }
+
+  ::selection {
+    background: #fef3c7;
+    color: #0b1220;
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply text-eyebrow font-mono uppercase text-ink-500 tracking-eyebrow;
+  }
+
+  .lede {
+    @apply text-lede text-ink-600 font-sans;
+  }
+
+  .rule {
+    @apply h-px w-full bg-ink-100;
+  }
+
+  .prose-narrative {
+    @apply max-w-prose text-ink-700 leading-relaxed;
+  }
+
+  .prose-narrative p {
+    @apply my-4;
+  }
+
+  .prose-narrative a {
+    @apply text-ink-900 underline decoration-ink-300 hover:decoration-ink-600;
+  }
+
+  .prose-narrative code {
+    @apply rounded bg-ink-50 px-1 py-0.5 font-mono text-[0.9em] text-ink-800;
+  }
+
+  .prose-narrative h3 {
+    @apply mt-10 mb-3 text-xl;
+  }
+
+  .prose-narrative ul {
+    @apply my-4 list-disc pl-6 space-y-2;
+  }
+
+  .prose-narrative ol {
+    @apply my-4 list-decimal pl-6 space-y-2;
+  }
+
+  .prose-narrative blockquote {
+    @apply my-6 border-l-2 border-accent pl-4 italic text-ink-600;
+  }
+}

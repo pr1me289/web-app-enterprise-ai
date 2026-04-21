@@ -1,10 +1,67 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Container from '../components/astro/Container.astro';
+import SectionHero from '../components/astro/SectionHero.astro';
+import Callout from '../components/astro/Callout.astro';
+import ReplayConsole from '../components/react/ReplayConsole';
+import runData from '../data/pipeline-run.json';
+
+const { run, steps } = runData;
+const startedAt = new Date(run.startedAt);
+const completedAt = new Date(run.completedAt);
+const durationSec = Math.round((completedAt.getTime() - startedAt.getTime()) / 1000);
+
+const outcomeTone = {
+  complete: 'text-emerald-700',
+  escalated: 'text-amber-700',
+  blocked: 'text-red-700',
+}[run.outcome as 'complete' | 'escalated' | 'blocked'];
 ---
 
-<BaseLayout title="Demo — Pipeline Replay">
-  <main class="mx-auto max-w-3xl px-6 py-16 prose">
-    <h1>Demo</h1>
-    <p>Part 6 — interactive replay of a captured pipeline run. Placeholder scaffold.</p>
-  </main>
+<BaseLayout title="Demo · Pipeline replay">
+  <section class="border-b border-ink-100 bg-paper-muted">
+    <Container width="wide" class="py-16 md:py-20">
+      <SectionHero
+        as="h1"
+        eyebrow="Part 06 · Demo"
+        title="Pipeline replay"
+        lede="A captured run of the vendor-onboarding pipeline on the mock scenario. Step through the six stages to see how the supervisor, retrieval layer, and domain agents produced each determination."
+      />
+
+      <div class="mt-10 grid gap-6 md:grid-cols-4">
+        <div class="rounded-md border border-ink-100 bg-paper p-4">
+          <p class="eyebrow text-ink-400">Run ID</p>
+          <p class="mt-1 font-mono text-xs text-ink-700">{run.id}</p>
+        </div>
+        <div class="rounded-md border border-ink-100 bg-paper p-4">
+          <p class="eyebrow text-ink-400">Scenario</p>
+          <p class="mt-1 text-sm text-ink-800">{run.scenario}</p>
+        </div>
+        <div class="rounded-md border border-ink-100 bg-paper p-4">
+          <p class="eyebrow text-ink-400">Duration</p>
+          <p class="mt-1 text-sm text-ink-800">{durationSec}s</p>
+        </div>
+        <div class="rounded-md border border-ink-100 bg-paper p-4">
+          <p class="eyebrow text-ink-400">Outcome</p>
+          <p class={`mt-1 text-sm font-medium uppercase tracking-wide ${outcomeTone}`}>{run.outcome}</p>
+        </div>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-section-sm md:py-section">
+    <Container width="wide">
+      <div class="mb-8 max-w-prose">
+        <p class="text-sm leading-relaxed text-ink-600">{run.summary}</p>
+      </div>
+
+      <ReplayConsole run={run} steps={steps} client:load />
+
+      <Callout kind="architecture" title="What this replay is — and isn't">
+        <p>
+          v1 plays back a pre-captured run from <code>src/data/pipeline-run.json</code>. It is not a live backend call. The audit-trail shape, escalation flow, and null-passthrough discipline shown here match the upstream pipeline's real contract.
+        </p>
+      </Callout>
+    </Container>
+  </section>
 </BaseLayout>

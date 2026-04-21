@@ -1,3 +1,17 @@
-# Part 3 — Problem & Landscape
+---
+order: 3
+key: problem
+eyebrow: 'Part 03 · Problem & landscape'
+title: 'Why naive RAG is not enough in the enterprise'
+lede: 'Most enterprise "AI copilots" bolt retrieval onto a chat model and hope governance emerges. It does not. The result is systems that look helpful in a demo and fail the first real audit.'
+tone: muted
+---
 
-*Placeholder.* Current approaches to enterprise AI; the players, their perspectives, their constraints.
+Enterprise workflows are not free-form conversations. They have:
+
+- **Role-based access** — not every agent, not every user, should see every document.
+- **Policy over questionnaire precedence** — when a vendor-supplied answer disagrees with an internal policy, the policy wins.
+- **Auditability by default** — every determination must be traceable to the evidence that produced it.
+- **Non-null discipline** — retrieval gaps must produce escalations, not hallucinations.
+
+Naive RAG collapses these dimensions into a single similarity search. This section frames the alternative.

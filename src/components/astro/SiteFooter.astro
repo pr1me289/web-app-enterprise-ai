@@ -1,0 +1,14 @@
+---
+import Container from './Container.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="mt-section border-t border-ink-100 py-10 text-sm text-ink-500">
+  <Container width="wide" class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+    <p>&copy; {year} Pierce Nellessen. All rights reserved.</p>
+    <p class="text-ink-400">
+      A narrative presentation of a spec-driven approach to enterprise context engineering.
+    </p>
+  </Container>
+</footer>
