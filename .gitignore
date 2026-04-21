@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build output
+.astro/
+dist/
+
+# Deploy
+.vercel/
+
+# Environment — never commit secrets (see CLAUDE.md)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Python (stray venvs should not live here)
+venv/
+.venv/
+__pycache__/
