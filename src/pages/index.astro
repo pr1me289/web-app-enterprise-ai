@@ -496,7 +496,147 @@ const scenarioActs = [
   </NarrativeSection>
 
   <NarrativeSection id="introduction" tone="muted" width="wide">
-    <SectionHero eyebrow={intro.data.eyebrow} title={intro.data.title} lede={intro.data.lede} />
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.8fr)]">
+      <div>
+        <SectionHero
+          eyebrow={intro.data.eyebrow}
+          title={intro.data.title}
+          lede={intro.data.lede}
+        />
+
+        <p class="mt-10 max-w-prose text-lg leading-relaxed text-ink-800">
+          <strong class="font-semibold text-ink-900">My argument:</strong> A fitted orchestration
+          layer and context engine is not architecture for its own sake. It is the only path that
+          forces the enterprise to confront security, reliability, and profitability — rather
+          than inheriting someone else’s answers.
+        </p>
+
+        <figure class="mt-12" aria-label="Three pillars: Security, Reliability, Profitability">
+      <svg
+        viewBox="0 0 680 410"
+        width="100%"
+        xmlns="http://www.w3.org/2000/svg"
+        role="img"
+        aria-labelledby="pillars-title pillars-desc"
+      >
+        <title id="pillars-title">Three pillars of enterprise AI</title>
+        <desc id="pillars-desc">
+          Three classical columns labeled Security, Reliability, and Profitability, sitting on a
+          shared stylobate.
+        </desc>
+
+        <style>
+          .p-outline { fill: none; stroke: #1a1a1a; stroke-width: 1.2; stroke-linejoin: round; }
+          .p-fluting { stroke: #1a1a1a; stroke-width: 0.5; opacity: 0.5; fill: none; }
+          .p-ring { stroke: #1a1a1a; stroke-width: 0.7; fill: none; }
+          .p-label { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 500; fill: #1a1a1a; text-anchor: middle; letter-spacing: 0.12em; }
+          .p-num { font-family: ui-serif, Georgia, serif; font-size: 14px; fill: #6b6b6b; text-anchor: middle; opacity: 0.55; font-style: italic; letter-spacing: 0.1em; }
+        </style>
+
+        <rect x="40" y="340" width="600" height="18" class="p-outline" />
+
+        <g>
+          <rect x="55" y="325" width="120" height="15" class="p-outline" />
+          <path d="M 68 325 L 75 315 L 155 315 L 162 325 Z" class="p-outline" />
+          <rect x="75" y="85" width="80" height="230" class="p-outline" />
+          <line x1="86" y1="88" x2="86" y2="312" class="p-fluting" />
+          <line x1="97" y1="88" x2="97" y2="312" class="p-fluting" />
+          <line x1="108" y1="88" x2="108" y2="312" class="p-fluting" />
+          <line x1="122" y1="88" x2="122" y2="312" class="p-fluting" />
+          <line x1="133" y1="88" x2="133" y2="312" class="p-fluting" />
+          <line x1="144" y1="88" x2="144" y2="312" class="p-fluting" />
+          <line x1="75" y1="88" x2="155" y2="88" class="p-ring" />
+          <path d="M 75 85 L 68 75 L 162 75 L 155 85 Z" class="p-outline" />
+          <rect x="55" y="60" width="120" height="15" class="p-outline" />
+          <text x="115" y="205" class="p-num">I</text>
+          <text x="115" y="390" class="p-label">Security</text>
+        </g>
+
+        <g>
+          <rect x="280" y="325" width="120" height="15" class="p-outline" />
+          <path d="M 293 325 L 300 315 L 380 315 L 387 325 Z" class="p-outline" />
+          <rect x="300" y="85" width="80" height="230" class="p-outline" />
+          <line x1="311" y1="88" x2="311" y2="312" class="p-fluting" />
+          <line x1="322" y1="88" x2="322" y2="312" class="p-fluting" />
+          <line x1="333" y1="88" x2="333" y2="312" class="p-fluting" />
+          <line x1="347" y1="88" x2="347" y2="312" class="p-fluting" />
+          <line x1="358" y1="88" x2="358" y2="312" class="p-fluting" />
+          <line x1="369" y1="88" x2="369" y2="312" class="p-fluting" />
+          <line x1="300" y1="88" x2="380" y2="88" class="p-ring" />
+          <path d="M 300 85 L 293 75 L 387 75 L 380 85 Z" class="p-outline" />
+          <rect x="280" y="60" width="120" height="15" class="p-outline" />
+          <text x="340" y="205" class="p-num">II</text>
+          <text x="340" y="390" class="p-label">Reliability</text>
+        </g>
+
+        <g>
+          <rect x="505" y="325" width="120" height="15" class="p-outline" />
+          <path d="M 518 325 L 525 315 L 605 315 L 612 325 Z" class="p-outline" />
+          <rect x="525" y="85" width="80" height="230" class="p-outline" />
+          <line x1="536" y1="88" x2="536" y2="312" class="p-fluting" />
+          <line x1="547" y1="88" x2="547" y2="312" class="p-fluting" />
+          <line x1="558" y1="88" x2="558" y2="312" class="p-fluting" />
+          <line x1="572" y1="88" x2="572" y2="312" class="p-fluting" />
+          <line x1="583" y1="88" x2="583" y2="312" class="p-fluting" />
+          <line x1="594" y1="88" x2="594" y2="312" class="p-fluting" />
+          <line x1="525" y1="88" x2="605" y2="88" class="p-ring" />
+          <path d="M 525 85 L 518 75 L 612 75 L 605 85 Z" class="p-outline" />
+          <rect x="505" y="60" width="120" height="15" class="p-outline" />
+          <text x="565" y="205" class="p-num">III</text>
+          <text x="565" y="390" class="p-label">Profitability</text>
+        </g>
+      </svg>
+        </figure>
+      </div>
+
+      <aside class="space-y-4 lg:mt-2" aria-label="Background concepts">
+        <details class="panel group overflow-hidden">
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
+          >
+            <h3 class="font-serif text-xl font-semibold text-ink-900">What is retrieval?</h3>
+            <span
+              aria-hidden
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
+              >+</span
+            >
+          </summary>
+          <div class="border-t border-ink-100 px-6 py-5">
+            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+              Retrieval is the part of the system that finds and gathers the information an AI
+              agent needs to do its job. Instead of expecting the agent to “just know” everything,
+              retrieval pulls the most relevant documents, records, or data from the
+              organization’s sources and gives them to the agent at the right time.
+            </p>
+          </div>
+        </details>
+        <details class="panel group overflow-hidden">
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
+          >
+            <h3 class="font-serif text-xl font-semibold text-ink-900">
+              Orchestration layer vs. context engine
+            </h3>
+            <span
+              aria-hidden
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
+              >+</span
+            >
+          </summary>
+          <div class="space-y-3 border-t border-ink-100 px-6 py-5">
+            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+              A context engine helps deliver useful information to an agent. It focuses on giving
+              the agent the right context from the organization’s data.
+            </p>
+            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+              An orchestration layer governs how the overall system behaves. It decides what
+              happens first, which agent acts next, when the system should pause or escalate, and
+              how the workflow moves from step to step.
+            </p>
+          </div>
+        </details>
+      </aside>
+    </div>
 
     <Callout kind="rationale" title="The source-of-truth inversion">
       The PRD remains the human stakeholder anchor, but the source of truth for execution shifts
