@@ -55,24 +55,6 @@ const headlineTicker = [
   },
 ];
 
-const framingCards = [
-  {
-    index: 'Method',
-    title: 'Governed translation',
-    body: 'Turn stakeholder intent, policy, and operational context into something agents can use safely and repeatably.',
-  },
-  {
-    index: 'Workflow',
-    title: 'Vendor onboarding',
-    body: 'Use a real enterprise workflow with compliance, access control, and cross-functional handoffs as the proving ground.',
-  },
-  {
-    index: 'Instance',
-    title: 'Lichen + OptiChain',
-    body: 'A fictional manufacturer and software vendor make the architecture concrete without pretending the scenario is the headline.',
-  },
-];
-
 const landscapeLayers = [
   {
     title: 'Spec-driven layer',
@@ -417,16 +399,19 @@ const scenarioActs = [
         value="CSR ≠ ISR"
         label="An agent that follows 9 of 10 constraints gets a perfect Constraint Success Rate — and an Instruction Success Rate of zero."
         source="Tsinghua · AGENTIF"
+        sourceHref="https://keg.cs.tsinghua.edu.cn/persons/xubin/papers/AgentIF.pdf"
       />
       <StatBlock
         value="Context rot"
         label="Accuracy drops 68 pts when single-function benchmarks become multi-file, distributed tasks."
-        source="Multi-file agentic coding benchmark"
+        source="Multi-file coding · Augment Code"
+        sourceHref="https://www.augmentcode.com/guides/ai-coding-agents-for-spec-driven-development-automation"
       />
       <StatBlock
         value="Middle loss"
         label={'LLMs weight information at the start and end of long prompts more than information buried in the middle. The "needle in a haystack" problem.'}
         source="Chroma · Context Rot"
+        sourceHref="https://research.trychroma.com/context-rot"
       />
     </div>
 
@@ -512,19 +497,6 @@ const scenarioActs = [
 
   <NarrativeSection id="introduction" tone="muted" width="wide">
     <SectionHero eyebrow={intro.data.eyebrow} title={intro.data.title} lede={intro.data.lede} />
-    <div class="prose-narrative mt-8 max-w-3xl">
-      <IntroBody.Content />
-    </div>
-
-    <div class="mt-12 grid gap-4 md:grid-cols-3">
-      {
-        framingCards.map((card) => (
-          <TakeawayCard index={card.index} title={card.title}>
-            {card.body}
-          </TakeawayCard>
-        ))
-      }
-    </div>
 
     <Callout kind="rationale" title="The source-of-truth inversion">
       The PRD remains the human stakeholder anchor, but the source of truth for execution shifts
@@ -538,6 +510,10 @@ const scenarioActs = [
         {executableContext.map((item) => <li>{item}</li>)}
       </ul>
     </DetailExpander>
+
+    <div class="prose-narrative mt-16 max-w-3xl">
+      <IntroBody.Content />
+    </div>
   </NarrativeSection>
 
   <NarrativeSection id="approach" tone="default" width="wide">
