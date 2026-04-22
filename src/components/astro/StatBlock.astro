@@ -3,10 +3,11 @@ interface Props {
   value: string;
   label: string;
   source?: string;
+  sourceHref?: string;
   emphasis?: boolean;
 }
 
-const { value, label, source, emphasis = false } = Astro.props;
+const { value, label, source, sourceHref, emphasis = false } = Astro.props;
 ---
 
 <article
@@ -29,5 +30,22 @@ const { value, label, source, emphasis = false } = Astro.props;
     </p>
     <p class="mt-4 text-sm leading-relaxed text-ink-700">{label}</p>
   </div>
-  {source && <p class="mt-6 eyebrow text-ink-400">{source}</p>}
+  {
+    source && (
+      <p class="mt-6 eyebrow text-ink-400">
+        {sourceHref ? (
+          <a
+            href={sourceHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-ink-400 underline decoration-ink-200 decoration-1 underline-offset-4 transition-colors hover:text-ink-700 hover:decoration-ink-500"
+          >
+            {source}
+          </a>
+        ) : (
+          source
+        )}
+      </p>
+    )
+  }
 </article>

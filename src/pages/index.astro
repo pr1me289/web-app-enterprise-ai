@@ -11,6 +11,7 @@ import SpecHierarchy from '../components/astro/SpecHierarchy.astro';
 import TakeawayCard from '../components/astro/TakeawayCard.astro';
 import Quote from '../components/astro/Quote.astro';
 import StatBlock from '../components/astro/StatBlock.astro';
+import HeadlineMarquee from '../components/astro/HeadlineMarquee.astro';
 import DetailExpander from '../components/react/DetailExpander';
 
 const parts = (await getCollection('parts')).sort((a, b) => a.data.order - b.data.order);
@@ -25,6 +26,33 @@ const IntroBody = await intro.render();
 const ProblemBody = await problem.render();
 const ApproachBody = await approach.render();
 const ScenarioBody = await scenario.render();
+
+const headlineTicker = [
+  {
+    source: 'The Wall Street Journal',
+    headline: 'Companies Are Struggling to Drive a Return on AI. It Doesn’t Have to Be That Way.',
+    headlineSrc: '/headlines/wsj-headline.png',
+    logoSrc: '/headlines/wsj-logo.png',
+  },
+  {
+    source: 'The New York Times',
+    headline: 'Companies Are Pouring Billions Into A.I. It Has Yet to Pay Off.',
+    headlineSrc: '/headlines/nyt-headline.png',
+    logoSrc: '/headlines/nyt-logo.png',
+  },
+  {
+    source: 'Forbes',
+    headline: 'The Context Engine: Compounding Productivity For AI',
+    headlineSrc: '/headlines/forbes-headline.png',
+    logoSrc: '/headlines/forbes-logo.png',
+  },
+  {
+    source: 'Fortune',
+    headline: 'MIT report: 95% of generative AI pilots at companies are failing',
+    headlineSrc: '/headlines/fortune-headline.png',
+    logoSrc: '/headlines/fortune-logo.png',
+  },
+];
 
 const framingCards = [
   {
@@ -174,7 +202,7 @@ const scenarioActs = [
 
 <BaseLayout title="Spec-Driven Enterprise AI">
   <section class="relative overflow-hidden border-b border-ink-100 bg-paper-muted">
-    <Container width="wide" class="relative pb-20 pt-16 md:pb-24 md:pt-24">
+    <Container width="wide" class="relative pb-24 pt-16 md:pb-32 md:pt-24">
       <div class="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(19rem,0.75fr)]">
         <div>
           <p class="eyebrow mb-5">{titlePart.data.eyebrow}</p>
@@ -184,7 +212,9 @@ const scenarioActs = [
             {titlePart.data.title}
           </h1>
           {titlePart.data.lede && <p class="lede mt-7 max-w-2xl">{titlePart.data.lede}</p>}
-          <div class="prose-narrative mt-8 max-w-2xl text-[1.02rem]">
+          <div class="silver-panel prose-narrative mt-8 max-w-2xl text-[1.02rem]">
+            <span class="silver-panel__corner silver-panel__corner--tl" aria-hidden="true"></span>
+            <span class="silver-panel__corner silver-panel__corner--br" aria-hidden="true"></span>
             <TitleBody.Content />
           </div>
 
@@ -193,7 +223,7 @@ const scenarioActs = [
               href="/demo"
               class="inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-3 text-sm font-medium text-paper no-underline shadow-soft transition-colors hover:bg-ink-800"
             >
-              Open the replay
+              Skip to the replay
               <span aria-hidden>→</span>
             </a>
             <a
@@ -217,12 +247,14 @@ const scenarioActs = [
               value="80%"
               label="of enterprises believe in the transformative impact of AI and have invested accordingly."
               source="McKinsey · The State of AI"
+              sourceHref="https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/ai-is-everywhere-the-agentic-organization-isnt-yet"
               emphasis
             />
             <StatBlock
               value="80%"
               label="of those same enterprises say they have not yet seen the investment reflected in the bottom line."
               source="McKinsey · The State of AI"
+              sourceHref="https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/ai-is-everywhere-the-agentic-organization-isnt-yet"
               emphasis
             />
             <StatBlock
@@ -234,6 +266,14 @@ const scenarioActs = [
         </div>
       </div>
     </Container>
+
+    <div class="border-t border-ink-100 bg-white py-9 md:py-10">
+      <HeadlineMarquee
+        headlines={headlineTicker}
+        ariaLabel="Enterprise AI headline ticker"
+        durationSeconds={70}
+      />
+    </div>
   </section>
 
   <NarrativeSection id="introduction" tone="default" width="wide">
@@ -473,3 +513,97 @@ const scenarioActs = [
     </div>
   </NarrativeSection>
 </BaseLayout>
+
+<style>
+  .silver-panel {
+    position: relative;
+    isolation: isolate;
+    padding: 1.5rem 1.75rem;
+    border-radius: 0.9rem;
+    background:
+      linear-gradient(
+        135deg,
+        #f6f8fa 0%,
+        #dde3e8 22%,
+        #f1f4f6 48%,
+        #c8d0d7 74%,
+        #e8ecef 100%
+      );
+    border: 1px solid rgba(24, 33, 38, 0.14);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.85),
+      inset 0 -1px 0 rgba(24, 33, 38, 0.18),
+      0 1px 2px rgba(24, 33, 38, 0.06),
+      0 10px 28px -14px rgba(24, 33, 38, 0.22);
+  }
+
+  .silver-panel::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0) 38%,
+      rgba(24, 33, 38, 0.04) 100%
+    );
+    mix-blend-mode: screen;
+    z-index: -1;
+  }
+
+  .silver-panel::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 40%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 60%,
+      transparent 100%
+    );
+    opacity: 0.5;
+    z-index: -1;
+  }
+
+  .silver-panel :global(p) {
+    color: #1b2529;
+  }
+
+  .silver-panel :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .silver-panel :global(p:last-child) {
+    margin-bottom: 0;
+  }
+
+  .silver-panel__corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(24, 33, 38, 0.35);
+    pointer-events: none;
+  }
+
+  .silver-panel__corner--tl {
+    top: 8px;
+    left: 8px;
+    border-right: none;
+    border-bottom: none;
+    border-top-left-radius: 4px;
+  }
+
+  .silver-panel__corner--br {
+    bottom: 8px;
+    right: 8px;
+    border-left: none;
+    border-top: none;
+    border-bottom-right-radius: 4px;
+  }
+</style>
