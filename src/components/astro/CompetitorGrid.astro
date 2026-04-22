@@ -1,0 +1,55 @@
+---
+interface Competitor {
+  name: string;
+  angle: string;
+}
+
+interface Props {
+  title?: string;
+  subtitle?: string;
+  eyebrow?: string | null;
+  competitors: Competitor[];
+  stance?: string;
+}
+
+const {
+  title = 'The 2026 context-engine boom',
+  subtitle,
+  eyebrow = 'Landscape',
+  competitors,
+  stance,
+} = Astro.props;
+---
+
+<section class="mt-12">
+  <header class="max-w-prose">
+    {eyebrow && <p class="eyebrow mb-3 text-accent">{eyebrow}</p>}
+    <h3 class="font-serif text-2xl font-semibold text-ink-900">{title}</h3>
+    {subtitle && <p class="mt-3 text-base leading-relaxed text-ink-600">{subtitle}</p>}
+    <div class="mt-3 text-base leading-relaxed text-ink-600 empty:hidden">
+      <slot name="subtitle" />
+    </div>
+  </header>
+
+  <ul
+    class="mt-8 grid gap-px overflow-hidden rounded-lg border border-ink-100 bg-ink-100 md:grid-cols-2 lg:grid-cols-3"
+  >
+    {
+      competitors.map((c) => (
+        <li class="flex flex-col gap-2 bg-paper p-5 transition-colors hover:bg-paper-muted">
+          <p class="font-serif text-base font-semibold text-ink-900">{c.name}</p>
+          <p class="text-xs leading-relaxed text-ink-500">{c.angle}</p>
+        </li>
+      ))
+    }
+  </ul>
+
+  {
+    stance && (
+      <div class="mt-6 rounded-r-md border border-l-4 border-ink-100 border-l-accent bg-paper-muted px-5 py-4">
+        <p class="eyebrow mb-2">Where this work sits</p>
+        <p class="text-sm leading-relaxed text-ink-700">{stance}</p>
+      </div>
+    )
+  }
+</section>

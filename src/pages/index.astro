@@ -6,6 +6,7 @@ import NarrativeSection from '../components/astro/NarrativeSection.astro';
 import SectionHero from '../components/astro/SectionHero.astro';
 import Callout from '../components/astro/Callout.astro';
 import ComparisonBlock from '../components/astro/ComparisonBlock.astro';
+import CompetitorGrid from '../components/astro/CompetitorGrid.astro';
 import PrincipleList from '../components/astro/PrincipleList.astro';
 import SpecHierarchy from '../components/astro/SpecHierarchy.astro';
 import TakeawayCard from '../components/astro/TakeawayCard.astro';
@@ -89,6 +90,39 @@ const landscapeLayers = [
     title: 'Runtime layer',
     body: 'MCP, A2A, and orchestration frameworks shift the question from pure search to controlled access and execution flow.',
   },
+];
+
+const contextEngines = [
+  {
+    name: 'Unblocked',
+    angle: 'Authority signals — who reviewed whose code, who is the domain expert.',
+  },
+  {
+    name: 'Augment Code',
+    angle: 'Semantic dependency analysis across 400K+ files, SOC 2 Type II.',
+  },
+  { name: 'Qodo Context Engine', angle: 'Deep research agent; high DeepCodeBench accuracy.' },
+  {
+    name: 'Context Hub (Ng)',
+    angle: 'Open-source CLI; agents annotate and "remember" workarounds.',
+  },
+  {
+    name: 'Kayba ACE',
+    angle: 'Self-improving via reflection; evolving "Skillbook" as system prompt.',
+  },
+  { name: 'Microsoft Agent Skills', angle: '126 modular knowledge packages for Azure / Foundry.' },
+  { name: 'Tabnine ECE', angle: 'Privacy-first; on-prem or air-gapped deployments.' },
+  {
+    name: 'Greptile',
+    angle: 'Graph-first semantic code graph; cross-service propagation detection.',
+  },
+  {
+    name: 'Sourcegraph Amp',
+    angle: 'Most established; enterprise knowledge graph; SOC 2 + ISO 27001.',
+  },
+  { name: 'Hyland ECE', angle: 'Broad content/process/people linking across ERP, CRM, EHR.' },
+  { name: 'Faros Clara', angle: 'Enhanced AGENTS.md built from years of coding assistant usage.' },
+  { name: 'Graphiti (Zep)', angle: 'Temporal knowledge graphs; time-aware fact management.' },
 ];
 
 const pressurePoints = [
@@ -276,52 +310,145 @@ const scenarioActs = [
     </div>
   </section>
 
-  <NarrativeSection id="introduction" tone="default" width="wide">
-    <SectionHero eyebrow={intro.data.eyebrow} title={intro.data.title} lede={intro.data.lede} />
-    <div class="prose-narrative mt-8 max-w-3xl">
-      <IntroBody.Content />
+  <NarrativeSection id="problem" tone="default" width="wide">
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.8fr)]">
+      <div>
+        <SectionHero
+          eyebrow={problem.data.eyebrow}
+          title={problem.data.title}
+          lede={problem.data.lede}
+        />
+        <div class="prose-narrative mt-8 max-w-3xl">
+          <ProblemBody.Content />
+        </div>
+      </div>
+
+      <aside class="space-y-4 lg:mt-2" aria-label="Background concepts">
+        <details class="panel group overflow-hidden">
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
+          >
+            <h3 class="font-serif text-xl font-semibold text-ink-900">What is context?</h3>
+            <span
+              aria-hidden
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
+              >+</span
+            >
+          </summary>
+          <div class="border-t border-ink-100 px-6 py-5">
+            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+              Context is the information an AI model or agent is given so it can answer a question,
+              make a decision, write something, or complete a task. This can include instructions,
+              documents, conversation history, policies, data from tools, and other relevant
+              inputs.
+            </p>
+          </div>
+        </details>
+        <details class="panel group overflow-hidden">
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
+          >
+            <h3 class="font-serif text-xl font-semibold text-ink-900">What are tokens?</h3>
+            <span
+              aria-hidden
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
+              >+</span
+            >
+          </summary>
+          <div class="border-t border-ink-100 px-6 py-5">
+            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+              Tokens are the small units of text AI systems read and produce. In practice, they
+              roughly correspond to pieces of words and sentences. The more context an AI system
+              processes and the more it writes back, the more tokens are used — and token usage
+              directly affects cost.
+            </p>
+          </div>
+        </details>
+
+        <figure class="border-l-2 border-accent pl-5 pt-2">
+          <blockquote class="font-serif text-lg leading-snug text-ink-800">
+            “AI capabilities continue to accelerate while the governance frameworks, evaluation
+            benchmarks, and transparency mechanisms needed to manage them fall further behind.”
+          </blockquote>
+          <figcaption class="mt-3 text-sm text-ink-500">
+            <a
+              href="https://hai.stanford.edu/ai-index/2026-ai-index-report"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-ink-500 underline decoration-ink-200 underline-offset-2 transition-colors hover:text-ink-800 hover:decoration-ink-500"
+            >
+              Stanford HAI&rsquo;s 2026 AI Index Report (April 13, 2026)
+            </a>
+          </figcaption>
+        </figure>
+
+        <figure class="border-l-2 border-accent pl-5 pt-2">
+          <blockquote class="font-serif text-lg leading-snug text-ink-800">
+            “Context is similar for agents and people. Context to me is all the information you
+            need to be good at your job.”
+          </blockquote>
+          <figcaption class="mt-3 text-sm text-ink-500">
+            <a
+              href="https://softwareengineeringdaily.com/2026/03/05/organizational-context-for-ai-coding-agents-with-dennis-pilarinos/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-ink-500 underline decoration-ink-200 underline-offset-2 transition-colors hover:text-ink-800 hover:decoration-ink-500"
+            >
+              Dennis Pilarinos, Unblocked CEO, on the Software Engineering Daily podcast (March
+              25, 2026)
+            </a>
+          </figcaption>
+        </figure>
+      </aside>
     </div>
 
-    <div class="mt-12 grid gap-4 md:grid-cols-3">
-      {
-        framingCards.map((card) => (
-          <TakeawayCard index={card.index} title={card.title}>
-            {card.body}
-          </TakeawayCard>
-        ))
-      }
+    <div class="mt-20 max-w-3xl">
+      <h3
+        class="font-serif text-3xl font-semibold tracking-tight text-ink-900 md:text-display-sm"
+      >
+        More context is not uniformly better. Beyond a threshold, it degrades performance. The
+        enterprise fix is not a bigger window — it is a governed, scoped, authority-aware
+        retrieval layer.
+      </h3>
     </div>
 
-    <Callout kind="rationale" title="The source-of-truth inversion">
-      The PRD remains the human stakeholder anchor, but the source of truth for execution shifts
-      into the spec stack. The real product of governance is not a markdown document. It is an
-      evidence-aware runtime package that tells the system what it may retrieve, how it should
-      behave, and when it must stop.
-    </Callout>
-
-    <DetailExpander summary="What executable context actually contains" kind="spec" client:visible>
-      <ul class="list-disc pl-5">
-        {executableContext.map((item) => <li>{item}</li>)}
-      </ul>
-    </DetailExpander>
-  </NarrativeSection>
-
-  <NarrativeSection id="problem" tone="muted" width="wide">
-    <SectionHero
-      eyebrow={problem.data.eyebrow}
-      title={problem.data.title}
-      lede={problem.data.lede}
-    />
-    <div class="prose-narrative mt-8 max-w-3xl">
-      <ProblemBody.Content />
+    <div class="mt-10 grid gap-5 md:grid-cols-3">
+      <StatBlock
+        value="CSR ≠ ISR"
+        label="An agent that follows 9 of 10 constraints gets a perfect Constraint Success Rate — and an Instruction Success Rate of zero."
+        source="Tsinghua · AGENTIF"
+      />
+      <StatBlock
+        value="Context rot"
+        label="Accuracy drops 68 pts when single-function benchmarks become multi-file, distributed tasks."
+        source="Multi-file agentic coding benchmark"
+      />
+      <StatBlock
+        value="Middle loss"
+        label={'LLMs weight information at the start and end of long prompts more than information buried in the middle. The "needle in a haystack" problem.'}
+        source="Chroma · Context Rot"
+      />
     </div>
 
-    <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+    <p class="mx-auto mt-12 max-w-2xl text-center text-lg leading-relaxed text-ink-700">
+      Meanwhile, a new product category — <em>context engines</em> — has crystallized in early
+      2026. Most of them are solving retrieval-over-code. Almost none are solving <strong
+        class="font-semibold text-ink-900"
+        >governed translation of stakeholder intent into scoped, authority-aware agent context.</strong
+      >
+    </p>
+
+    <div class="mt-20 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
       {pressurePoints.map((point) => <TakeawayCard title={point.title}>{point.body}</TakeawayCard>)}
     </div>
 
-    <h3 class="mt-16 font-serif text-xl text-ink-900">How the landscape is evolving</h3>
-    <div class="mt-6 grid gap-4 md:grid-cols-2">
+    <div class="mt-20 max-w-3xl">
+      <p class="eyebrow mb-3 text-accent">Landscape</p>
+      <h3 class="font-serif text-2xl font-semibold text-ink-900 md:text-3xl">
+        There are many perspectives to solving the enterprise context problem
+      </h3>
+    </div>
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
       {
         landscapeLayers.map((layer) => (
           <article class="panel p-5">
@@ -331,6 +458,21 @@ const scenarioActs = [
         ))
       }
     </div>
+
+    <CompetitorGrid
+      title="The 2026 context-engine boom"
+      eyebrow={null}
+      competitors={contextEngines}
+      stance="This work is not another context engine. It is the governance layer that sits above the retrieval layer — the part that decides what the agent is allowed to see, under whose authority, and with what audit obligation. It is customizable to fit an organization’s structure, governance needs, and intended agentic use cases."
+    >
+      <Fragment slot="subtitle">
+        A dozen credible products crystallized into a single category in early 2026. Most are
+        solving retrieval over code. <strong class="font-semibold text-ink-900"
+          >Almost none are solving governed translation from enterprise intent into scoped,
+          authority-aware agent context.</strong
+        >
+      </Fragment>
+    </CompetitorGrid>
 
     <ComparisonBlock
       left={{
@@ -365,6 +507,36 @@ const scenarioActs = [
       principles, and access rules. Project context covers APIs, features, and sprint-level tasks.
       They overlap, but they are not interchangeable, and treating them as one bucket is how
       supposedly helpful assistants violate enterprise boundaries.
+    </DetailExpander>
+  </NarrativeSection>
+
+  <NarrativeSection id="introduction" tone="muted" width="wide">
+    <SectionHero eyebrow={intro.data.eyebrow} title={intro.data.title} lede={intro.data.lede} />
+    <div class="prose-narrative mt-8 max-w-3xl">
+      <IntroBody.Content />
+    </div>
+
+    <div class="mt-12 grid gap-4 md:grid-cols-3">
+      {
+        framingCards.map((card) => (
+          <TakeawayCard index={card.index} title={card.title}>
+            {card.body}
+          </TakeawayCard>
+        ))
+      }
+    </div>
+
+    <Callout kind="rationale" title="The source-of-truth inversion">
+      The PRD remains the human stakeholder anchor, but the source of truth for execution shifts
+      into the spec stack. The real product of governance is not a markdown document. It is an
+      evidence-aware runtime package that tells the system what it may retrieve, how it should
+      behave, and when it must stop.
+    </Callout>
+
+    <DetailExpander summary="What executable context actually contains" kind="spec" client:visible>
+      <ul class="list-disc pl-5">
+        {executableContext.map((item) => <li>{item}</li>)}
+      </ul>
     </DetailExpander>
   </NarrativeSection>
 
