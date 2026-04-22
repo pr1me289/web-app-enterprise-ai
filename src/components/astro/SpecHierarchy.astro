@@ -2,6 +2,7 @@
 interface Layer {
   label: string;
   name: string;
+  subtitle?: string;
   jurisdiction: string;
 }
 
@@ -13,27 +14,33 @@ const defaultLayers: Layer[] = [
   {
     label: '01',
     name: 'PRD',
-    jurisdiction: 'Product intent — what the system must do and for whom.',
+    subtitle: 'Product Requirements Document',
+    jurisdiction:
+      'Stakeholder intent — used by business stakeholders; defines what the system should do, why it exists, and who it is for.',
   },
   {
     label: '02',
     name: 'Design Doc',
-    jurisdiction: 'System architecture — how the system is shaped.',
+    jurisdiction:
+      'System architecture — used by engineers; defines how the system is designed and what technical shape it takes.',
   },
   {
     label: '03',
     name: 'Context Contract',
-    jurisdiction: 'Retrieval + data — what each agent is allowed to see.',
+    jurisdiction:
+      'Context governance — used by the retrieval/governance layer; defines source authority, retrieval rules, and agent visibility boundaries.',
   },
   {
     label: '04',
     name: 'Orchestration Plan',
-    jurisdiction: 'Runtime execution — step order, gates, state mutations, and escalation flow.',
+    jurisdiction:
+      'Runtime workflow — used by the supervisor layer; defines execution order, gates, state changes, and escalation flow.',
   },
   {
     label: '05',
     name: 'Agent Specs',
-    jurisdiction: "Agent behavior — DOs, DON'Ts, output contracts.",
+    jurisdiction:
+      'Agent behavior — used by the agents; defines DOs, DON’Ts, scope boundaries, and output contracts.',
   },
 ];
 
@@ -46,19 +53,25 @@ const { layers = defaultLayers } = Astro.props;
       layers.map((layer, i) => (
         <li
           class:list={[
-            'grid grid-cols-[4rem_10rem_1fr] items-center gap-4 px-5 py-4',
+            'grid grid-cols-[4rem_10rem_1fr] items-center gap-4 px-5 py-4 transition-colors hover:bg-paper-muted',
             i !== layers.length - 1 ? 'border-b border-ink-100' : '',
           ]}
         >
           <span class="eyebrow text-ink-400">{layer.label}</span>
-          <span class="font-serif text-base font-medium text-ink-900">{layer.name}</span>
+          <span class="flex flex-col">
+            <span class="font-serif text-base font-medium text-ink-900">{layer.name}</span>
+            {layer.subtitle && (
+              <span class="mt-0.5 text-xs italic text-ink-500">{layer.subtitle}</span>
+            )}
+          </span>
           <span class="text-sm leading-relaxed text-ink-600">{layer.jurisdiction}</span>
         </li>
       ))
     }
   </ol>
   <figcaption class="mt-3 text-xs text-ink-400">
-    Conceptually four framing documents; in implementation, the orchestration plan became a distinct
-    fifth runtime layer.
+    This hierarchy is cumulative: higher-level documents guide and authorize the documents beneath
+    them, often supplying information directly. To keep the system reliable, these documents must
+    be maintained as the system evolves.
   </figcaption>
 </figure>

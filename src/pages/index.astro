@@ -9,6 +9,8 @@ import ComparisonBlock from '../components/astro/ComparisonBlock.astro';
 import CompetitorGrid from '../components/astro/CompetitorGrid.astro';
 import PrincipleList from '../components/astro/PrincipleList.astro';
 import SpecHierarchy from '../components/astro/SpecHierarchy.astro';
+import StatementCallout from '../components/astro/StatementCallout.astro';
+import SchoolsOfThought from '../components/astro/SchoolsOfThought.astro';
 import TakeawayCard from '../components/astro/TakeawayCard.astro';
 import Quote from '../components/astro/Quote.astro';
 import StatBlock from '../components/astro/StatBlock.astro';
@@ -71,6 +73,31 @@ const landscapeLayers = [
   {
     title: 'Runtime layer',
     body: 'MCP, A2A, and orchestration frameworks shift the question from pure search to controlled access and execution flow.',
+  },
+];
+
+const schools = [
+  {
+    label: 'School I',
+    name: 'GitHub Spec Kit',
+    centers: 'Spec',
+    tagline:
+      '4-phase CLI, 14+ agents, MIT-licensed. Greenfield, single-repo, agent-agnostic. The spec is the artifact.',
+  },
+  {
+    label: 'School II',
+    name: 'AWS Kiro',
+    centers: 'Workflow',
+    tagline:
+      'Code-OSS IDE; EARS notation; Requirements → Design → Tasks. AWS-native, formal documentation stack.',
+  },
+  {
+    label: 'School III',
+    name: 'This work',
+    centers: 'Governed translation',
+    tagline:
+      'Specs translate stakeholder intent into scoped, authority-aware agent context. Retrieval and orchestration are first-class citizens of the spec stack, not afterthoughts.',
+    emphasized: true,
   },
 ];
 
@@ -716,24 +743,18 @@ const scenarioActs = [
 
     <div class="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
       <div>
-        <h3 class="font-serif text-xl text-ink-900">The document stack</h3>
+        <p class="eyebrow mb-3 text-accent">The document stack</p>
         <SpecHierarchy />
       </div>
 
-      <div class="panel-muted p-6">
-        <p class="eyebrow mb-3">Load-bearing decision</p>
-        <h3 class="font-serif text-2xl text-ink-900">Keep the supervisor boring</h3>
-        <p class="mt-4 text-sm leading-relaxed text-ink-600">
-          The flashy version would make the supervisor another free-roaming model. The practical
-          version makes orchestration a state machine and leaves interpretation to tightly scoped
-          domain agents. That trade buys auditability, reproducibility, and cleaner failure
-          analysis.
-        </p>
-        <div class="mt-5 flex flex-wrap gap-2">
-          <span class="chip">Deterministic gates</span>
-          <span class="chip">Explicit state mutation</span>
-          <span class="chip">Auditable retries</span>
-        </div>
+      <div>
+        <StatementCallout attribution="Spec-driven development, three schools">
+          GitHub Spec Kit centers the spec. Kiro centers the workflow. <span class="text-accent"
+            >This model centers the governed translation from enterprise intent into agent-usable
+            context.</span
+          >
+        </StatementCallout>
+        <SchoolsOfThought schools={schools} />
       </div>
     </div>
 
@@ -797,6 +818,22 @@ const scenarioActs = [
       automation suite. Those are interesting extensions, but they are not the value proposition
       demonstrated here.
     </DetailExpander>
+
+    <div class="panel-muted mt-16 p-6">
+      <p class="eyebrow mb-3">Load-bearing decision</p>
+      <h3 class="font-serif text-2xl text-ink-900">Keep the supervisor boring</h3>
+      <p class="mt-4 text-sm leading-relaxed text-ink-600">
+        The flashy version would make the supervisor another free-roaming model. The practical
+        version makes orchestration a state machine and leaves interpretation to tightly scoped
+        domain agents. That trade buys auditability, reproducibility, and cleaner failure
+        analysis.
+      </p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        <span class="chip">Deterministic gates</span>
+        <span class="chip">Explicit state mutation</span>
+        <span class="chip">Auditable retries</span>
+      </div>
+    </div>
   </NarrativeSection>
 
   <NarrativeSection id="scenario" tone="muted" width="wide">

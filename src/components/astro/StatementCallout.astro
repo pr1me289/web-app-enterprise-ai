@@ -1,0 +1,20 @@
+---
+interface Props {
+  eyebrow?: string;
+  attribution?: string;
+  align?: 'left' | 'center';
+}
+
+const { eyebrow, attribution, align = 'left' } = Astro.props;
+const alignClass = align === 'center' ? 'text-center mx-auto' : '';
+---
+
+<figure class:list={['my-10 max-w-3xl', alignClass]}>
+  {eyebrow && <p class="eyebrow mb-5 text-accent">{eyebrow}</p>}
+  <blockquote
+    class="font-serif text-2xl font-semibold leading-snug tracking-tight text-ink-900 md:text-3xl"
+  >
+    <slot />
+  </blockquote>
+  {attribution && <figcaption class="mt-6 eyebrow text-ink-400">— {attribution}</figcaption>}
+</figure>
