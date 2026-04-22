@@ -283,7 +283,7 @@ const scenarioActs = [
           </Quote>
         </div>
 
-        <div class="panel p-6">
+        <div class="panel self-center p-6">
           <p class="eyebrow mb-6">The paradox</p>
           <div class="grid gap-4">
             <StatBlock
@@ -299,11 +299,6 @@ const scenarioActs = [
               source="McKinsey · The State of AI"
               sourceHref="https://www.mckinsey.com/capabilities/people-and-organizational-performance/our-insights/ai-is-everywhere-the-agentic-organization-isnt-yet"
               emphasis
-            />
-            <StatBlock
-              value="19.36%"
-              label="Pass@1 on multi-file agentic coding tasks — down from 87.2% on single-function benchmarks."
-              source="Multi-file agentic coding benchmark"
             />
           </div>
         </div>
@@ -415,9 +410,9 @@ const scenarioActs = [
       <h3
         class="font-serif text-3xl font-semibold tracking-tight text-ink-900 md:text-display-sm"
       >
-        More context is not uniformly better. Beyond a threshold, it degrades performance. The
-        enterprise fix is not a bigger window — it is a governed, scoped, authority-aware
-        retrieval layer.
+        <span class="text-accent">More context is not uniformly better.</span> Beyond a threshold,
+        it degrades performance. The enterprise fix is not a bigger window — it is a governed,
+        scoped, authority-aware retrieval layer.
       </h3>
     </div>
 
@@ -430,7 +425,7 @@ const scenarioActs = [
       />
       <StatBlock
         value="Context rot"
-        label="Accuracy drops 68 pts when single-function benchmarks become multi-file, distributed tasks."
+        label="Accuracy drops 68 percent when single-function benchmarks become multi-file, distributed tasks."
         source="Multi-file coding · Augment Code"
         sourceHref="https://www.augmentcode.com/guides/ai-coding-agents-for-spec-driven-development-automation"
       />
@@ -741,21 +736,19 @@ const scenarioActs = [
       </aside>
     </div>
 
-    <div class="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-      <div>
-        <p class="eyebrow mb-3 text-accent">The document stack</p>
-        <SpecHierarchy />
-      </div>
+    <div class="mt-12">
+      <p class="eyebrow mb-3 text-accent">The document stack</p>
+      <SpecHierarchy />
+    </div>
 
-      <div>
-        <StatementCallout attribution="Spec-driven development, three schools">
-          GitHub Spec Kit centers the spec. Kiro centers the workflow. <span class="text-accent"
-            >This model centers the governed translation from enterprise intent into agent-usable
-            context.</span
-          >
-        </StatementCallout>
-        <SchoolsOfThought schools={schools} />
-      </div>
+    <div class="mt-12 grid items-center gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)]">
+      <StatementCallout>
+        GitHub Spec Kit centers the spec. Kiro centers the workflow. <span class="text-accent"
+          >This model centers the governed translation from enterprise intent into agent-usable
+          context.</span
+        >
+      </StatementCallout>
+      <SchoolsOfThought schools={schools} />
     </div>
 
     <Callout kind="architecture" title="Hybrid search is not the full story">
