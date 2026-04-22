@@ -2,15 +2,13 @@
 order: 4
 key: approach
 eyebrow: 'Part 04 · Approach'
-title: 'Specs govern the system. Agents execute inside that scope.'
-lede: 'A spec hierarchy, a deterministic supervisor, and a hybrid agentic retrieval layer. The model is asked to reason, not to improvise control flow.'
+title: 'Governable systems are built before agents are deployed.'
+lede: 'The system is designed so that stakeholders, engineers, and domain owners each contribute to how agents are governed, deployed, and evaluated.'
 tone: default
 ---
 
-The approach has three load-bearing pieces:
+My approach has three load-bearing pieces:
 
 1. **A governed document stack** with non-overlapping jurisdictions — PRD, Design Doc, Context Contract, Orchestration Plan, Agent Specs.
-2. **A deterministic Python supervisor** that walks six pipeline steps with explicit gate conditions. Orchestration is code; reasoning is LLM.
-3. **Hybrid agentic retrieval** — per-source dense (Chroma) + lexical (BM25) collections, row-targeted matrix retrieval, cross-encoder re-ranking, authority-weighted bundle assembly.
-
-The agents themselves are small, tightly scoped LLMs governed by behavioral specs with strict DOs / DON'Ts, output contracts, and distinct blocked / escalated / complete output shapes. The output of the governance layer is not prose; it is executable context.
+2. **A deterministic orchestration layer** that facilitates a multi-agent pipeline with explicit gate conditions. Orchestration is code; reasoning is LLM.
+3. **Hybrid agentic retrieval** — enterprise sources are chunked, indexed, and retrieved through the method that best fits their structure, combining semantic search, lexical search, and structured lookups where appropriate, then re-ranked and assembled into scoped context bundles with source authority and permissions intact.

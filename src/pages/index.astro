@@ -657,13 +657,61 @@ const scenarioActs = [
   </NarrativeSection>
 
   <NarrativeSection id="approach" tone="default" width="wide">
-    <SectionHero
-      eyebrow={approach.data.eyebrow}
-      title={approach.data.title}
-      lede={approach.data.lede}
-    />
-    <div class="prose-narrative mt-8 max-w-3xl">
-      <ApproachBody.Content />
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.8fr)]">
+      <div>
+        <SectionHero
+          eyebrow={approach.data.eyebrow}
+          title={approach.data.title}
+          lede={approach.data.lede}
+        />
+        <div class="prose-narrative mt-8 max-w-3xl">
+          <ApproachBody.Content />
+        </div>
+      </div>
+
+      <aside class="space-y-4 lg:mt-2" aria-label="Background concepts">
+        <details class="panel group overflow-hidden">
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
+          >
+            <h3 class="font-serif text-xl font-semibold text-ink-900">What is chunking?</h3>
+            <span
+              aria-hidden
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
+              >+</span
+            >
+          </summary>
+          <div class="border-t border-ink-100 px-6 py-5">
+            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+              Chunking is the process of breaking large documents into smaller, usable pieces so
+              the system can work with them more effectively. Instead of handing an agent an
+              entire policy or report at once, the system splits it into meaningful sections that
+              are easier to store, search, and retrieve later.
+            </p>
+          </div>
+        </details>
+        <details class="panel group overflow-hidden">
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
+          >
+            <h3 class="font-serif text-xl font-semibold text-ink-900">What is embedding?</h3>
+            <span
+              aria-hidden
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
+              >+</span
+            >
+          </summary>
+          <div class="border-t border-ink-100 px-6 py-5">
+            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+              Embedding is the process of turning a piece of text into a numerical representation
+              that helps the system find related meaning, not just matching keywords. This makes
+              it possible to search for information based on semantic similarity — for example,
+              finding a relevant policy section even if it does not use the exact same wording as
+              the question.
+            </p>
+          </div>
+        </details>
+      </aside>
     </div>
 
     <div class="mt-12 grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
