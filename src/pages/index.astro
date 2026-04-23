@@ -160,27 +160,39 @@ const approachPrinciples = [
   },
   {
     title: 'Keep orchestration deterministic',
-    body: 'The supervisor is a plain Python state machine. It owns steps, gates, and mutations so failures stay inspectable.',
+    body: 'The supervisor is a deterministic state machine that owns step order, gate logic, and state mutations so failures remain visible, inspectable, and governable.',
   },
   {
     title: 'Make retrieval source-aware',
-    body: 'One giant index hides authority, permissions, and freshness. Per-source lanes keep those dimensions explicit.',
+    body: 'Enterprise context is not one undifferentiated knowledge blob. Retrieval should preserve source boundaries, authority, permissions, and freshness instead of collapsing everything into a single opaque index.',
   },
   {
     title: 'Evaluate behavior, not fluency',
-    body: 'A graceful hallucination is still a governance failure. Escalation discipline and evidence traceability are first-class criteria.',
+    body: 'What matters is whether agents escalate correctly, stay within scope, and ground their outputs in traceable evidence.',
+  },
+  {
+    title: 'Let domain agents reason within constraints',
+    body: 'The LLM is allowed to reason freely inside its assigned domain, but only within a scoped context bundle and a controlled orchestration environment. Flexibility lives inside the guardrails, not outside them.',
   },
 ];
 
-const retrievalFlow = [
-  'Supervisor receives a pipeline task and decides what must be known.',
-  'The task is decomposed into targeted subqueries rather than one vague search.',
-  'A source router maps each subquery to the right retrieval lane.',
-  'Dense, lexical, and direct structured lookups run in parallel where appropriate.',
-  'Weak evidence is downweighted before anything reaches an agent.',
-  'A scoped context bundle is assembled with authority and permissions intact.',
-  'A domain agent reasons over the bundle and returns a structured determination.',
-  'The supervisor updates pipeline state, preserves escalations, and decides what happens next.',
+const retrievalSteps = [
+  {
+    title: 'Plan',
+    body: 'The supervisor receives the task, identifies what information is needed, and breaks the work into smaller questions.',
+  },
+  {
+    title: 'Retrieve',
+    body: 'The system routes each question to the right source and retrieval method instead of relying on one broad search.',
+  },
+  {
+    title: 'Govern',
+    body: 'The system filters weak evidence and builds a context bundle with permissions and source authority preserved.',
+  },
+  {
+    title: 'Decide',
+    body: 'A domain agent reasons over the bundle, returns a structured result, and the supervisor decides what happens next.',
+  },
 ];
 
 const executableContext = [
@@ -757,17 +769,18 @@ const scenarioActs = [
       capabilities are put inside a governed runtime path.
     </Callout>
 
-    <div class="mt-14 grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,22rem)]">
+    <div class="mt-14 grid items-start gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,20rem)]">
       <div class="panel p-6">
         <p class="eyebrow mb-4">Retrieval flow</p>
-        <ol class="space-y-3">
+        <ol class="grid gap-4 sm:grid-cols-2">
           {
-            retrievalFlow.map((step, index) => (
-              <li class="grid gap-3 rounded-2xl border border-ink-100 bg-paper-muted/70 px-4 py-4 md:grid-cols-[3rem_1fr]">
+            retrievalSteps.map((step, index) => (
+              <li class="rounded-2xl border border-ink-100 bg-paper-muted/70 px-5 py-5">
                 <span class="font-mono text-sm text-ink-500">
                   {String(index + 1).padStart(2, '0')}
                 </span>
-                <p class="text-sm leading-relaxed text-ink-700">{step}</p>
+                <h4 class="mt-2 font-serif text-lg font-semibold text-ink-900">{step.title}</h4>
+                <p class="mt-2 text-sm leading-relaxed text-ink-700">{step.body}</p>
               </li>
             ))
           }
@@ -776,57 +789,70 @@ const scenarioActs = [
 
       <div class="space-y-4">
         <div class="panel p-6">
-          <p class="eyebrow mb-4">What the bundle carries</p>
-          <ul class="space-y-3 text-sm leading-relaxed text-ink-700">
-            {executableContext.map((item) => <li>{item}</li>)}
-          </ul>
-        </div>
-
-        <div class="panel p-6">
-          <p class="eyebrow mb-4">Why the embedding step stays boring</p>
-          <p class="text-sm leading-relaxed text-ink-600">
-            The intelligence of the system is not in the embedding call. It is in the later routing,
-            reranking, and bundle assembly where permissions, authority, and source fit are applied
-            deliberately.
+          <h3 class="font-serif text-xl font-semibold text-ink-900">What is the Supervisor?</h3>
+          <p class="mt-3 text-sm leading-relaxed text-ink-600">
+            The Supervisor is my programmatic solution for an orchestration layer — governable
+            AI agent guidance. It does not replace the agents’ reasoning — it governs the
+            workflow around them, deciding what must be known, what happens next, and when the
+            system should pause, escalate, or continue.
           </p>
         </div>
+
+        <details class="panel group overflow-hidden">
+          <summary
+            class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
+          >
+            <h3 class="font-serif text-xl font-semibold text-ink-900">What is a context bundle?</h3>
+            <span
+              aria-hidden
+              class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
+              >+</span
+            >
+          </summary>
+          <div class="border-t border-ink-100 px-6 py-5">
+            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+              A context bundle is the package of information an agent receives before it does its
+              work. Instead of giving the agent unrestricted access to everything, the system
+              assembles a scoped set of instructions, documents, rules, and relevant evidence so
+              the agent can reason within the right boundaries.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <div class="mt-12 grid gap-6 md:grid-cols-2">
+      <div class="panel p-6">
+        <p class="eyebrow mb-4">What the bundle carries</p>
+        <ul class="space-y-3 text-sm leading-relaxed text-ink-700">
+          {executableContext.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+
+      <div class="panel p-6">
+        <p class="eyebrow mb-4">Why the embedding step stays boring</p>
+        <p class="text-sm leading-relaxed text-ink-600">
+          The intelligence of the system is not in the embedding call. It is in the later routing,
+          reranking, and bundle assembly where permissions, authority, and source fit are applied
+          deliberately.
+        </p>
       </div>
     </div>
 
     <h3 class="mt-16 font-serif text-xl text-ink-900">Operating principles</h3>
     <PrincipleList items={approachPrinciples} />
 
-    <h3 class="mt-16 font-serif text-xl text-ink-900">Domain agents in the pipeline</h3>
-    <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-      {domainAgents.map((agent) => <TakeawayCard title={agent.title}>{agent.body}</TakeawayCard>)}
-    </div>
-
     <DetailExpander
-      summary="Why this is not trying to be a generalized enterprise AI platform"
+      summary="This approach does not replace RAG so much as specialize it."
       kind="architecture"
       client:visible
     >
-      The strength of the work is that it is concrete and governed. The presentation should not
-      overclaim into a universal context engine, a GraphRAG platform, or a living-document
-      automation suite. Those are interesting extensions, but they are not the value proposition
-      demonstrated here.
+      Enterprise context is too heterogeneous to flatten into one uniform retrieval method, so
+      retrieval should be tailored to the source itself. RAG is still vital, especially for
+      enterprise data lakes and other large document ecosystems where semantic retrieval is
+      indispensable. But when decisions depend on authority, permissions, and source type,
+      retrieval should be adapted to the structure of the information itself.
     </DetailExpander>
-
-    <div class="panel-muted mt-16 p-6">
-      <p class="eyebrow mb-3">Load-bearing decision</p>
-      <h3 class="font-serif text-2xl text-ink-900">Keep the supervisor boring</h3>
-      <p class="mt-4 text-sm leading-relaxed text-ink-600">
-        The flashy version would make the supervisor another free-roaming model. The practical
-        version makes orchestration a state machine and leaves interpretation to tightly scoped
-        domain agents. That trade buys auditability, reproducibility, and cleaner failure
-        analysis.
-      </p>
-      <div class="mt-5 flex flex-wrap gap-2">
-        <span class="chip">Deterministic gates</span>
-        <span class="chip">Explicit state mutation</span>
-        <span class="chip">Auditable retries</span>
-      </div>
-    </div>
   </NarrativeSection>
 
   <NarrativeSection id="scenario" tone="muted" width="wide">
@@ -861,6 +887,11 @@ const scenarioActs = [
       domain-specific evidence use, escalation preservation, and stakeholder-ready next-step
       guidance. That makes the architecture visible without requiring a live backend.
     </Callout>
+
+    <h3 class="mt-16 font-serif text-xl text-ink-900">Domain agents in the pipeline</h3>
+    <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+      {domainAgents.map((agent) => <TakeawayCard title={agent.title}>{agent.body}</TakeawayCard>)}
+    </div>
 
     <div class="mt-10 flex flex-wrap gap-3 text-sm">
       <a
