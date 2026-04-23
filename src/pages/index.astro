@@ -748,8 +748,8 @@ const scenarioActs = [
       </aside>
     </div>
 
-    <div class="mt-12">
-      <p class="eyebrow mb-3 text-accent">The document stack</p>
+    <div id="doc-stack" class="mt-12 scroll-mt-24">
+      <p class="eyebrow mb-3 text-accent">The spec-driven development document stack</p>
       <SpecHierarchy />
     </div>
 
@@ -763,13 +763,11 @@ const scenarioActs = [
       <SchoolsOfThought schools={schools} />
     </div>
 
-    <Callout kind="architecture" title="Hybrid search is not the full story">
-      Hybrid search is the engine. Agentic retrieval is the planner, router, judge, and assembler
-      around it. The system does not win because it has vectors and keywords. It wins because those
-      capabilities are put inside a governed runtime path.
-    </Callout>
+    <div id="retrieval-process" class="mt-28 scroll-mt-24">
+      <p class="eyebrow mb-3 text-accent">The retrieval process</p>
+    </div>
 
-    <div class="mt-14 grid items-start gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,20rem)]">
+    <div class="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,20rem)]">
       <div class="panel p-6">
         <p class="eyebrow mb-4">Retrieval flow</p>
         <ol class="grid gap-4 sm:grid-cols-2">
@@ -821,6 +819,14 @@ const scenarioActs = [
       </div>
     </div>
 
+    <div class="mt-12">
+      <Callout kind="architecture" title="Hybrid search is not the full story">
+        Hybrid search is the engine. Agentic retrieval is the planner, router, judge, and
+        assembler around it. The system does not win because it has vectors and keywords. It wins
+        because those capabilities are put inside a governed runtime path.
+      </Callout>
+    </div>
+
     <div class="mt-12 grid gap-6 md:grid-cols-2">
       <div class="panel p-6">
         <p class="eyebrow mb-4">What the bundle carries</p>
@@ -837,6 +843,18 @@ const scenarioActs = [
           deliberately.
         </p>
       </div>
+    </div>
+
+    <div id="orchestration-layer" class="mt-28 scroll-mt-24">
+      <p class="eyebrow mb-3 text-accent">The orchestration layer</p>
+    </div>
+
+    <div class="mt-6 flex justify-center">
+      <img
+        src="/robot_diagram_fixed.png"
+        alt="Diagram of the deterministic orchestration layer governing domain agents"
+        class="h-auto w-full max-w-5xl"
+      />
     </div>
 
     <h3 class="mt-16 font-serif text-xl text-ink-900">Operating principles</h3>
