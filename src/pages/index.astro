@@ -176,25 +176,6 @@ const approachPrinciples = [
   },
 ];
 
-const retrievalSteps = [
-  {
-    title: 'Plan',
-    body: 'The supervisor receives the task, identifies what information is needed, and breaks the work into smaller questions.',
-  },
-  {
-    title: 'Retrieve',
-    body: 'The system routes each question to the right source and retrieval method instead of relying on one broad search.',
-  },
-  {
-    title: 'Govern',
-    body: 'The system filters weak evidence and builds a context bundle with permissions and source authority preserved.',
-  },
-  {
-    title: 'Decide',
-    body: 'A domain agent reasons over the bundle, returns a structured result, and the supervisor decides what happens next.',
-  },
-];
-
 const executableContext = [
   'Instructions and non-goals',
   'Source priorities and authority tiers',
@@ -767,56 +748,53 @@ const scenarioActs = [
       <p class="eyebrow mb-3 text-accent">The retrieval process</p>
     </div>
 
-    <div class="mt-6 grid items-start gap-6 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,20rem)]">
+    <div class="mt-6 flex justify-center">
+      <img
+        src="/retrieval.png"
+        alt="Diagram of the retrieval flow"
+        class="h-auto w-full"
+      />
+    </div>
+
+    <div class="mt-8 flex justify-center">
+      <img
+        src="/retrieval-explain.png"
+        alt="Explanation of the retrieval flow"
+        class="h-auto w-full"
+      />
+    </div>
+
+    <div class="mt-12 grid items-start gap-6 lg:grid-cols-2">
       <div class="panel p-6">
-        <p class="eyebrow mb-4">Retrieval flow</p>
-        <ol class="grid gap-4 sm:grid-cols-2">
-          {
-            retrievalSteps.map((step, index) => (
-              <li class="rounded-2xl border border-ink-100 bg-paper-muted/70 px-5 py-5">
-                <span class="font-mono text-sm text-ink-500">
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-                <h4 class="mt-2 font-serif text-lg font-semibold text-ink-900">{step.title}</h4>
-                <p class="mt-2 text-sm leading-relaxed text-ink-700">{step.body}</p>
-              </li>
-            ))
-          }
-        </ol>
+        <h3 class="font-serif text-xl font-semibold text-ink-900">What is the Supervisor?</h3>
+        <p class="mt-3 text-sm leading-relaxed text-ink-600">
+          The Supervisor is my programmatic solution for an orchestration layer — governable AI
+          agent guidance. It does not replace the agents’ reasoning — it governs the workflow
+          around them, deciding what must be known, what happens next, and when the system
+          should pause, escalate, or continue.
+        </p>
       </div>
 
-      <div class="space-y-4">
-        <div class="panel p-6">
-          <h3 class="font-serif text-xl font-semibold text-ink-900">What is the Supervisor?</h3>
-          <p class="mt-3 text-sm leading-relaxed text-ink-600">
-            The Supervisor is my programmatic solution for an orchestration layer — governable
-            AI agent guidance. It does not replace the agents’ reasoning — it governs the
-            workflow around them, deciding what must be known, what happens next, and when the
-            system should pause, escalate, or continue.
+      <details class="panel group overflow-hidden">
+        <summary
+          class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
+        >
+          <h3 class="font-serif text-xl font-semibold text-ink-900">What is a context bundle?</h3>
+          <span
+            aria-hidden
+            class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
+            >+</span
+          >
+        </summary>
+        <div class="border-t border-ink-100 px-6 py-5">
+          <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
+            A context bundle is the package of information an agent receives before it does its
+            work. Instead of giving the agent unrestricted access to everything, the system
+            assembles a scoped set of instructions, documents, rules, and relevant evidence so
+            the agent can reason within the right boundaries.
           </p>
         </div>
-
-        <details class="panel group overflow-hidden">
-          <summary
-            class="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 [&::-webkit-details-marker]:hidden"
-          >
-            <h3 class="font-serif text-xl font-semibold text-ink-900">What is a context bundle?</h3>
-            <span
-              aria-hidden
-              class="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-transform group-open:rotate-45"
-              >+</span
-            >
-          </summary>
-          <div class="border-t border-ink-100 px-6 py-5">
-            <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
-              A context bundle is the package of information an agent receives before it does its
-              work. Instead of giving the agent unrestricted access to everything, the system
-              assembles a scoped set of instructions, documents, rules, and relevant evidence so
-              the agent can reason within the right boundaries.
-            </p>
-          </div>
-        </details>
-      </div>
+      </details>
     </div>
 
     <div class="mt-12">
@@ -827,24 +805,6 @@ const scenarioActs = [
       </Callout>
     </div>
 
-    <div class="mt-12 grid gap-6 md:grid-cols-2">
-      <div class="panel p-6">
-        <p class="eyebrow mb-4">What the bundle carries</p>
-        <ul class="space-y-3 text-sm leading-relaxed text-ink-700">
-          {executableContext.map((item) => <li>{item}</li>)}
-        </ul>
-      </div>
-
-      <div class="panel p-6">
-        <p class="eyebrow mb-4">Why the embedding step stays boring</p>
-        <p class="text-sm leading-relaxed text-ink-600">
-          The intelligence of the system is not in the embedding call. It is in the later routing,
-          reranking, and bundle assembly where permissions, authority, and source fit are applied
-          deliberately.
-        </p>
-      </div>
-    </div>
-
     <div id="orchestration-layer" class="mt-28 scroll-mt-24">
       <p class="eyebrow mb-3 text-accent">The orchestration layer</p>
     </div>
@@ -853,24 +813,13 @@ const scenarioActs = [
       <img
         src="/robot_diagram_fixed.png"
         alt="Diagram of the deterministic orchestration layer governing domain agents"
-        class="h-auto w-full max-w-5xl"
+        class="h-auto w-full"
       />
     </div>
 
     <h3 class="mt-16 font-serif text-xl text-ink-900">Operating principles</h3>
     <PrincipleList items={approachPrinciples} />
 
-    <DetailExpander
-      summary="This approach does not replace RAG so much as specialize it."
-      kind="architecture"
-      client:visible
-    >
-      Enterprise context is too heterogeneous to flatten into one uniform retrieval method, so
-      retrieval should be tailored to the source itself. RAG is still vital, especially for
-      enterprise data lakes and other large document ecosystems where semantic retrieval is
-      indispensable. But when decisions depend on authority, permissions, and source type,
-      retrieval should be adapted to the structure of the information itself.
-    </DetailExpander>
   </NarrativeSection>
 
   <NarrativeSection id="scenario" tone="muted" width="wide">
