@@ -18,6 +18,7 @@ import StatBlock from '../components/astro/StatBlock.astro';
 import HeadlineMarquee from '../components/astro/HeadlineMarquee.astro';
 import DetailExpander from '../components/react/DetailExpander';
 import StackedCards from '../components/react/StackedCards';
+import DocumentViewer from '../components/react/DocumentViewer';
 
 const parts = (await getCollection('parts')).sort((a, b) => a.data.order - b.data.order);
 const titlePart = parts.find((p) => p.data.key === 'title')!;
@@ -211,8 +212,16 @@ const domainAgents = [
 
 const onboardingDifficulties = [
   {
-    title: 'Unclear approval path',
-    body: 'Teams must cross-reference policies, matrices, and prior guidance just to determine what the correct review path should be.',
+    title: 'Document-heavy process',
+    body: 'Teams must cross-reference policies, matrices, prior guidance, and intake materials just to determine the correct review path.',
+  },
+  {
+    title: 'Conflicting signals across sources',
+    body: 'Policies, matrices, intake materials, and discussion threads do not always point in the same direction, so teams have to resolve contradictions before onboarding can move forward.',
+  },
+  {
+    title: 'Too much repeated review',
+    body: 'Security, legal, and procurement often re-check overlapping material in parallel, creating redundant work and inconsistent summaries instead of one governed process.',
   },
   {
     title: 'Late discovery of required reviews',
@@ -252,21 +261,119 @@ const onboardingSteps = [
   },
 ];
 
-const stakeholders = [
+type DocKind = 'pdf' | 'json' | 'markdown' | 'sheet';
+interface StakeholderDoc {
+  title: string;
+  label: string;
+  src: string;
+  kind: DocKind;
+  overrides?: {
+    tabs?: string[];
+    skipRowsPerSheet?: number[];
+    firstCellOverrides?: string[];
+  };
+}
+interface Stakeholder {
+  name: string;
+  role: string;
+  body: string;
+  documents: StakeholderDoc[];
+}
+
+const stakeholders: Stakeholder[] = [
   {
     name: 'IT Security',
     role: 'Owns policy enforcement and technical risk.',
     body: 'Determines risk posture, integration sensitivity, and whether the request can qualify for streamlined review.',
+    documents: [
+      {
+        title: 'IT Security Policy v4.2',
+        label: 'IT Security Policy',
+        src: '/mock-documents/IT_Security_Policy_v4.2.pdf',
+        kind: 'pdf',
+      },
+    ],
   },
   {
     name: 'Legal',
     role: 'Owns contractual and regulatory posture.',
     body: 'Determines legal triggers such as DPA requirements and reviews unresolved compliance obligations.',
+    documents: [
+      {
+        title: 'DPA Legal Trigger Matrix v1.3',
+        label: 'DPA Trigger Matrix',
+        src: '/mock-documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx',
+        kind: 'sheet',
+        overrides: {
+          skipRowsPerSheet: [2, 0, 0, 0, 0],
+          firstCellOverrides: [
+            '',
+            'Section 2 — Regulatory Framework Reference',
+            'Section 3 — Status Legend',
+            'Section 4 — Procurement Workflow Integration',
+            'Section 5 — Maintenance and Version History',
+          ],
+        },
+      },
+    ],
   },
   {
     name: 'Procurement',
     role: 'Owns the vendor relationship and commercial routing.',
     body: 'Controls intake, approval path determination, and the overall business process around onboarding.',
+    documents: [
+      {
+        title: 'Procurement Approval Matrix v2.0',
+        label: 'Approval Matrix',
+        src: '/mock-documents/Procurement_Approval_Matrix_v2_0.xlsx',
+        kind: 'sheet',
+        overrides: {
+          skipRowsPerSheet: [2, 0, 0, 0, 0, 0, 0],
+          firstCellOverrides: [
+            '',
+            'Section 2',
+            'Section 3',
+            'Section 4',
+            'Section 5',
+            'Section 6',
+            'Section 7',
+          ],
+        },
+      },
+    ],
+  },
+];
+
+const sharedDocuments: StakeholderDoc[] = [
+  {
+    title: 'OptiChain Vendor Security Questionnaire v2.1',
+    label: 'OptiChain VSQ',
+    src: '/mock-documents/OptiChain_VSQ_001_v2_1.json',
+    kind: 'json',
+  },
+  {
+    title: 'Slack Thread Export (Markdown)',
+    label: 'Slack Thread (MD)',
+    src: '/mock-documents/Slack_Thread_Export_001.md',
+    kind: 'markdown',
+  },
+  {
+    title: 'Slack Thread Export (JSON)',
+    label: 'Slack Thread (JSON)',
+    src: '/mock-documents/Slack_Thread_Export_001.json',
+    kind: 'json',
+  },
+  {
+    title: 'Stakeholder Map PRQ-2024-0047',
+    label: 'Stakeholder Map',
+    src: '/mock-documents/Stakeholder_Map_PRQ_2024_0047.json',
+    kind: 'json',
+  },
+  {
+    title: 'Vendor Precedent Log v1.1',
+    label: 'Vendor Precedent Log',
+    src: '/mock-documents/Vendor_Precedent_Log_v1_1.json',
+    kind: 'json',
   },
 ];
 ---
@@ -879,13 +986,48 @@ const stakeholders = [
       <div class="mt-6 grid gap-4 md:grid-cols-3">
         {
           stakeholders.map((s) => (
-            <div class="panel p-6">
+            <div class="panel flex flex-col p-6">
               <h4 class="font-serif text-lg font-semibold text-ink-900">{s.name}</h4>
               <p class="mt-2 text-sm italic leading-relaxed text-ink-600">{s.role}</p>
               <p class="mt-3 text-sm leading-relaxed text-ink-700">{s.body}</p>
+              {s.documents.length > 0 && (
+                <div class="mt-5 border-t border-ink-100 pt-4">
+                  <p class="eyebrow mb-3 text-ink-400">Governing documents</p>
+                  <div class="flex flex-wrap gap-2">
+                    {s.documents.map((doc) => (
+                      <DocumentViewer
+                        client:visible
+                        src={doc.src}
+                        title={doc.title}
+                        label={doc.label}
+                        kind={doc.kind}
+                        overrides={doc.overrides}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ))
         }
+      </div>
+
+      <div class="mt-6">
+        <p class="eyebrow mb-3 text-ink-400">Shared across stakeholders</p>
+        <div class="flex flex-wrap gap-2">
+          {
+            sharedDocuments.map((doc) => (
+              <DocumentViewer
+                client:visible
+                src={doc.src}
+                title={doc.title}
+                label={doc.label}
+                kind={doc.kind}
+                overrides={doc.overrides}
+              />
+            ))
+          }
+        </div>
       </div>
     </div>
 
