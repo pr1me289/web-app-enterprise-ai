@@ -4,12 +4,28 @@ interface Props {
   title: string;
   lede: string;
   citation?: string;
+  step?: number;
 }
 
-const { act, title, lede, citation } = Astro.props;
+const { act, title, lede, citation, step = 0 } = Astro.props;
+
+const indentClasses = [
+  '',
+  'md:ml-6',
+  'md:ml-12',
+  'md:ml-[4.5rem]',
+  'md:ml-24',
+  'md:ml-[7.5rem]',
+];
+const indentClass = indentClasses[step] ?? '';
 ---
 
-<article class="group relative flex items-start gap-6 border-t border-ink-100 py-8 md:gap-10">
+<article
+  class:list={[
+    'group relative flex items-start gap-6 border-t border-ink-100 py-8 md:gap-10',
+    indentClass,
+  ]}
+>
   <div class="hidden shrink-0 md:block">
     <p
       class="font-serif text-5xl font-semibold leading-none tracking-tight text-ink-200 transition-colors group-hover:text-accent"

@@ -228,6 +228,30 @@ const onboardingDifficulties = [
   },
 ];
 
+const onboardingSteps = [
+  { label: 'Vendor questionnaire submission', owner: 'Procurement' },
+  {
+    label: 'Data classification — regulated or not',
+    owner: 'IT Security, evaluated against IT Security policy',
+  },
+  { label: 'ERP integration scope', owner: 'From questionnaire — IT Security evaluates' },
+  {
+    label: 'NDA status',
+    owner: 'From questionnaire — Legal verifies against IT Security policy',
+  },
+  { label: 'EU personal data handling', owner: 'From questionnaire — Legal evaluates' },
+  { label: 'DPA requirement', owner: 'Legal, against DPA contract' },
+  { label: 'Fast-track eligibility', owner: 'IT Security — regulated data disqualifies' },
+  {
+    label: 'Approval path determination',
+    owner: 'Procurement — needs IT Security + Legal outputs first',
+  },
+  {
+    label: 'Executive approval threshold',
+    owner: 'Procurement — based on deal size and vendor class',
+  },
+];
+
 const stakeholders = [
   {
     name: 'IT Security',
@@ -243,11 +267,6 @@ const stakeholders = [
     name: 'Procurement',
     role: 'Owns the vendor relationship and commercial routing.',
     body: 'Controls intake, approval path determination, and the overall business process around onboarding.',
-  },
-  {
-    name: 'Checklist Assembler + Checkoff',
-    role: 'Own the handoff package.',
-    body: 'Preserve escalations, compile blockers and approvals, and return stakeholder-ready next steps rather than a vague summary.',
   },
 ];
 ---
@@ -856,59 +875,8 @@ const stakeholders = [
     </div>
 
     <div class="mt-24">
-      <p class="eyebrow mb-3 text-accent">What this workflow must do</p>
-      <h3 class="font-serif text-2xl font-semibold text-ink-900">
-        One vendor. One pipeline. Five acts.
-      </h3>
-
-      <div class="mt-6">
-        <ActCard
-          act="I"
-          title="Nothing starts without the questionnaire"
-          lede="Until OptiChain submits a complete vendor questionnaire, no review can begin. The pipeline halts, flags the gap, and asks Procurement to chase the submission."
-          citation="R-01 · Vendor questionnaire intake"
-        />
-
-        <ActCard
-          act="II"
-          title="The workflow must classify the path early"
-          lede="The system first determines whether the request belongs on a regulated or streamlined path. If the vendor touches ERP-connected, sensitive, or regulated data, the workflow moves into a stricter review posture before anything else continues."
-          citation="R-02 · Onboarding path classification"
-        />
-
-        <ActCard
-          act="III"
-          title="Legal and compliance triggers must be made explicit"
-          lede="Once the path is known, the workflow identifies what legal or compliance obligations are actually in play. That includes questions like whether a DPA is required and whether contractual review must block progress before implementation can move forward."
-          citation="R-03 · Legal and compliance trigger determination"
-        />
-
-        <ActCard
-          act="IV"
-          title="Fast-track is earned, not assumed"
-          lede="The system then determines whether the vendor can move through an expedited approval path or must stay on the standard route. If the request involves regulated data or even borderline risk, the workflow defaults to the standard path and records why."
-          citation="R-04 · Fast-track eligibility"
-        />
-
-        <ActCard
-          act="V"
-          title="The output must become a real approval checklist"
-          lede="The workflow does not stop at an assessment. It must produce a structured checklist showing every required sign-off, the responsible stakeholder, blockers that remain open, and the expected timeline before implementation can begin."
-          citation="R-05 · Complete approval checklist generation"
-        />
-
-        <ActCard
-          act="VI"
-          title="Stakeholders need next-step guidance, not just analysis"
-          lede="The final handoff must tell each team what they own, why their review is required, and what must happen next. The goal is to return something people can act on immediately, without forcing the business owner to interpret policies and approval rules on their own."
-          citation="R-06 · Stakeholder guidance and handoff support"
-        />
-      </div>
-    </div>
-
-    <div class="mt-24">
       <p class="eyebrow mb-3 text-accent">Who are the stakeholders?</p>
-      <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div class="mt-6 grid gap-4 md:grid-cols-3">
         {
           stakeholders.map((s) => (
             <div class="panel p-6">
@@ -918,6 +886,96 @@ const stakeholders = [
             </div>
           ))
         }
+      </div>
+    </div>
+
+    <div class="mt-24">
+      <p class="eyebrow mb-3 text-accent">What a vendor onboarding process looks like</p>
+      <ul class="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {
+          onboardingSteps.map((item) => (
+            <li class="flex items-start gap-4">
+              <span
+                aria-hidden="true"
+                class="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent-soft text-accent"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </span>
+              <div>
+                <p class="font-serif text-base leading-snug text-ink-900">{item.label}</p>
+                <p class="mt-1 text-xs italic leading-relaxed text-ink-400">{item.owner}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="mt-24">
+      <p class="eyebrow mb-3 text-accent">What this agentic workflow must do</p>
+      <h3 class="font-serif text-2xl font-semibold text-ink-900">
+        One vendor. One pipeline. Five acts.
+      </h3>
+
+      <div class="mt-6">
+        <ActCard
+          act="I"
+          step={0}
+          title="Nothing starts without the questionnaire"
+          lede="Until OptiChain submits a complete vendor questionnaire, no review can begin. The pipeline halts, flags the gap, and asks Procurement to chase the submission."
+          citation="R-01 · Vendor questionnaire intake"
+        />
+
+        <ActCard
+          act="II"
+          step={1}
+          title="The workflow must classify the path early"
+          lede="The system first determines whether the request belongs on a regulated or streamlined path. If the vendor touches ERP-connected, sensitive, or regulated data, the workflow moves into a stricter review posture before anything else continues."
+          citation="R-02 · Onboarding path classification"
+        />
+
+        <ActCard
+          act="III"
+          step={2}
+          title="Legal and compliance triggers must be made explicit"
+          lede="Once the path is known, the workflow identifies what legal or compliance obligations are actually in play. That includes questions like whether a DPA is required and whether contractual review must block progress before implementation can move forward."
+          citation="R-03 · Legal and compliance trigger determination"
+        />
+
+        <ActCard
+          act="IV"
+          step={3}
+          title="Fast-track is earned, not assumed"
+          lede="The system then determines whether the vendor can move through an expedited approval path or must stay on the standard route. If the request involves regulated data or even borderline risk, the workflow defaults to the standard path and records why."
+          citation="R-04 · Fast-track eligibility"
+        />
+
+        <ActCard
+          act="V"
+          step={4}
+          title="The output must become a real approval checklist"
+          lede="The workflow does not stop at an assessment. It must produce a structured checklist showing every required sign-off, the responsible stakeholder, blockers that remain open, and the expected timeline before implementation can begin."
+          citation="R-05 · Complete approval checklist generation"
+        />
+
+        <ActCard
+          act="VI"
+          step={5}
+          title="Stakeholders need next-step guidance, not just analysis"
+          lede="The final handoff must tell each team what they own, why their review is required, and what must happen next. The goal is to return something people can act on immediately, without forcing the business owner to interpret policies and approval rules on their own."
+          citation="R-06 · Stakeholder guidance and handoff support"
+        />
       </div>
     </div>
 
