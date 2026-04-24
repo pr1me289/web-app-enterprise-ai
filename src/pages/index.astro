@@ -12,10 +12,12 @@ import SpecHierarchy from '../components/astro/SpecHierarchy.astro';
 import StatementCallout from '../components/astro/StatementCallout.astro';
 import SchoolsOfThought from '../components/astro/SchoolsOfThought.astro';
 import TakeawayCard from '../components/astro/TakeawayCard.astro';
+import ActCard from '../components/astro/ActCard.astro';
 import Quote from '../components/astro/Quote.astro';
 import StatBlock from '../components/astro/StatBlock.astro';
 import HeadlineMarquee from '../components/astro/HeadlineMarquee.astro';
 import DetailExpander from '../components/react/DetailExpander';
+import StackedCards from '../components/react/StackedCards';
 
 const parts = (await getCollection('parts')).sort((a, b) => a.data.order - b.data.order);
 const titlePart = parts.find((p) => p.data.key === 'title')!;
@@ -207,31 +209,45 @@ const domainAgents = [
   },
 ];
 
-const scenarioActs = [
+const onboardingDifficulties = [
   {
-    index: 'Act 1',
-    title: 'The intake gate fails first',
-    body: 'The run begins blocked because the questionnaire is missing. That is a feature, not a bug. No downstream reasoning is allowed to improvise around a missing prerequisite.',
+    title: 'Unclear approval path',
+    body: 'Teams must cross-reference policies, matrices, and prior guidance just to determine what the correct review path should be.',
   },
   {
-    index: 'Act 2',
-    title: 'The path classifies as regulated',
-    body: 'EU employee scheduling data plus ERP adjacency push the scenario onto the regulated path. Fast-track is denied early.',
+    title: 'Late discovery of required reviews',
+    body: 'Security, legal, or compliance obligations are often discovered after work has already started, creating rework and delay.',
   },
   {
-    index: 'Act 3',
-    title: 'Domain agents narrow the unresolved set',
-    body: 'Legal escalates on the DPA and NDA. IT Security cannot cleanly classify the integration tier from questionnaire evidence alone. Procurement resolves approval path.',
+    title: 'Escalations reverse progress',
+    body: 'When evidence is incomplete or conflicting, work stalls and prior assumptions must be revisited instead of quietly pushed forward.',
   },
   {
-    index: 'Act 4',
-    title: 'The checklist preserves open work',
-    body: 'The checklist is not a summary of confidence. It is an explicit package of blockers, resolved items, owners, and citations.',
+    title: 'No clear next-step guidance',
+    body: 'Business owners often cannot tell why onboarding is blocked, what is missing, or which stakeholder needs to act next.',
+  },
+];
+
+const stakeholders = [
+  {
+    name: 'IT Security',
+    role: 'Owns policy enforcement and technical risk.',
+    body: 'Determines risk posture, integration sensitivity, and whether the request can qualify for streamlined review.',
   },
   {
-    index: 'Act 5',
-    title: 'Stakeholders get next-step guidance',
-    body: 'The run ends escalated, not because the system failed, but because it correctly identified where human authority still belongs.',
+    name: 'Legal',
+    role: 'Owns contractual and regulatory posture.',
+    body: 'Determines legal triggers such as DPA requirements and reviews unresolved compliance obligations.',
+  },
+  {
+    name: 'Procurement',
+    role: 'Owns the vendor relationship and commercial routing.',
+    body: 'Controls intake, approval path determination, and the overall business process around onboarding.',
+  },
+  {
+    name: 'Checklist Assembler + Checkoff',
+    role: 'Own the handoff package.',
+    body: 'Preserve escalations, compile blockers and approvals, and return stakeholder-ready next steps rather than a vague summary.',
   },
 ];
 ---
@@ -832,35 +848,85 @@ const scenarioActs = [
       <ScenarioBody.Content />
     </div>
 
-    <div class="mt-10 flex flex-wrap gap-2">
-      <span class="chip">Path: regulated</span>
-      <span class="chip">Outcome: escalated</span>
-      <span class="chip">Fast-track: ineligible</span>
-      <span class="chip">Approval path: standard</span>
+    <div class="mt-20">
+      <p class="eyebrow mb-3 text-accent">What makes vendor onboarding difficult?</p>
+      <div class="mt-6">
+        <StackedCards cards={onboardingDifficulties} client:visible />
+      </div>
     </div>
 
-    <div class="mt-12 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-      {
-        scenarioActs.map((act) => (
-          <TakeawayCard index={act.index} title={act.title}>
-            {act.body}
-          </TakeawayCard>
-        ))
-      }
+    <div class="mt-24">
+      <p class="eyebrow mb-3 text-accent">What this workflow must do</p>
+      <h3 class="font-serif text-2xl font-semibold text-ink-900">
+        One vendor. One pipeline. Five acts.
+      </h3>
+
+      <div class="mt-6">
+        <ActCard
+          act="I"
+          title="Nothing starts without the questionnaire"
+          lede="Until OptiChain submits a complete vendor questionnaire, no review can begin. The pipeline halts, flags the gap, and asks Procurement to chase the submission."
+          citation="R-01 · Vendor questionnaire intake"
+        />
+
+        <ActCard
+          act="II"
+          title="The workflow must classify the path early"
+          lede="The system first determines whether the request belongs on a regulated or streamlined path. If the vendor touches ERP-connected, sensitive, or regulated data, the workflow moves into a stricter review posture before anything else continues."
+          citation="R-02 · Onboarding path classification"
+        />
+
+        <ActCard
+          act="III"
+          title="Legal and compliance triggers must be made explicit"
+          lede="Once the path is known, the workflow identifies what legal or compliance obligations are actually in play. That includes questions like whether a DPA is required and whether contractual review must block progress before implementation can move forward."
+          citation="R-03 · Legal and compliance trigger determination"
+        />
+
+        <ActCard
+          act="IV"
+          title="Fast-track is earned, not assumed"
+          lede="The system then determines whether the vendor can move through an expedited approval path or must stay on the standard route. If the request involves regulated data or even borderline risk, the workflow defaults to the standard path and records why."
+          citation="R-04 · Fast-track eligibility"
+        />
+
+        <ActCard
+          act="V"
+          title="The output must become a real approval checklist"
+          lede="The workflow does not stop at an assessment. It must produce a structured checklist showing every required sign-off, the responsible stakeholder, blockers that remain open, and the expected timeline before implementation can begin."
+          citation="R-05 · Complete approval checklist generation"
+        />
+
+        <ActCard
+          act="VI"
+          title="Stakeholders need next-step guidance, not just analysis"
+          lede="The final handoff must tell each team what they own, why their review is required, and what must happen next. The goal is to return something people can act on immediately, without forcing the business owner to interpret policies and approval rules on their own."
+          citation="R-06 · Stakeholder guidance and handoff support"
+        />
+      </div>
     </div>
 
-    <Callout kind="rationale" title="Why this scenario works for the presentation">
-      It forces the system to demonstrate prerequisite gating, regulated-path classification,
-      domain-specific evidence use, escalation preservation, and stakeholder-ready next-step
-      guidance. That makes the architecture visible without requiring a live backend.
-    </Callout>
+    <div class="mt-24">
+      <p class="eyebrow mb-3 text-accent">Who are the stakeholders?</p>
+      <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {
+          stakeholders.map((s) => (
+            <div class="panel p-6">
+              <h4 class="font-serif text-lg font-semibold text-ink-900">{s.name}</h4>
+              <p class="mt-2 text-sm italic leading-relaxed text-ink-600">{s.role}</p>
+              <p class="mt-3 text-sm leading-relaxed text-ink-700">{s.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
 
-    <h3 class="mt-16 font-serif text-xl text-ink-900">Domain agents in the pipeline</h3>
+    <h3 class="mt-24 font-serif text-xl text-ink-900">Domain agents in the pipeline</h3>
     <div class="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
       {domainAgents.map((agent) => <TakeawayCard title={agent.title}>{agent.body}</TakeawayCard>)}
     </div>
 
-    <div class="mt-10 flex flex-wrap gap-3 text-sm">
+    <div class="mt-16 flex flex-wrap gap-3 text-sm">
       <a
         href="/demo"
         class="inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-3 font-medium text-paper no-underline shadow-soft transition-colors hover:bg-ink-800"

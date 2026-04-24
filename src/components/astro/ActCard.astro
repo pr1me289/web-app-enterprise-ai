@@ -1,0 +1,30 @@
+---
+interface Props {
+  act: string;
+  title: string;
+  lede: string;
+  citation?: string;
+}
+
+const { act, title, lede, citation } = Astro.props;
+---
+
+<article class="group relative flex items-start gap-6 border-t border-ink-100 py-8 md:gap-10">
+  <div class="hidden shrink-0 md:block">
+    <p
+      class="font-serif text-5xl font-semibold leading-none tracking-tight text-ink-200 transition-colors group-hover:text-accent"
+    >
+      {act}
+    </p>
+  </div>
+  <div class="flex-1">
+    <p class="eyebrow text-ink-400 md:hidden">Act {act}</p>
+    <h3
+      class="mt-2 font-serif text-2xl font-semibold leading-none tracking-tight text-ink-900 md:mt-0"
+    >
+      {title}
+    </h3>
+    <p class="mt-4 max-w-prose text-base leading-relaxed text-ink-600">{lede}</p>
+    {citation && <p class="mt-4 font-mono text-xs text-ink-400">{citation}</p>}
+  </div>
+</article>
