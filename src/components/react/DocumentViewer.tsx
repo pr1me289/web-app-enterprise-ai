@@ -131,10 +131,12 @@ export default function DocumentViewer({ src, title, kind, label, overrides }: P
       <Dialog.Trigger asChild>
         <button
           type="button"
-          className="group inline-flex items-center gap-2 rounded-md border border-ink-200 bg-paper px-2.5 py-1.5 text-left text-xs text-ink-700 shadow-soft transition-colors hover:border-ink-900 hover:bg-paper-muted"
+          className="group inline-flex max-w-full items-center gap-2 rounded-md border border-ink-200 bg-paper px-2.5 py-1.5 text-left text-xs text-ink-700 shadow-soft transition-colors hover:border-ink-900 hover:bg-paper-muted"
         >
           <FileIcon kind={kind} />
-          <span className="truncate font-medium group-hover:text-ink-900">{label ?? title}</span>
+          <span className="min-w-0 truncate font-medium group-hover:text-ink-900">
+            {label ?? title}
+          </span>
         </button>
       </Dialog.Trigger>
 
@@ -182,7 +184,7 @@ export default function DocumentViewer({ src, title, kind, label, overrides }: P
             )}
             {!error && kind === 'markdown' && (
               <div
-                className="prose-narrative bg-paper p-8 text-sm leading-relaxed text-ink-800 [&_h1]:font-serif [&_h1]:text-2xl [&_h2]:mt-6 [&_h2]:font-serif [&_h2]:text-xl [&_h3]:mt-5 [&_h3]:font-serif [&_h3]:text-lg [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-6 [&_code]:rounded [&_code]:bg-paper-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-xs"
+                className="prose-narrative mx-auto bg-paper p-8 text-sm leading-relaxed text-ink-800 [&_h1]:font-serif [&_h1]:text-2xl [&_h2]:mt-6 [&_h2]:font-serif [&_h2]:text-xl [&_h3]:mt-5 [&_h3]:font-serif [&_h3]:text-lg [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-6 [&_code]:rounded [&_code]:bg-paper-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-xs"
                 dangerouslySetInnerHTML={{
                   __html: content ? (marked.parse(content) as string) : 'Loading…',
                 }}
