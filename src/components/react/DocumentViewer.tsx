@@ -2,7 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import { useEffect, useState } from 'react';
 import { marked } from 'marked';
 
-export type DocKind = 'pdf' | 'json' | 'markdown' | 'sheet';
+export type DocKind = 'pdf' | 'json' | 'markdown' | 'sheet' | 'docx';
 
 interface SheetOverrides {
   tabs?: string[];
@@ -23,11 +23,20 @@ const typeLabel: Record<DocKind, string> = {
   json: 'JSON',
   markdown: 'Markdown',
   sheet: 'Spreadsheet',
+  docx: 'Word Document',
 };
 
 function FileIcon({ kind }: { kind: DocKind }) {
   const pillText =
-    kind === 'sheet' ? 'XLSX' : kind === 'pdf' ? 'PDF' : kind === 'json' ? 'JSON' : 'MD';
+    kind === 'sheet'
+      ? 'XLSX'
+      : kind === 'pdf'
+        ? 'PDF'
+        : kind === 'json'
+          ? 'JSON'
+          : kind === 'docx'
+            ? 'DOCX'
+            : 'MD';
   return (
     <span
       aria-hidden
@@ -79,6 +88,16 @@ export default function DocumentViewer({ src, title, kind, label, overrides }: P
             setSheetData(data);
             setActiveSheet(0);
           }
+        })
+        .catch((e) => !cancelled && setError(String(e)));
+    } else if (kind === 'docx') {
+      fetch(src.replace(/\.docx$/i, '.html.json'))
+        .then((r) => {
+          if (!r.ok) throw new Error(`${r.status}`);
+          return r.json();
+        })
+        .then((data: { html: string }) => {
+          if (!cancelled) setContent(data.html);
         })
         .catch((e) => !cancelled && setError(String(e)));
     } else {
@@ -166,6 +185,14 @@ export default function DocumentViewer({ src, title, kind, label, overrides }: P
                 className="prose-narrative bg-paper p-8 text-sm leading-relaxed text-ink-800 [&_h1]:font-serif [&_h1]:text-2xl [&_h2]:mt-6 [&_h2]:font-serif [&_h2]:text-xl [&_h3]:mt-5 [&_h3]:font-serif [&_h3]:text-lg [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-6 [&_code]:rounded [&_code]:bg-paper-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-xs"
                 dangerouslySetInnerHTML={{
                   __html: content ? (marked.parse(content) as string) : 'Loading…',
+                }}
+              />
+            )}
+            {!error && kind === 'docx' && (
+              <div
+                className="prose-narrative bg-paper p-8 text-sm leading-relaxed text-ink-800 [&_h1]:mt-6 [&_h1]:font-serif [&_h1]:text-2xl [&_h1]:font-semibold [&_h2]:mt-6 [&_h2]:font-serif [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:mt-5 [&_h3]:font-serif [&_h3]:text-lg [&_h3]:font-semibold [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:mt-3 [&_ol]:list-decimal [&_ol]:pl-6 [&_table]:mt-4 [&_table]:w-full [&_table]:border-collapse [&_table]:text-xs [&_td]:border [&_td]:border-ink-100 [&_td]:px-2 [&_td]:py-1 [&_td]:align-top [&_th]:border [&_th]:border-ink-100 [&_th]:bg-paper-muted [&_th]:px-2 [&_th]:py-1 [&_strong]:font-semibold"
+                dangerouslySetInnerHTML={{
+                  __html: content ?? 'Loading…',
                 }}
               />
             )}
