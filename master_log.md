@@ -80,3 +80,31 @@
 **Result:** `pnpm lint` and `pnpm build` both pass. The branch now contains a more intentional presentation build oriented around the strongest ideas from the working notes: context as a governed runtime package, deterministic supervision, source-aware retrieval, and nuanced failure analysis rather than generic "AI demo" framing.
 
 **Next:** Optional follow-up work could tighten responsive polish further, replace the synthetic replay fixture with the true upstream capture, and decide whether any of the current presentation copy should be distilled into external-facing README updates.
+
+
+---
+
+### [#4] 2026-04-25 | Claude Code
+
+**Task:** Build the Demo (Part 06) page on branch `feat/demo-page-initial-codex` (parallel attempt to the claude branch), following `build-prompt-demo-page-codex.md`. The codex prompt asks for an animated guided replay with the supervisor as a visible architectural actor, evidence-to-bundle-to-agent flow animation, and explicit phase-by-phase progression — distinct from the claude branch's reader-controlled scrubbing.
+
+**Plan:**
+
+1. Branch off `feat/demo-page` (NOT off the claude branch); restore build-prompt files from the claude branch.
+2. Add `zustand`, `lucide-react`, `@radix-ui/react-collapsible` per codex-prompt recommendations. Skip shiki — write a custom palette-consistent JSON renderer instead.
+3. Lay down typed scenario fixtures matching the codex-prompt schema (`replayMoments`, `gateDecision`, `finalOutputs`, `takeaway`).
+4. Build a phase-driven replay state machine in Zustand: stopped → playing/paused/ended; phases idle → retrieving → bundling → dispatching → agent_working → output_ready → gating → decided → completed.
+5. Build a `SupervisorRail` that surfaces the supervisor's current action live; an `ExecutionStrip` whose status icons compute from replay phase; four narrative `stages` (Retrieval, Bundle, Agent, Gate) that gate visibility on phase progress.
+6. Wire keyboard: Space play/pause, → step, R reset.
+
+**Changes:**
+
+- Added: `src/data/demo-codex/{types.ts,index.ts,scenarios/clean.ts,scenarios/escalated.ts}` — typed fixtures for both runs with replay narration per phase, gate decisions, audit events, final outputs, and per-scenario takeaway.
+- Added: `src/components/react/demo-codex/` — `store.ts` (replay state machine), `DemoExperience.tsx` (top-level island, MotionConfig + keyboard), `SupervisorRail.tsx` (sticky animated supervisor presence), `ExecutionStrip.tsx` + `ExecutionStepCard` with status computed from replay phase, `stages.tsx` (RetrievalStage, BundleStage, AgentStage, GateStage all gated on `phaseIndex`), `CurrentStepPanel.tsx` (composes the four stages + drawers), `StructuredOutputViewer.tsx` (custom JSON tokenizer with hoverable Tooltip-backed citation chips on top-level keys), `AuditEventsPanel.tsx`, `SourceDocumentsDrawer.tsx` (Radix Dialog with placeholder previews per source), `ExpandableDrawer.tsx` (generic Radix Collapsible + Framer height-tween), `FinalOutputsPanel.tsx` (checklist + blockers + stakeholder guidance, per-scenario), `TakeawayPanel.tsx`, `ReplayControls.tsx` (Start/Pause/Step/Jump/Reset + 1×/1.5×/2× speed), `RunSummaryChips.tsx`, `ScenarioSelector.tsx`, `StatusPill.tsx`, `badges.tsx` (AuthorityBadge, LaneBadge, TreatmentBadge).
+- Modified: `src/pages/demo.astro` — rewrote as thin hero shell mounting `<DemoExperience client:load />`. Existing `ReplayConsole.tsx` and `pipeline-run.json` left untouched but no longer imported.
+- Modified: `package.json` / `pnpm-lock.yaml` — added zustand, lucide-react, @radix-ui/react-collapsible.
+- Commands run: `pnpm add`, `pnpm build` (passes), manual smoke via `astro dev` on http://localhost:4339/demo (HTTP 200, no SSR errors in dev log).
+
+**Result:** `pnpm build` passes. Page renders end-to-end. The Start Replay button drives the supervisor rail through phased animations per step (retrieving → bundling → dispatching → agent_working → output_ready → gating → decided), with the four stage cards lighting up in sequence. Pause/Step/Jump/Reset all work. Speed selector reschedules timers without restarting. Clicking any execution-strip step pauses replay and inspects that step (including NOT_RUN steps in the escalated run). Hovering a top-level field's cite chip in the structured output reveals the source via a Radix Tooltip. Bundle: DemoExperience island ≈ 151 KB / 41 KB gz (no shiki — custom JSON renderer is ~120 LoC).
+
+**Next:** Browser-verify the timed replay feel on real hardware (might want to tune phase durations); the scenario-comparison side-by-side view from the claude branch was deliberately omitted because the codex prompt didn't ask for it (one scenario at a time is the codex pattern); responsive: execution strip stacks vertically on mobile, stages stack naturally, but supervisor rail's progress dots column hides on `<lg` — could add a compact version. Existing `ReplayConsole.tsx` and `pipeline-run.json` are again superseded; safe to remove once direction is approved.

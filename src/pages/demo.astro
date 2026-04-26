@@ -1,95 +1,126 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/astro/Container.astro';
-import SectionHero from '../components/astro/SectionHero.astro';
-import Callout from '../components/astro/Callout.astro';
-import ReplayConsole from '../components/react/ReplayConsole';
-import runData from '../data/pipeline-run.json';
-
-const { run, steps } = runData;
-const startedAt = new Date(run.startedAt);
-const completedAt = new Date(run.completedAt);
-const durationSec = Math.round((completedAt.getTime() - startedAt.getTime()) / 1000);
-const escalatedCount = steps.filter((step) => step.state === 'escalated').length;
-const blockers = steps
-  .flatMap((step) => step.determination.output)
-  .filter((item) => item.includes('BLOCKER'));
-const evidenceCount = steps.reduce((sum, step) => sum + step.evidence.length, 0);
-
-const outcomeTone = {
-  complete: 'text-spruce-700 bg-spruce-50',
-  escalated: 'text-accent bg-accent-soft',
-  blocked: 'text-rose-700 bg-rose-50',
-}[run.outcome as 'complete' | 'escalated' | 'blocked'];
+import DemoExperience from '../components/react/demo-codex/DemoExperience';
 ---
 
-<BaseLayout title="Demo · Pipeline replay">
-  <section class="border-b border-ink-100">
-    <Container width="wide" class="py-16 md:py-20">
-      <div class="grid gap-8 xl:grid-cols-[minmax(0,1.1fr)_minmax(19rem,0.9fr)]">
+<BaseLayout title="Demo · Guided replay of a governed pipeline run">
+  <section class="relative overflow-hidden border-b border-ink-100">
+    <div class="hero-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true">
+    </div>
+    <Container width="wide" class="relative py-16 md:py-24">
+      <div class="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(20rem,0.8fr)]">
         <div>
-          <SectionHero
-            as="h1"
-            eyebrow="Part 06 · Demo"
-            title="Three-pane replay of a governed pipeline run"
-            lede="A captured walkthrough of the Lichen Manufacturing and OptiChain scenario. The left rail tracks execution, the center panel shows the active step, and the right rail exposes bundle evidence and audit notes."
-          />
-          <p class="mt-7 max-w-3xl text-sm leading-relaxed text-ink-600">
-            This is where the architecture becomes legible. Instead of narrating abstractly about
-            retrieval and orchestration, the replay shows what triggered each stage, what the
-            supervisor needed to know, which sources were pulled into the bundle, and why the final
-            state remained escalated.
+          <p class="eyebrow text-accent">Part 06 · Demo</p>
+          <h1
+            class="display-balance mt-5 max-w-[18ch] font-serif text-display-sm font-semibold leading-tight tracking-tight text-ink-900 md:text-display"
+          >
+            A guided replay of a governed pipeline run.
+          </h1>
+          <p class="lede mt-6 max-w-2xl">
+            Watch the supervisor walk a precomputed onboarding pipeline through six governed steps —
+            retrieving evidence by lane, assembling scoped bundles, dispatching to domain agents,
+            validating output contracts, and either advancing or halting at each gate. Two recorded
+            runs are available: one completes cleanly, the other halts at Legal.
           </p>
-        </div>
-
-        <div class="panel p-6">
-          <p class="eyebrow mb-3">Run framing</p>
-          <p class="font-serif text-2xl text-ink-900">{run.scenario}</p>
-          <p class="mt-4 text-sm leading-relaxed text-ink-600">{run.summary}</p>
-          <div class="mt-5 flex flex-wrap gap-2">
-            <span
-              class={`rounded-full px-3 py-1 text-[0.72rem] font-medium uppercase tracking-[0.12em] ${outcomeTone}`}
-            >
-              {run.outcome}
-            </span>
-            <span class="chip">Duration {durationSec}s</span>
-            <span class="chip">{steps.length} steps</span>
+          <div class="mt-7 flex flex-wrap items-center gap-3 text-xs">
+            <span class="chip">Replay · not live</span>
+            <span class="chip">Supervisor as actor</span>
+            <span class="chip">Two scenarios</span>
+            <span class="chip">Inspectable trace</span>
           </div>
         </div>
-      </div>
 
-      <div class="mt-10 grid gap-4 md:grid-cols-4">
-        <div class="panel p-4">
-          <p class="eyebrow text-ink-400">Run ID</p>
-          <p class="mt-2 font-mono text-xs text-ink-700">{run.id}</p>
-        </div>
-        <div class="panel p-4">
-          <p class="eyebrow text-ink-400">Escalated steps</p>
-          <p class="mt-2 font-serif text-3xl text-ink-900">{escalatedCount}</p>
-        </div>
-        <div class="panel p-4">
-          <p class="eyebrow text-ink-400">Evidence items</p>
-          <p class="mt-2 font-serif text-3xl text-ink-900">{evidenceCount}</p>
-        </div>
-        <div class="panel p-4">
-          <p class="eyebrow text-ink-400">Named blockers</p>
-          <p class="mt-2 font-serif text-3xl text-ink-900">{blockers.length}</p>
-        </div>
+        <aside class="silver-panel max-w-none text-[0.95rem]">
+          <span class="silver-panel__corner silver-panel__corner--tl" aria-hidden="true"></span>
+          <span class="silver-panel__corner silver-panel__corner--br" aria-hidden="true"></span>
+          <p class="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-ink-500">
+            How to read this page
+          </p>
+          <ul class="mt-3 space-y-2 text-sm leading-relaxed text-ink-700">
+            <li>
+              <strong class="font-semibold text-ink-900">Pick a scenario</strong> with the selector.
+              Escalated is the default — it shows governance more clearly than the happy path.
+            </li>
+            <li>
+              <strong class="font-semibold text-ink-900">Press Start Replay</strong>. The supervisor
+              rail animates each phase: retrieve, bundle, dispatch, validate, decide.
+            </li>
+            <li>
+              <strong class="font-semibold text-ink-900">Pause anytime</strong> and use Step or
+              click any node to inspect a single step in detail.
+            </li>
+            <li>
+              <strong class="font-semibold text-ink-900">Open the drawers</strong> below each step
+              for the audit log, raw structured output, and source previews.
+            </li>
+          </ul>
+        </aside>
       </div>
     </Container>
   </section>
 
   <section class="py-section-sm md:py-section">
     <Container width="wide">
-      <ReplayConsole run={run} steps={steps} client:load />
-
-      <Callout kind="architecture" title="What this replay is — and isn't">
-        <p>
-          The replay is driven by a captured JSON artifact in <code>src/data/pipeline-run.json</code
-          >. That is intentional. v1 is about making the architecture and decision trail legible,
-          not about simulating live enterprise execution from the browser.
-        </p>
-      </Callout>
+      <DemoExperience client:load />
     </Container>
   </section>
 </BaseLayout>
+
+<style>
+  .hero-grid {
+    background-image:
+      radial-gradient(circle at 12% 22%, rgba(157, 87, 40, 0.08), transparent 32%),
+      radial-gradient(circle at 88% 12%, rgba(33, 71, 60, 0.08), transparent 30%),
+      linear-gradient(rgba(24, 33, 38, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(24, 33, 38, 0.04) 1px, transparent 1px);
+    background-size:
+      auto,
+      auto,
+      48px 48px,
+      48px 48px;
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+    mask-image: radial-gradient(ellipse at top, black 50%, transparent 88%);
+  }
+
+  .silver-panel {
+    position: relative;
+    isolation: isolate;
+    padding: 1.5rem 1.75rem;
+    border-radius: 0.9rem;
+    background:
+      linear-gradient(135deg, #f6f8fa 0%, #dde3e8 22%, #f1f4f6 48%, #c8d0d7 74%, #e8ecef 100%);
+    border: 1px solid rgba(24, 33, 38, 0.14);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.85),
+      inset 0 -1px 0 rgba(24, 33, 38, 0.18),
+      0 1px 2px rgba(24, 33, 38, 0.06),
+      0 10px 28px -14px rgba(24, 33, 38, 0.22);
+  }
+
+  .silver-panel__corner {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 1px solid rgba(24, 33, 38, 0.45);
+    pointer-events: none;
+  }
+
+  .silver-panel__corner--tl {
+    top: 8px;
+    left: 8px;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .silver-panel__corner--br {
+    bottom: 8px;
+    right: 8px;
+    border-left: none;
+    border-top: none;
+  }
+</style>

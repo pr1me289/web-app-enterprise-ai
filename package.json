@@ -28,6 +28,7 @@
     "@astrojs/mdx": "^3.1.9",
     "@astrojs/react": "^3.6.2",
     "@radix-ui/react-accordion": "^1.2.1",
+    "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-tabs": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.4",
@@ -36,11 +37,13 @@
     "clsx": "^2.1.1",
     "d3": "^7.9.0",
     "framer-motion": "^11.15.0",
+    "lucide-react": "^1.11.0",
     "marked": "^18.0.2",
     "mermaid": "^11.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "tailwind-merge": "^2.5.5"
+    "tailwind-merge": "^2.5.5",
+    "zustand": "^5.0.12"
   },
   "devDependencies": {
     "@astrojs/tailwind": "^5.1.3",
