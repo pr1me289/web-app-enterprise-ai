@@ -89,14 +89,16 @@ export default function ReplayControls() {
       </SecondaryButton>
 
       {/* Jump to end */}
-      <SecondaryButton
+      <button
+        type="button"
         onClick={jumpToEnd}
         disabled={isStopped || phase === 'completed'}
-        label="Jump to final state"
+        aria-label="Jump to final state"
+        className="inline-flex h-10 items-center gap-2 rounded-full bg-accent px-3.5 text-paper shadow-soft transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent"
       >
         <FastForward size={14} />
         <span className="font-mono text-[0.65rem] uppercase tracking-[0.1em]">Jump to end</span>
-      </SecondaryButton>
+      </button>
 
       {/* Reset */}
       <SecondaryButton

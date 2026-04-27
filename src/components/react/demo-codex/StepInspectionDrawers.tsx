@@ -22,7 +22,7 @@ export default function StepInspectionDrawers() {
   const docsId = `docs-${scenario}-${step.id}`;
 
   return (
-    <div className="grid gap-3">
+    <div className="grid min-w-0 grid-cols-1 gap-3">
       <p className="eyebrow mt-2 text-ink-400">Technical inspection · default closed</p>
       <ExpandableDrawer
         id={auditId}

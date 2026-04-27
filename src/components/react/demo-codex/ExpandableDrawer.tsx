@@ -45,7 +45,7 @@ export default function ExpandableDrawer({
     <Collapsible.Root open={open} onOpenChange={onOpenChange}>
       <div
         id={id}
-        className={`overflow-hidden rounded-2xl border ${
+        className={`min-w-0 overflow-hidden rounded-2xl border ${
           tone === 'mono' ? 'border-ink-900/40' : 'border-ink-100'
         } bg-paper shadow-soft`}
       >

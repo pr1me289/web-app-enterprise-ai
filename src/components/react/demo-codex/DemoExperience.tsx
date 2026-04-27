@@ -90,9 +90,13 @@ export default function DemoExperience() {
             <div className="flex flex-col justify-between gap-3 rounded-xl border border-ink-100 bg-paper p-4">
               <div>
                 <p className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-ink-500">
-                  Final artifact
+                  Summary
                 </p>
-                <p className="mt-1 font-serif text-base text-ink-900">{meta.finalOutputs.artifactName}</p>
+                <p className="mt-1 font-serif text-sm leading-relaxed text-ink-700">
+                  {meta.id === 'escalated'
+                    ? 'Below is a replay of a scenario in which intake is complete, but authoritative evidence reveals unresolved legal blockers. The pipeline reaches STEP-03, emits an escalated status, and halts rather than continuing through conflicting or incomplete conditions.'
+                    : 'Below is a replay of a scenario in which intake is complete and the evidence is sufficient across all required steps. The pipeline moves cleanly through each stage, produces governed domain determinations, and completes with a final approval package instead of halting for escalation.'}
+                </p>
               </div>
               <div className="flex flex-col gap-1.5">
                 <p className="font-mono text-[0.6rem] uppercase tracking-[0.1em] text-ink-500">
@@ -144,12 +148,10 @@ export default function DemoExperience() {
         ) : (
           <>
             <CurrentStepPanel />
-            <div className={`${FOCUS_FRAME} flex flex-col gap-12`}>
-              <StepInspectionDrawers />
-              <div className="mt-12 flex flex-col gap-12 md:mt-16">
-                <FinalOutputsPanel />
-                <TakeawayPanel />
-              </div>
+            <StepInspectionDrawers />
+            <div className={`${FOCUS_FRAME} mt-12 flex flex-col gap-12 md:mt-16`}>
+              <FinalOutputsPanel />
+              <TakeawayPanel />
             </div>
           </>
         )}
