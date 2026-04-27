@@ -269,15 +269,14 @@ export function BundleStage({
 
   return (
     <StageShell state={state} icon={Package} eyebrow="Stage 2" title="Bundle assembly" accent="spruce">
-      <AnimatePresence mode="wait">
-        {state !== 'pending' && (
-          <motion.div
-            key="bundle-content"
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.32, ease: 'easeOut' }}
-            className="grid gap-3 md:grid-cols-2"
-          >
+      {state !== 'pending' && (
+        <motion.div
+          key="bundle-content"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.32, ease: 'easeOut' }}
+          className="grid gap-3 md:grid-cols-2"
+        >
             <BundleSection title="Task" delay={0}>
               <p className="text-sm leading-relaxed text-ink-700">{step.bundle.task}</p>
             </BundleSection>
@@ -342,9 +341,8 @@ export function BundleStage({
                 {step.bundle.outputContract.map((line) => `  ${line}`).join('\n')}
               </pre>
             </BundleSection>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </motion.div>
+      )}
     </StageShell>
   );
 }
@@ -408,6 +406,8 @@ export function AgentStage({
 
   return (
     <StageShell state={dispatchState} icon={Send} eyebrow="Stage 3" title="Agent dispatch & output">
+      {dispatchState !== 'pending' && (
+      <>
       {/* Dispatch visual — animated bundle traveling to agent */}
       <div className="relative grid items-center gap-3 rounded-xl border border-ink-100 bg-paper-muted/30 p-3 md:grid-cols-[minmax(0,7rem)_minmax(0,1fr)_minmax(0,9rem)]">
         <div className="flex items-center gap-2 rounded-lg border border-ink-100 bg-paper px-3 py-2">
@@ -438,6 +438,29 @@ export function AgentStage({
               strokeWidth="1.5"
               strokeDasharray="4 4"
             />
+            {phaseIndex(phase) >= PHASE_INDEX.DISPATCHING &&
+              phaseIndex(phase) <= PHASE_INDEX.OUTPUT_READY &&
+              [0, 1, 2].map((i) => (
+                <motion.line
+                  key={i}
+                  x1={i * 60}
+                  y1="16"
+                  x2={(i + 1) * 60}
+                  y2="16"
+                  stroke="rgba(157,87,40,1)"
+                  strokeWidth="2"
+                  strokeDasharray="4 4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0, 0.95, 0] }}
+                  transition={{
+                    duration: 0.6,
+                    repeat: Infinity,
+                    repeatDelay: 0.6,
+                    delay: i * 0.4,
+                    ease: 'easeInOut',
+                  }}
+                />
+              ))}
             <path d="M 180 16 L 172 11 L 172 21 Z" fill="rgba(157,87,40,0.7)" />
             {dispatchState === 'active' && (
               <motion.g
@@ -509,6 +532,8 @@ export function AgentStage({
           </span>
         </div>
       )}
+      </>
+      )}
     </StageShell>
   );
 }
@@ -536,10 +561,12 @@ export function GateStage({
   step,
   phase,
   prevented,
+  eyebrow = 'Stage 4',
 }: {
   step: DemoStep;
   phase: ReplayPhase;
   prevented: boolean;
+  eyebrow?: string;
 }) {
   const state = stateFor(phase, PHASE_INDEX.GATING);
   const decided = phaseIndex(phase) >= PHASE_INDEX.DECIDED;
@@ -548,14 +575,16 @@ export function GateStage({
 
   if (prevented) {
     return (
-      <StageShell state="pending" icon={ShieldCheck} eyebrow="Stage 4" title="Gate decision">
+      <StageShell state="pending" icon={ShieldCheck} eyebrow={eyebrow} title="Gate decision">
         <PreventedNote message="No gate ran; the supervisor never validated this step." />
       </StageShell>
     );
   }
 
   return (
-    <StageShell state={state} icon={ShieldCheck} eyebrow="Stage 4" title="Gate decision">
+    <StageShell state={state} icon={ShieldCheck} eyebrow={eyebrow} title="Gate decision">
+      {state !== 'pending' && (
+      <>
       {/* Contract validation list */}
       <div className="rounded-xl border border-ink-100 bg-paper-muted/30 p-4">
         <p className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-ink-500">
@@ -639,6 +668,8 @@ export function GateStage({
           </motion.div>
         )}
       </AnimatePresence>
+      </>
+      )}
     </StageShell>
   );
 }

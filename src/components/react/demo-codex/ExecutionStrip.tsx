@@ -138,7 +138,7 @@ function ExecutionStepCard({
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2 }}
             aria-hidden
-            className="absolute -bottom-2 left-1/2 hidden h-3 w-3 -translate-x-1/2 rotate-45 border-b border-r border-accent bg-paper md:block"
+            className="absolute -bottom-2 left-1/2 hidden h-3 w-3 -translate-x-1/2 rounded-full bg-ink-900 md:block"
           />
         )}
       </AnimatePresence>

@@ -5,6 +5,7 @@ import {
   Play,
   Pause,
   StepForward,
+  StepBack,
   RotateCcw,
   FastForward,
 } from 'lucide-react';
@@ -21,6 +22,7 @@ export default function ReplayControls() {
   const pause = useDemoCodexStore((s) => s.pause);
   const resume = useDemoCodexStore((s) => s.resume);
   const stepThrough = useDemoCodexStore((s) => s.stepThrough);
+  const stepBackward = useDemoCodexStore((s) => s.stepBackward);
   const jumpToEnd = useDemoCodexStore((s) => s.jumpToEnd);
   const reset = useDemoCodexStore((s) => s.reset);
   const setSpeed = useDemoCodexStore((s) => s.setSpeed);
@@ -65,6 +67,16 @@ export default function ReplayControls() {
           {primaryLabel}
         </span>
       </motion.button>
+
+      {/* Step back */}
+      <SecondaryButton
+        onClick={stepBackward}
+        disabled={isPlaying || isStopped}
+        label="Step back one phase"
+      >
+        <StepBack size={14} />
+        <span className="font-mono text-[0.65rem] uppercase tracking-[0.1em]">Back</span>
+      </SecondaryButton>
 
       {/* Step through */}
       <SecondaryButton

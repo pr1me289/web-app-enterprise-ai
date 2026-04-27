@@ -3,7 +3,7 @@
 // takeaway. Single React island; all state lives in the codex Zustand store.
 import { useEffect } from 'react';
 import { MotionConfig } from 'framer-motion';
-import { useDemoCodexStore } from './store';
+import { useDemoCodexStore, lastExecutedStep, PHASE_INDEX, phaseIndex } from './store';
 import { scenarios } from '../../../data/demo-codex';
 import ScenarioSelector from './ScenarioSelector';
 import ReplayControls from './ReplayControls';
@@ -11,18 +11,34 @@ import RunSummaryChips from './RunSummaryChips';
 import SupervisorRail from './SupervisorRail';
 import ExecutionStrip from './ExecutionStrip';
 import CurrentStepPanel from './CurrentStepPanel';
+import StepInspectionDrawers from './StepInspectionDrawers';
 import FinalOutputsPanel from './FinalOutputsPanel';
 import TakeawayPanel from './TakeawayPanel';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+
+// Focus frame styling — black border, faintly tinted translucent gray fill.
+const FOCUS_FRAME = 'rounded-3xl border-2 border-ink-900 bg-ink-900/[0.04] p-5 md:p-7';
 
 export default function DemoExperience() {
   const scenario = useDemoCodexStore((s) => s.scenario);
   const stepThrough = useDemoCodexStore((s) => s.stepThrough);
+  const stepBackward = useDemoCodexStore((s) => s.stepBackward);
   const reset = useDemoCodexStore((s) => s.reset);
   const start = useDemoCodexStore((s) => s.start);
   const pause = useDemoCodexStore((s) => s.pause);
   const resume = useDemoCodexStore((s) => s.resume);
   const mode = useDemoCodexStore((s) => s.mode);
+  const currentStep = useDemoCodexStore((s) => s.currentStep);
+  const phase = useDemoCodexStore((s) => s.phase);
+
+  // Frame moves once the run reaches Stage 4 (Gate decision) of the last
+  // executed step. Before that, the frame focuses the in-progress stages;
+  // after, it focuses the post-run summary (drawers + final outputs + takeaway).
+  const lastStep = lastExecutedStep(scenario);
+  const runFinalized =
+    phase === 'completed' ||
+    mode === 'ended' ||
+    (currentStep === lastStep && phaseIndex(phase) >= PHASE_INDEX.GATING);
 
   // Keyboard: space toggles play/pause, → steps through, R resets
   useEffect(() => {
@@ -38,6 +54,9 @@ export default function DemoExperience() {
       } else if (e.key === 'ArrowRight') {
         e.preventDefault();
         stepThrough();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        stepBackward();
       } else if (e.key === 'r' || e.key === 'R') {
         e.preventDefault();
         reset();
@@ -45,7 +64,7 @@ export default function DemoExperience() {
     }
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [mode, pause, resume, start, stepThrough, reset]);
+  }, [mode, pause, resume, start, stepThrough, stepBackward, reset]);
 
   const meta = scenarios[scenario];
 
@@ -53,15 +72,13 @@ export default function DemoExperience() {
     <MotionConfig reducedMotion="user">
       <div className="flex flex-col gap-12">
         {/* Scenario framing strip */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={meta.id}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.25 }}
-            className="grid gap-6 rounded-2xl border border-ink-100 bg-paper-muted/40 p-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:p-7"
-          >
+        <motion.div
+          key={meta.id}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.25 }}
+          className="grid gap-6 rounded-2xl border border-ink-100 bg-paper-muted/40 p-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:p-7"
+        >
             <div className="flex flex-col gap-3">
               <p className="eyebrow text-accent">Scenario · {meta.outcome}</p>
               <h2 className="font-serif text-2xl font-semibold text-ink-900 md:text-3xl">
@@ -84,6 +101,8 @@ export default function DemoExperience() {
                 <p className="font-mono text-[0.62rem] text-ink-500">
                   <kbd className="rounded border border-ink-200 bg-paper-muted/60 px-1 py-0.5">Space</kbd>{' '}
                   play/pause ·{' '}
+                  <kbd className="rounded border border-ink-200 bg-paper-muted/60 px-1 py-0.5">←</kbd>
+                  /
                   <kbd className="rounded border border-ink-200 bg-paper-muted/60 px-1 py-0.5">→</kbd>{' '}
                   step ·{' '}
                   <kbd className="rounded border border-ink-200 bg-paper-muted/60 px-1 py-0.5">R</kbd>{' '}
@@ -91,8 +110,7 @@ export default function DemoExperience() {
                 </p>
               </div>
             </div>
-          </motion.div>
-        </AnimatePresence>
+        </motion.div>
 
         {/* Scenario selector + replay controls */}
         <div className="flex flex-col gap-4">
@@ -110,14 +128,31 @@ export default function DemoExperience() {
         {/* Execution strip */}
         <ExecutionStrip />
 
-        {/* Current step panel — full-width detail with stages */}
-        <CurrentStepPanel />
-
-        {/* Final outputs */}
-        <FinalOutputsPanel />
-
-        {/* Per-scenario takeaway */}
-        <TakeawayPanel />
+        {/* Focus frame — wraps the in-flight stages during replay, then moves
+            down to wrap the post-run summary once the last gate decides. */}
+        {!runFinalized ? (
+          <>
+            <div className={FOCUS_FRAME}>
+              <CurrentStepPanel />
+            </div>
+            <StepInspectionDrawers />
+            <div className="mt-12 flex flex-col gap-12 md:mt-16">
+              <FinalOutputsPanel />
+              <TakeawayPanel />
+            </div>
+          </>
+        ) : (
+          <>
+            <CurrentStepPanel />
+            <div className={`${FOCUS_FRAME} flex flex-col gap-12`}>
+              <StepInspectionDrawers />
+              <div className="mt-12 flex flex-col gap-12 md:mt-16">
+                <FinalOutputsPanel />
+                <TakeawayPanel />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </MotionConfig>
   );

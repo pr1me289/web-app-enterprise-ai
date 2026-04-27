@@ -2,7 +2,7 @@
 // is doing in this exact moment of the replay — retrieving evidence, dispatching
 // to an agent, validating output contracts, recording escalation. Replaces the
 // "vague label" that the build prompt explicitly forbids.
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
   Compass,
   Database,
@@ -14,7 +14,7 @@ import {
   Gavel,
   CircleSlash,
 } from 'lucide-react';
-import { useDemoCodexStore, PHASE_LABELS, type ReplayPhase } from './store';
+import { useDemoCodexStore, PHASE_LABELS, phasesForStep, type ReplayPhase } from './store';
 import { scenarios } from '../../../data/demo-codex';
 import type { DemoStep } from '../../../data/demo-codex/types';
 
@@ -63,7 +63,10 @@ export default function SupervisorRail() {
   const Icon = phaseIcon[phase];
   const accent = phaseAccent[phase];
   const message = resolveMessage(phase, step, scenario);
-  const phaseProgress = phase === 'idle' || phase === 'completed' ? -1 : PHASE_PROGRESS_ORDER.indexOf(phase);
+  // Step-01 only walks retrieve → gate → decide; other steps use the full 7-phase rail.
+  const dotSequence: ReplayPhase[] =
+    step.stepNumber === 1 ? phasesForStep(1) : PHASE_PROGRESS_ORDER;
+  const phaseProgress = phase === 'idle' || phase === 'completed' ? -1 : dotSequence.indexOf(phase);
 
   const supervisorActive = phase !== 'idle' && phase !== 'completed';
 
@@ -100,24 +103,21 @@ export default function SupervisorRail() {
           <span className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-ink-500">
             {`${step.id} · ${PHASE_LABELS[phase]}`}
           </span>
-          <AnimatePresence mode="wait">
-            <motion.span
-              key={`${step.id}-${phase}`}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.22 }}
-              className="truncate font-serif text-sm text-ink-900 md:text-base"
-            >
-              {message}
-            </motion.span>
-          </AnimatePresence>
+          <motion.span
+            key={`${step.id}-${phase}`}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.22 }}
+            className="truncate font-serif text-sm text-ink-900 md:text-base"
+          >
+            {message}
+          </motion.span>
         </div>
       </div>
 
       {/* Phase progress dots */}
       <div className="hidden shrink-0 items-center gap-1 rounded-xl border border-ink-100 bg-paper-muted/60 px-3 py-2 lg:flex">
-        {PHASE_PROGRESS_ORDER.map((p, idx) => {
+        {dotSequence.map((p, idx) => {
           const isActive = idx === phaseProgress;
           const isPast = idx < phaseProgress || phase === 'completed';
           return (

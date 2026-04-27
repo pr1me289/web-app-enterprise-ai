@@ -28,15 +28,30 @@ const PHASE_ORDER: Exclude<ReplayPhase, 'idle' | 'completed'>[] = [
   'decided',
 ];
 
+// Step-01 (Intake) is the deterministic supervisor — no bundle assembly,
+// no agent dispatch. The replay walks only retrieve → gate → decide for it.
+const STEP1_PHASE_ORDER: Exclude<ReplayPhase, 'idle' | 'completed'>[] = [
+  'retrieving',
+  'gating',
+  'decided',
+];
+
+export function phasesForStep(
+  stepNumber: StepNumber,
+): Exclude<ReplayPhase, 'idle' | 'completed'>[] {
+  return stepNumber === 1 ? STEP1_PHASE_ORDER : PHASE_ORDER;
+}
+
 // Tuned for legibility, not realism. Replay pacing is a teaching tool.
+// Base durations are calibrated to 1x. 1.5x and 2x scale via the speed divisor.
 const PHASE_DURATIONS_MS: Record<Exclude<ReplayPhase, 'idle' | 'completed'>, number> = {
-  retrieving: 1300,
-  bundling: 1000,
-  dispatching: 800,
-  agent_working: 700,
-  output_ready: 600,
-  gating: 1000,
-  decided: 700,
+  retrieving: 9750,
+  bundling: 7500,
+  dispatching: 6000,
+  agent_working: 5250,
+  output_ready: 4500,
+  gating: 7500,
+  decided: 5250,
 };
 
 export const PHASE_LABELS: Record<ReplayPhase, string> = {
@@ -60,6 +75,10 @@ interface DemoState {
   phase: ReplayPhase;
   speed: Speed;
   expandedSections: Set<string>;
+  // True only after selectStep parks us at 'decided' so the user can scroll the
+  // step's stages. The next resume rewinds to Stage 1 once and clears this.
+  // Any natural engagement (step/back/jump/play/reset) clears it as well.
+  resumeShouldRewind: boolean;
 
   // actions
   selectScenario: (s: ScenarioId) => void;
@@ -67,6 +86,7 @@ interface DemoState {
   pause: () => void;
   resume: () => void;
   stepThrough: () => void;
+  stepBackward: () => void;
   jumpToEnd: () => void;
   reset: () => void;
   selectStep: (n: StepNumber) => void;
@@ -86,19 +106,20 @@ function clearTimer() {
   }
 }
 
-function lastExecutedStep(scenarioId: ScenarioId): StepNumber {
+export function lastExecutedStep(scenarioId: ScenarioId): StepNumber {
   const steps = scenarios[scenarioId].steps;
   const executed = steps.filter((s) => s.status !== 'NOT_RUN');
   return executed[executed.length - 1].stepNumber;
 }
 
-function nextPhase(phase: ReplayPhase): ReplayPhase | null {
+function nextPhase(phase: ReplayPhase, stepNumber: StepNumber): ReplayPhase | null {
   if (phase === 'idle') return 'retrieving';
   if (phase === 'completed') return null;
-  const idx = PHASE_ORDER.indexOf(phase as Exclude<ReplayPhase, 'idle' | 'completed'>);
+  const seq = phasesForStep(stepNumber);
+  const idx = seq.indexOf(phase as Exclude<ReplayPhase, 'idle' | 'completed'>);
   if (idx === -1) return null;
-  if (idx === PHASE_ORDER.length - 1) return null; // 'decided' has no next within step
-  return PHASE_ORDER[idx + 1];
+  if (idx === seq.length - 1) return null; // 'decided' has no next within step
+  return seq[idx + 1];
 }
 
 export const useDemoCodexStore = create<DemoState>((set, get) => {
@@ -110,7 +131,7 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
 
     const duration = PHASE_DURATIONS_MS[phase as Exclude<ReplayPhase, 'idle' | 'completed'>] / speed;
     activeTimer = setTimeout(() => {
-      const next = nextPhase(phase);
+      const next = nextPhase(phase, currentStep);
       if (next) {
         set({ phase: next });
         schedule();
@@ -138,6 +159,7 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
     phase: 'idle',
     speed: 1,
     expandedSections: new Set(),
+    resumeShouldRewind: false,
 
     selectScenario: (s) => {
       clearTimer();
@@ -147,12 +169,13 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
         currentStep: 1,
         phase: 'idle',
         expandedSections: new Set(),
+        resumeShouldRewind: false,
       });
     },
 
     start: () => {
       clearTimer();
-      set({ mode: 'playing', currentStep: 1, phase: 'retrieving' });
+      set({ mode: 'playing', currentStep: 1, phase: 'retrieving', resumeShouldRewind: false });
       schedule();
     },
 
@@ -162,11 +185,13 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
     },
 
     resume: () => {
-      const { mode, phase } = get();
+      const { mode, phase, resumeShouldRewind } = get();
       if (mode !== 'paused') return;
-      set({ mode: 'playing' });
-      // If we paused at decided or in-flight, resume scheduling
-      if (phase === 'idle') {
+      set({ mode: 'playing', resumeShouldRewind: false });
+      if (resumeShouldRewind) {
+        // User parked here via selectStep; play should restart this step from Stage 1.
+        set({ phase: 'retrieving' });
+      } else if (phase === 'idle') {
         set({ phase: 'retrieving' });
       }
       schedule();
@@ -177,12 +202,13 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
       clearTimer();
       const { phase, currentStep, scenario, mode } = get();
       if (mode === 'playing') set({ mode: 'paused' });
+      set({ resumeShouldRewind: false });
       if (phase === 'completed') return;
       if (phase === 'idle') {
         set({ phase: 'retrieving' });
         return;
       }
-      const next = nextPhase(phase);
+      const next = nextPhase(phase, currentStep);
       if (next) {
         set({ phase: next });
         return;
@@ -199,11 +225,47 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
       set({ currentStep: newStep, phase: 'retrieving' });
     },
 
+    stepBackward: () => {
+      clearTimer();
+      const { phase, currentStep, scenario, mode } = get();
+      if (mode === 'playing') set({ mode: 'paused' });
+      set({ resumeShouldRewind: false });
+
+      // From a finalized run, drop back to the last executed step's gate decision.
+      if (phase === 'completed') {
+        const lastStep = lastExecutedStep(scenario);
+        set({ mode: 'paused', currentStep: lastStep, phase: 'decided' });
+        return;
+      }
+
+      // Already at the pre-replay state — nothing to undo.
+      if (phase === 'idle') return;
+
+      const seq = phasesForStep(currentStep);
+      const idx = seq.indexOf(phase as Exclude<ReplayPhase, 'idle' | 'completed'>);
+
+      // Mid-step → walk one phase back along this step's sequence.
+      if (idx > 0) {
+        set({ phase: seq[idx - 1] });
+        return;
+      }
+
+      // At the first phase of a step → land on the previous step's gate decision.
+      if (currentStep > 1) {
+        const newStep = (currentStep - 1) as StepNumber;
+        set({ currentStep: newStep, phase: 'decided' });
+        return;
+      }
+
+      // At the very start → return to idle.
+      set({ mode: 'stopped', phase: 'idle' });
+    },
+
     jumpToEnd: () => {
       clearTimer();
       const { scenario } = get();
       const lastStep = lastExecutedStep(scenario);
-      set({ mode: 'ended', currentStep: lastStep, phase: 'completed' });
+      set({ mode: 'ended', currentStep: lastStep, phase: 'completed', resumeShouldRewind: false });
     },
 
     reset: () => {
@@ -213,6 +275,7 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
         currentStep: 1,
         phase: 'idle',
         expandedSections: new Set(),
+        resumeShouldRewind: false,
       });
     },
 
@@ -222,8 +285,9 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
       const target = scenarios[scenario].steps.find((s) => s.stepNumber === n);
       if (!target) return;
       // Allow inspecting NOT_RUN steps too — the panel shows a prevented banner
-      // for them, and the supervisor rail surfaces the halt reason.
-      set({ mode: 'paused', currentStep: n, phase: 'decided' });
+      // for them, and the supervisor rail surfaces the halt reason. The flag
+      // signals "next play should rewind this step to Stage 1" exactly once.
+      set({ mode: 'paused', currentStep: n, phase: 'decided', resumeShouldRewind: true });
     },
 
     setSpeed: (s) => {
