@@ -192,38 +192,32 @@ export const escalatedScenario: DemoScenario = {
         summary:
           'Integration pattern is AMBIGUOUS — vendor description references a possible extraction agent with service-account credentials, which does not clearly map to Tier 1, 2, or 3 per ISP-001 §12.2. Agent assigns integration_tier=UNCLASSIFIED_PENDING_REVIEW, data_classification=REGULATED (EU personal data present), fast_track_eligible=false (DISALLOWED_AMBIGUOUS_SCOPE), and emits three required security actions. Status: escalated.',
         structured: {
-          status: 'escalated',
-          integration_type_normalized: 'AMBIGUOUS',
-          integration_tier: 'UNCLASSIFIED_PENDING_REVIEW',
+          integration_type_normalized: 'DIRECT_API',
+          integration_tier: 'TIER_1',
           data_classification: 'REGULATED',
           eu_personal_data_present: true,
           fast_track_eligible: false,
-          fast_track_rationale: 'DISALLOWED_AMBIGUOUS_SCOPE',
+          fast_track_rationale: 'DISALLOWED_REGULATED_DATA',
           security_followup_required: true,
           nda_status_from_questionnaire: 'PENDING',
           required_security_actions: [
             {
-              action_type: 'ARCHITECTURE_CLARIFICATION',
-              reason: 'Integration pattern is ambiguous — vendor description states \'may deploy an extraction agent with service-account credentials\' which does not clearly map to Tier 1 (direct API), Tier 2 (approved middleware), or Tier 3 (file-based export). Service-account credential deployment suggests direct system access but lacks explicit confirmation of persistent authenticated session vs. scheduled extraction. Tier assignment requires clarification per ISP-001 §12.2.2.',
+              action_type: 'FULL_SECURITY_REVIEW',
+              reason: 'TIER_1 direct ERP integration with REGULATED data classification (EU personal data present). Mandatory security review required per ISP-001 §12.2.',
               owner: 'IT Security',
             },
             {
-              action_type: 'EU_PERSONAL_DATA_HANDLING_REVIEW',
-              reason: 'EU personal data is present (Employee IDs for EU-based facilities, shift schedules). Vendor will access RESTRICTED data classification per ISP-001 §5. Security review required before data access can be provisioned.',
-              owner: 'IT Security',
-            },
-            {
-              action_type: 'NDA_EXECUTION_REQUIRED',
-              reason: 'NDA status is PENDING. Per ISP-001 §12.1.4, onboarding may not proceed to information-exchange phase until NDA execution is confirmed. Required before any RESTRICTED data disclosure.',
+              action_type: 'NDA_EXECUTION',
+              reason: 'NDA status is PENDING. Per ISP-001 §12.1.4, NDA must be fully executed prior to disclosure of RESTRICTED or CONFIDENTIAL information. Onboarding cannot proceed to information-exchange phase until NDA execution is confirmed.',
               owner: 'Procurement',
             },
           ],
           policy_citations: [
             { source_id: 'ISP-001', version: '4.2', chunk_id: 'ISP-001__section_12_2', section_id: '12.2', citation_class: 'PRIMARY' },
-            { source_id: 'ISP-001', version: '4.2', chunk_id: 'ISP-001__section_12_2_2', section_id: '12.2.2', citation_class: 'PRIMARY' },
             { source_id: 'ISP-001', version: '4.2', chunk_id: 'ISP-001__section_5', section_id: '5', citation_class: 'PRIMARY' },
             { source_id: 'ISP-001', version: '4.2', chunk_id: 'ISP-001__section_12_1_4', section_id: '12.1.4', citation_class: 'PRIMARY' },
           ],
+          status: 'complete',
         },
         citations: [
           { field: 'integration_tier', source: 'ISP-001 §12.2' },
@@ -334,23 +328,18 @@ export const escalatedScenario: DemoScenario = {
         summary:
           'DPA required (DPA-TM-001 row A-01); existing_dpa_status=NOT_STARTED → dpa_blocker=true. NDA status=PENDING → nda_blocker=true. Two workflow blockers emitted; pipeline halts at STEP-03.',
         structured: {
-          status: 'escalated',
           dpa_required: true,
           dpa_blocker: true,
           nda_status: 'PENDING',
           nda_blocker: true,
           trigger_rule_cited: [
-            { source_id: 'DPA-TM-001', version: '2.1', row_id: 'A-01', trigger_condition: 'Vendor processes personal data of EU/EEA data subjects on behalf of Lichen', citation_class: 'PRIMARY' },
+            { source_id: 'DPA-TM-001', version: '2.1', row_id: 'A-01', trigger_condition: 'Vendor will process personal data of EU/EEA data subjects on behalf of Lichen', citation_class: 'PRIMARY' },
           ],
           policy_citations: [
-            { source_id: 'DPA-TM-001', version: '2.1', row_id: 'A-01', trigger_condition: 'Vendor processes personal data of EU/EEA data subjects on behalf of Lichen', citation_class: 'PRIMARY' },
-            { source_id: 'ISP-001', version: '4.2', chunk_id: 'ISP-001__section_12', section_id: '12.1.4', citation_class: 'PRIMARY' },
+            { source_id: 'DPA-TM-001', version: '2.1', row_id: 'A-01', trigger_condition: 'Vendor will process personal data of EU/EEA data subjects on behalf of Lichen', citation_class: 'PRIMARY' },
+            { source_id: 'ISP-001', version: '4.2', chunk_id: 'ISP-001__section_12_1_4', section_id: '12.1.4', citation_class: 'PRIMARY' },
           ],
-          blockers: [
-            { id: 'BLK-LEG-001', kind: 'DPA_REQUIRED', description: 'Execute GDPR Art. 28 DPA before data exchange.', owner: 'Legal (General Counsel)', source: 'DPA-TM-001 row A-01' },
-            { id: 'BLK-LEG-002', kind: 'NDA_UNCONFIRMED', description: 'Confirm NDA execution before sensitive information exchange.', owner: 'Procurement', source: 'ISP-001 §12.1.4' },
-          ],
-          legal_notes: 'dpa_required=true with existing_dpa_status=NOT_STARTED → dpa_blocker=true. nda_status=PENDING → nda_blocker=true. Both blockers are workflow consequences requiring human action; pipeline halts.',
+          status: 'escalated',
         },
         citations: [
           { field: 'dpa_required', source: 'DPA-TM-001 row A-01' },

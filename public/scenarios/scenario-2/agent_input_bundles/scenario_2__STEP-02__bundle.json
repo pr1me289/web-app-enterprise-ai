@@ -625,9 +625,9 @@
   "excluded_evidence": [],
   "structured_fields": {
     "questionnaire": {
-      "integration_details.erp_type": "AMBIGUOUS",
+      "integration_details.erp_type": "DIRECT_API",
       "integration_details.erp_system": "SAP S/4HANA",
-      "integration_details.integration_description": "Vendor may deploy an extraction agent with service-account credentials to pull ERP data on a recurring schedule.",
+      "integration_details.integration_description": "Direct API integration to SAP S/4HANA. Vendor establishes a persistent authenticated session via OAuth client credentials and pulls production order, MRP, and inventory data over the SAP OData API on a scheduled interval. No middleware layer.",
       "data_classification_self_reported": true,
       "regulated_data_types": [
         "Shift schedules",

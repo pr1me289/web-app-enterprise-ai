@@ -1,7 +1,7 @@
 {
   "record_type": "pipeline_step",
   "pipeline_run_number": 4,
-  "scenario": "scenario_1",
+  "scenario": "scenario_2",
   "step_id": "STEP-06",
   "determination_key": "step_06_guidance",
   "agent_name": "checkoff_agent",

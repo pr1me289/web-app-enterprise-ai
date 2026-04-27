@@ -1,7 +1,7 @@
 {
   "record_type": "pipeline_step",
   "pipeline_run_number": 4,
-  "scenario": "scenario_1",
+  "scenario": "scenario_2",
   "step_id": "STEP-02",
   "determination_key": "step_02_security_classification",
   "agent_name": "it_security_agent",

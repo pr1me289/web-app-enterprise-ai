@@ -13,10 +13,10 @@ import type { DemoStep } from '../../../data/demo-codex/types';
 import type { ScenarioId, StepNumber } from '../../../data/demo-codex/types';
 
 // Hardcoded map of which (scenario, stepNumber) combinations have a captured bundle on disk.
-// scenario-1 has STEP-02 through STEP-06; scenario-2 has only STEP-02.
+// scenario-1 has STEP-02 through STEP-06; scenario-2 has STEP-02 and STEP-03 (run halts at STEP-03).
 const BUNDLE_EXISTS: Record<ScenarioId, Set<StepNumber>> = {
   clean: new Set([2, 3, 4, 5, 6] as StepNumber[]),
-  escalated: new Set([2] as StepNumber[]),
+  escalated: new Set([2, 3] as StepNumber[]),
 };
 
 function scenarioNumber(scenario: ScenarioId): string {
@@ -40,7 +40,7 @@ function bundleTitle(stepNumber: StepNumber, actor: string): string {
 
 function bundleLabel(stepNumber: StepNumber): string {
   const step = String(stepNumber).padStart(2, '0');
-  return `scenario_${step}__bundle.json`;
+  return `step_${step}__bundle.json`;
 }
 
 // ---- useBundleMeta hook ----

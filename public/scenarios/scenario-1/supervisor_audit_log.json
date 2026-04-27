@@ -1,6 +1,6 @@
 {
   "record_type": "supervisor_audit_log",
-  "scenario": "scenario_1",
+  "scenario": "scenario_2",
   "pipeline_run_number": 4,
   "pipeline_run_id": "run_b0ae836897",
   "source": "extracted from STEP-05 bundle.structured_fields.audit_log_entries (run #4 predates the standalone audit-log persistence patch)",

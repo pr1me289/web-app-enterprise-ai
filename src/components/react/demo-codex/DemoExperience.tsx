@@ -82,7 +82,9 @@ export default function DemoExperience() {
           className="grid gap-6 rounded-2xl border border-ink-100 bg-paper-muted/40 p-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:p-7"
         >
             <div className="flex flex-col gap-3">
-              <p className="eyebrow text-accent">Scenario · {meta.outcome}</p>
+              <p className="eyebrow text-accent">
+                Scenario {meta.id === 'escalated' ? '1' : '2'} · {meta.outcome}
+              </p>
               <h2 className="font-serif text-2xl font-semibold text-ink-900 md:text-3xl">
                 {meta.title}
               </h2>
@@ -96,7 +98,7 @@ export default function DemoExperience() {
                 </p>
                 <p className="mt-1 font-serif text-sm leading-relaxed text-ink-700">
                   {meta.id === 'escalated'
-                    ? 'Below is a replay of a scenario in which intake is complete, but authoritative evidence reveals unresolved legal blockers. The pipeline reaches STEP-03, emits an escalated status, and halts rather than continuing through conflicting or incomplete conditions.'
+                    ? 'Below is a replay of a scenario in which intake is complete, but authoritative evidence reveals unresolved legal blockers. The pipeline reaches STEP-03, the legal agent emits an escalated status, and halts rather than continuing through conflicting or incomplete conditions.'
                     : 'Below is a replay of a scenario in which intake is complete and the evidence is sufficient across all required steps. The pipeline moves cleanly through each stage, produces governed domain determinations, and completes with a final approval package instead of halting for escalation.'}
                 </p>
               </div>

@@ -1,7 +1,7 @@
 {
   "record_type": "supervisor_audit_log",
   "pipeline_run_number": 6,
-  "scenario": "scenario_2",
+  "scenario": "scenario_1",
   "pipeline_run_id": "run_a97dfc0bee",
   "timestamp_utc": "20260427T201012Z",
   "entry_count": 28,
