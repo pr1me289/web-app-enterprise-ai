@@ -531,9 +531,7 @@ const documentStack: StackStage[] = [
             {titlePart.data.title}
           </h1>
           {titlePart.data.lede && <p class="lede mt-7 max-w-2xl">{titlePart.data.lede}</p>}
-          <div class="silver-panel prose-narrative mt-8 max-w-2xl text-[1.02rem]">
-            <span class="silver-panel__corner silver-panel__corner--tl" aria-hidden="true"></span>
-            <span class="silver-panel__corner silver-panel__corner--br" aria-hidden="true"></span>
+          <div class="prose-narrative mt-8 max-w-2xl text-[1.02rem]">
             <TitleBody.Content />
           </div>
 
@@ -713,18 +711,6 @@ const documentStack: StackStage[] = [
       />
     </div>
 
-    <p class="mx-auto mt-12 max-w-2xl text-center text-lg leading-relaxed text-ink-700">
-      Meanwhile, a new product category — <em>context engines</em> — has crystallized in early
-      2026. Most of them are solving retrieval-over-code. Almost none are solving <strong
-        class="font-semibold text-ink-900"
-        >governed translation of stakeholder intent into scoped, authority-aware agent context.</strong
-      >
-    </p>
-
-    <div class="mt-20 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {pressurePoints.map((point) => <TakeawayCard title={point.title}>{point.body}</TakeawayCard>)}
-    </div>
-
     <div class="mt-20 max-w-3xl">
       <p class="eyebrow mb-3 text-accent">Landscape</p>
       <h3 class="font-serif text-2xl font-semibold text-ink-900 md:text-3xl">
@@ -757,29 +743,51 @@ const documentStack: StackStage[] = [
       </Fragment>
     </CompetitorGrid>
 
-    <ComparisonBlock
-      left={{
-        label: 'Common pattern',
-        title: 'Naive RAG',
-        points: [
-          'One flat searchable corpus with weak source boundaries.',
-          'Questionnaire answers, policy, and informal discussion blend together.',
-          'Similarity search becomes an implicit governance layer.',
-          'Output quality depends on retrieval luck and prompt phrasing.',
-        ],
-      }}
-      right={{
-        label: 'This project',
-        title: 'Governed agentic retrieval',
-        points: [
-          'Per-source lanes with dense, lexical, and direct structured access.',
-          'Authority tiers and permissions preserved before the agent sees anything.',
-          'Supervisor-planned subqueries and bundle assembly replace one-pass search.',
-          'Escalations surface missing or conflicting evidence instead of hiding it.',
-        ],
-      }}
-      emphasis="right"
-    />
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
+      {/* Row 1 — Common pattern + Data structure approach */}
+      <article class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors">
+        <p class="eyebrow mb-2">Common pattern</p>
+        <h3 class="font-serif text-lg text-ink-900">Naive RAG</h3>
+        <ul class="mt-4 space-y-2 text-sm leading-relaxed">
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>One flat searchable corpus with weak source boundaries.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Questionnaire answers, policy, and informal discussion blend together.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Similarity search becomes an implicit governance layer.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Output quality depends on retrieval luck and prompt phrasing.</span></li>
+        </ul>
+      </article>
+      <article class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors">
+        <p class="eyebrow mb-2">Data structure approach</p>
+        <h3 class="font-serif text-lg text-ink-900">GraphRAG</h3>
+        <ul class="mt-4 space-y-2 text-sm leading-relaxed">
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Knowledge is organized as entities and relationships rather than only flat chunks.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Strong for multi-hop reasoning across people, systems, documents, and dependencies.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Useful when the problem depends on traversing a connected knowledge structure.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Requires graph construction and maintenance before retrieval can work well.</span></li>
+        </ul>
+      </article>
+
+      {/* Row 2 — Context management approach + This project */}
+      <article class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors">
+        <p class="eyebrow mb-2">Context management approach</p>
+        <h3 class="font-serif text-lg text-ink-900">Context Engine</h3>
+        <ul class="mt-4 space-y-2 text-sm leading-relaxed">
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Context is assembled deliberately from multiple source types instead of pulled from one shared search layer.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Retrieval, authority, permissions, and bundle composition are treated as separate governed decisions.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Supervisor-planned subqueries and scoped bundles replace one-pass context gathering.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Best suited for workflows where correctness depends on structure, sequencing, and human-owned escalation.</span></li>
+        </ul>
+      </article>
+      <article class="flex h-full flex-col rounded-lg border border-ink-900 bg-paper p-6 text-ink-800 shadow-soft transition-colors">
+        <p class="eyebrow mb-2">This project</p>
+        <h3 class="font-serif text-lg text-ink-900">Governed agentic retrieval</h3>
+        <ul class="mt-4 space-y-2 text-sm leading-relaxed">
+          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Per-source lanes with dense, lexical, and direct structured access.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Authority tiers and permissions preserved before the agent sees anything.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Supervisor-planned subqueries and bundle assembly replace one-pass search.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Escalations surface missing or conflicting evidence instead of hiding it.</span></li>
+        </ul>
+      </article>
+    </div>
 
     <DetailExpander
       summary="Enterprise context is not the same as project context"
@@ -936,19 +944,6 @@ const documentStack: StackStage[] = [
       </aside>
     </div>
 
-    <Callout kind="rationale" title="The source-of-truth inversion">
-      The PRD remains the human stakeholder anchor, but the source of truth for execution shifts
-      into the spec stack. The real product of governance is not a markdown document. It is an
-      evidence-aware runtime package that tells the system what it may retrieve, how it should
-      behave, and when it must stop.
-    </Callout>
-
-    <DetailExpander summary="What executable context actually contains" kind="spec" client:visible>
-      <ul class="list-disc pl-5">
-        {executableContext.map((item) => <li>{item}</li>)}
-      </ul>
-    </DetailExpander>
-
     <div class="prose-narrative mt-16 max-w-3xl">
       <IntroBody.Content />
     </div>
@@ -1025,6 +1020,18 @@ const documentStack: StackStage[] = [
         >
       </StatementCallout>
       <SchoolsOfThought schools={schools} />
+    </div>
+
+    <div class="mt-16">
+      <DetailExpander
+        summary="What executable context actually contains"
+        kind="spec"
+        client:visible
+      >
+        <ul class="list-disc pl-5">
+          {executableContext.map((item) => <li>{item}</li>)}
+        </ul>
+      </DetailExpander>
     </div>
 
     <div id="retrieval-process" class="mt-28 scroll-mt-24">
@@ -1363,7 +1370,7 @@ const documentStack: StackStage[] = [
         href="/demo"
         class="inline-flex items-center gap-2 rounded-full bg-ink-900 px-5 py-3 font-medium text-paper no-underline shadow-soft transition-colors hover:bg-ink-800"
       >
-        See the three-pane replay
+        See the demo replay
         <span aria-hidden>→</span>
       </a>
       <a
