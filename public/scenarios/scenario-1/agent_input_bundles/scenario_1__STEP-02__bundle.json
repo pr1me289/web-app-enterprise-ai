@@ -625,17 +625,17 @@
   "excluded_evidence": [],
   "structured_fields": {
     "questionnaire": {
-      "integration_details.erp_type": "DIRECT_API",
+      "integration_details.erp_type": "EXPORT_ONLY",
       "integration_details.erp_system": "SAP S/4HANA",
-      "integration_details.integration_description": "Direct API integration to SAP S/4HANA. Vendor establishes a persistent authenticated session via OAuth client credentials and pulls production order, MRP, and inventory data over the SAP OData API on a scheduled interval. No middleware layer.",
-      "data_classification_self_reported": true,
+      "integration_details.integration_description": "Scheduled export-only transfer over SFTP. No service account and no persistent ERP session.",
+      "data_classification_self_reported": false,
       "regulated_data_types": [
-        "Shift schedules",
-        "Employee IDs for EU-based facilities"
+        "Inventory position exports",
+        "Demand forecast outputs"
       ],
-      "eu_personal_data_flag": true,
-      "data_subjects_eu": true,
-      "existing_nda_status": "PENDING"
+      "eu_personal_data_flag": false,
+      "data_subjects_eu": false,
+      "existing_nda_status": "EXECUTED"
     },
     "policy_chunks": {
       "erp_tier_policy_chunks": [

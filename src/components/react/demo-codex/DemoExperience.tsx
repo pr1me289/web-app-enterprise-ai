@@ -16,8 +16,10 @@ import FinalOutputsPanel from './FinalOutputsPanel';
 import TakeawayPanel from './TakeawayPanel';
 import { motion } from 'framer-motion';
 
-// Focus frame styling — black border, faintly tinted translucent gray fill.
-const FOCUS_FRAME = 'rounded-3xl border-2 border-ink-900 bg-ink-900/[0.04] p-5 md:p-7';
+// Focus frame styling — black border, faintly tinted translucent gray fill,
+// radiating warm-accent halo so the framed content stands out from the page.
+const FOCUS_FRAME =
+  'rounded-3xl border-2 border-ink-900 bg-ink-900/[0.04] p-5 md:p-7 shadow-[0_0_90px_-20px_rgba(157,87,40,0.4),0_0_32px_-8px_rgba(157,87,40,0.25)]';
 
 export default function DemoExperience() {
   const scenario = useDemoCodexStore((s) => s.scenario);

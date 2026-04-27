@@ -1,15 +1,141 @@
 // Renders one card per retrieved source for this step. Clicking a card opens
-// a Radix Dialog with a placeholder document preview. Real document content
-// will be wired in later — for now the dialog surfaces the source's metadata,
-// retrieval lane reasoning, and a labelled placeholder body.
-import { useState } from 'react';
-import * as Dialog from '@radix-ui/react-dialog';
+// the site-wide DocumentViewer dialog (same as the Overview page) in place of
+// the old in-file custom dialog. Supported formats: .md → markdown, .json →
+// json, .csv → sheet (via .xlsx sibling in public/mock-documents/).
+// pipeline_state and no_file items render as plain non-interactive cards.
 import { motion } from 'framer-motion';
-import { FileText, ExternalLink } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { AuthorityBadge, LaneBadge, TreatmentBadge } from './badges';
+import DocumentViewer, { type DocKind } from '../DocumentViewer';
 import type { DemoStep, RetrievedEvidenceItem } from '../../../data/demo-codex/types';
+import type { ScenarioId } from '../../../data/demo-codex/types';
 
-export default function SourceDocumentsDrawer({ step }: { step: DemoStep }) {
+// ---- Document path resolution ----
+
+type DocRef =
+  | { kind: DocKind; src: string; title: string }
+  | { kind: 'note'; note: string };
+
+function scenarioNumber(scenario: ScenarioId): string {
+  return scenario === 'clean' ? '1' : '2';
+}
+
+function resolveDoc(name: string, scenario: ScenarioId): DocRef {
+  const n = scenarioNumber(scenario);
+  const base = `/scenarios/scenario-${n}/mock_documents`;
+
+  // ISP-001 — IT Security Policy (.md)
+  if (name.startsWith('ISP-001')) {
+    return {
+      kind: 'markdown',
+      src: `${base}/IT_Security_Policy_V4.2.md`,
+      title: 'IT Security Policy V4.2',
+    };
+  }
+
+  // DPA-TM-001 — DPA Legal Trigger Matrix (.csv → .xlsx in /mock-documents/)
+  if (name.startsWith('DPA-TM-001')) {
+    return {
+      kind: 'sheet',
+      src: '/mock-documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx',
+      title: 'DPA Legal Trigger Matrix v1.3',
+    };
+  }
+
+  // PAM-001 — Procurement Approval Matrix (.csv → .xlsx in /mock-documents/)
+  if (name.startsWith('PAM-001')) {
+    return {
+      kind: 'sheet',
+      src: '/mock-documents/Procurement_Approval_Matrix_v2_0.xlsx',
+      title: 'Procurement Approval Matrix v2.0',
+    };
+  }
+
+  // VQ-OC-001 — OptiChain vendor questionnaire (.json)
+  if (name.startsWith('VQ-OC-001')) {
+    const filename =
+      scenario === 'clean'
+        ? 'OptiChain_VSQ_001_v2_1_scenario01.json'
+        : 'OptiChain_VSQ_001_v2_1.json';
+    return { kind: 'json', src: `${base}/${filename}`, title: 'OptiChain Vendor Security Questionnaire' };
+  }
+
+  // STAKEHOLDER-MAP-001
+  if (name.startsWith('STAKEHOLDER-MAP-001')) {
+    return {
+      kind: 'json',
+      src: `${base}/Stakeholder_Map_PRQ_2024_0047.json`,
+      title: 'Stakeholder Map PRQ-2024-0047',
+    };
+  }
+
+  // SLK-001 — Slack thread export (.md)
+  if (name.startsWith('SLK-001')) {
+    const filename =
+      scenario === 'clean'
+        ? 'Slack_Thread_Export_scenario01.md'
+        : 'Slack_Thread_Export_001.md';
+    return { kind: 'markdown', src: `${base}/${filename}`, title: 'Slack Thread Export' };
+  }
+
+  // Pipeline-state evidence — upstream agent outputs bundled into the context
+  if (
+    /STEP-0[1-6]/.test(name) ||
+    name.includes('Upstream determination') ||
+    name.includes('outputs') ||
+    name.includes('checklist')
+  ) {
+    return {
+      kind: 'note',
+      note: 'This evidence is upstream pipeline state, not a source document. See the agent input bundle drawer for the bundled values.',
+    };
+  }
+
+  // CHKLST-TMPL-001 — template not captured
+  if (name.startsWith('CHKLST-TMPL-001')) {
+    return { kind: 'note', note: 'Mock template not yet captured.' };
+  }
+
+  return { kind: 'note', note: 'No underlying mock document for this evidence type.' };
+}
+
+// ---- Source card markup (shared between interactive and non-interactive variants) ----
+
+function SourceCardContent({
+  item,
+}: {
+  item: RetrievedEvidenceItem;
+}) {
+  return (
+    <>
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="font-mono text-[0.72rem] text-ink-900">{item.name}</p>
+          <p className="font-mono text-[0.6rem] uppercase tracking-[0.1em] text-ink-500">
+            {item.type}
+          </p>
+        </div>
+        <FileText size={14} className="shrink-0 text-ink-400" aria-hidden />
+      </div>
+      <div className="flex flex-wrap items-center gap-1.5">
+        <AuthorityBadge tier={item.authorityTier} size="sm" />
+        <LaneBadge lane={item.lane} size="sm" />
+        <TreatmentBadge treatment={item.treatment} size="sm" />
+      </div>
+      <p className="text-[0.7rem] leading-relaxed text-ink-600">{item.reason}</p>
+    </>
+  );
+}
+
+// ---- Source card + dialog ----
+
+export default function SourceDocumentsDrawer({
+  step,
+  scenario,
+}: {
+  step: DemoStep;
+  scenario: ScenarioId;
+}) {
   if (step.retrievedEvidence.length === 0) {
     return (
       <p className="px-5 py-4 text-sm italic text-ink-500">No sources retrieved for this step.</p>
@@ -18,113 +144,54 @@ export default function SourceDocumentsDrawer({ step }: { step: DemoStep }) {
   return (
     <div className="grid gap-3 p-5 md:grid-cols-2">
       {step.retrievedEvidence.map((item) => (
-        <SourceCard key={item.id} item={item} stepActor={step.actor} />
+        <SourceCard key={item.id} item={item} scenario={scenario} />
       ))}
     </div>
   );
 }
 
-function SourceCard({ item, stepActor }: { item: RetrievedEvidenceItem; stepActor: string }) {
-  const [open, setOpen] = useState(false);
-  return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
-      <Dialog.Trigger asChild>
-        <motion.button
-          type="button"
-          whileHover={{ y: -1 }}
-          className="flex flex-col gap-2 rounded-xl border border-ink-100 bg-paper p-3 text-left shadow-soft transition-colors hover:border-ink-300"
-        >
-          <div className="flex items-start justify-between gap-2">
-            <div className="min-w-0">
-              <p className="font-mono text-[0.72rem] text-ink-900">{item.name}</p>
-              <p className="font-mono text-[0.6rem] uppercase tracking-[0.1em] text-ink-500">
-                {item.type}
-              </p>
-            </div>
-            <FileText size={14} className="shrink-0 text-ink-400" aria-hidden />
-          </div>
-          <div className="flex flex-wrap items-center gap-1.5">
-            <AuthorityBadge tier={item.authorityTier} size="sm" />
-            <LaneBadge lane={item.lane} size="sm" />
-            <TreatmentBadge treatment={item.treatment} size="sm" />
-          </div>
-          <p className="text-[0.7rem] leading-relaxed text-ink-600">{item.reason}</p>
-          <span className="mt-1 inline-flex items-center gap-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-accent">
-            <ExternalLink size={11} aria-hidden /> Open preview
-          </span>
-        </motion.button>
-      </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-50 bg-ink-950/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content
-          aria-describedby={undefined}
-          className="fixed left-1/2 top-1/2 z-50 flex h-[80vh] w-[92vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl bg-paper shadow-2xl"
-        >
-          <header className="flex items-start justify-between gap-4 border-b border-ink-100 bg-paper px-5 py-4">
-            <div className="min-w-0">
-              <p className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-ink-400">
-                {item.type}
-              </p>
-              <Dialog.Title className="mt-1 truncate font-serif text-lg font-semibold text-ink-900">
-                {item.name}
-              </Dialog.Title>
-              <div className="mt-2 flex flex-wrap items-center gap-1.5">
-                <AuthorityBadge tier={item.authorityTier} size="sm" />
-                <LaneBadge lane={item.lane} size="sm" />
-                <TreatmentBadge treatment={item.treatment} size="sm" />
-              </div>
-            </div>
-            <Dialog.Close asChild>
-              <button
-                type="button"
-                aria-label="Close"
-                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-ink-200 text-ink-600 transition-colors hover:border-ink-900 hover:text-ink-900"
-              >
-                ×
-              </button>
-            </Dialog.Close>
-          </header>
+function SourceCard({
+  item,
+  scenario,
+}: {
+  item: RetrievedEvidenceItem;
+  scenario: ScenarioId;
+}) {
+  const doc = resolveDoc(item.name, scenario);
 
-          <div className="min-h-0 flex-1 overflow-auto bg-paper-muted/40 p-6">
-            <div className="mx-auto max-w-2xl rounded-2xl border border-dashed border-ink-200 bg-paper p-6">
-              <p className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-accent">
-                Placeholder document preview
-              </p>
-              <p className="mt-2 font-serif text-lg text-ink-900">
-                {item.name} — full content coming soon
-              </p>
-              <p className="mt-3 text-sm leading-relaxed text-ink-600">
-                Real document content for <span className="font-mono">{item.name}</span> will be
-                wired here once the upstream pipeline run is captured. The preview will render the
-                relevant sections of the source as the {stepActor.toLowerCase()} agent saw them,
-                with the same citation chips that appear in this demo.
-              </p>
-              <div className="mt-5 rounded-xl border border-ink-100 bg-paper-muted/40 p-4">
-                <p className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-ink-500">
-                  Why this source was {item.treatment === 'excluded' ? 'excluded' : 'included'}
-                </p>
-                <p className="mt-1 text-sm leading-relaxed text-ink-700">{item.reason}</p>
-              </div>
-              <div className="mt-3 grid gap-2 sm:grid-cols-2">
-                <Stat label="Chunks retrieved" value={String(item.chunksRetrieved)} />
-                <Stat label="Chunks admitted" value={String(item.chunksAdmitted)} />
-              </div>
-              <p className="mt-5 font-mono text-[0.6rem] uppercase tracking-[0.12em] text-ink-400">
-                TODO: replace placeholder with real captured source view
-              </p>
-            </div>
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+  // Non-interactive card for pipeline state / no-file evidence
+  if (doc.kind === 'note') {
+    return (
+      <div className="flex flex-col gap-2 rounded-xl border border-ink-100 bg-paper p-3 text-left shadow-soft">
+        <SourceCardContent item={item} />
+        <p className="mt-1 rounded-lg border border-dashed border-ink-200 bg-paper-muted/40 px-3 py-2 text-[0.68rem] italic text-ink-500">
+          {doc.note}
+        </p>
+      </div>
+    );
+  }
+
+  // Interactive card — the card itself is the DocumentViewer trigger
+  const cardTrigger = (
+    <motion.button
+      type="button"
+      whileHover={{ y: -1 }}
+      className="flex flex-col gap-2 rounded-xl border border-ink-100 bg-paper p-3 text-left shadow-soft transition-colors hover:border-ink-300"
+    >
+      <SourceCardContent item={item} />
+      <span className="mt-1 inline-flex items-center gap-1 font-mono text-[0.6rem] uppercase tracking-[0.1em] text-accent">
+        Open preview →
+      </span>
+    </motion.button>
   );
-}
 
-function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-ink-100 bg-paper-muted/40 p-3 text-center">
-      <p className="font-mono text-[0.6rem] uppercase tracking-[0.1em] text-ink-500">{label}</p>
-      <p className="mt-1 font-serif text-lg text-ink-900">{value}</p>
-    </div>
+    <DocumentViewer
+      src={doc.src}
+      title={doc.title}
+      kind={doc.kind}
+      label={item.name}
+      trigger={cardTrigger}
+    />
   );
 }

@@ -1,5 +1,5 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { marked } from 'marked';
 
 export type DocKind = 'pdf' | 'json' | 'markdown' | 'sheet' | 'docx';
@@ -16,6 +16,8 @@ interface Props {
   kind: DocKind;
   label?: string;
   overrides?: SheetOverrides;
+  /** If provided, renders as the Dialog.Trigger instead of the default file-pill button. */
+  trigger?: ReactNode;
 }
 
 const typeLabel: Record<DocKind, string> = {
@@ -61,7 +63,7 @@ function FileIcon({ kind }: { kind: DocKind }) {
   );
 }
 
-export default function DocumentViewer({ src, title, kind, label, overrides }: Props) {
+export default function DocumentViewer({ src, title, kind, label, overrides, trigger }: Props) {
   const [open, setOpen] = useState(false);
   const [content, setContent] = useState<string | null>(null);
   const [sheetData, setSheetData] = useState<{
@@ -129,15 +131,17 @@ export default function DocumentViewer({ src, title, kind, label, overrides }: P
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        <button
-          type="button"
-          className="group inline-flex max-w-full items-center gap-2 rounded-md border border-ink-200 bg-paper px-2.5 py-1.5 text-left text-xs text-ink-700 shadow-soft transition-colors hover:border-ink-900 hover:bg-paper-muted"
-        >
-          <FileIcon kind={kind} />
-          <span className="min-w-0 truncate font-medium group-hover:text-ink-900">
-            {label ?? title}
-          </span>
-        </button>
+        {trigger ?? (
+          <button
+            type="button"
+            className="group inline-flex max-w-full items-center gap-2 rounded-md border border-ink-200 bg-paper px-2.5 py-1.5 text-left text-xs text-ink-700 shadow-soft transition-colors hover:border-ink-900 hover:bg-paper-muted"
+          >
+            <FileIcon kind={kind} />
+            <span className="min-w-0 truncate font-medium group-hover:text-ink-900">
+              {label ?? title}
+            </span>
+          </button>
+        )}
       </Dialog.Trigger>
 
       <Dialog.Portal>

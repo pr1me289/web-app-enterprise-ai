@@ -50,10 +50,10 @@
     "erp_integration": {
       "erp_system": "SAP S/4HANA",
       "integration_required": true,
-      "integration_description": "Direct API integration to SAP S/4HANA. Vendor establishes a persistent authenticated session via OAuth client credentials and pulls production order, MRP, and inventory data over the SAP OData API on a scheduled interval. No middleware layer.",
-      "erp_type": "DIRECT_API",
-      "erp_tier_status": "TIER_1",
-      "reviewer_note": "Direct API integration to SAP S/4HANA over an authenticated OAuth session, no mediating middleware. Per ISP-001 §12.2, this is a TIER_1 integration. Combined with EU employee personal data in scope, the resulting data classification is REGULATED and full IT Security review is mandatory; fast-track is disallowed."
+      "integration_description": "Scheduled data extraction of production order data, MRP outputs, and inventory position records. Extraction initiated from Lichen side via SAP standard export functionality or a lightweight extraction agent with service account credentials scoped to relevant SAP data objects. Data transmitted over encrypted SFTP or HTTPS to OptiChain ingestion API. No persistent authenticated session into SAP maintained.",
+      "erp_type": "UNCLASSIFIED — PENDING REVIEW",
+      "erp_tier_status": "PROVISIONAL",
+      "reviewer_note": "ERP integration description is ambiguous. Vendor states no persistent SAP session but references a possible extraction agent with service account credentials. It is unclear whether this constitutes Tier 2 (mediated) or Tier 3 (indirect/file-based) under ISP-001 §12.2. IT Security must review and formally assign an integration tier before onboarding proceeds."
     },
     "additional_system_access": [
       {
@@ -208,20 +208,20 @@
     }
   },
   "legal_and_contractual_status": {
-    "existing_nda_status": "PENDING",
+    "existing_nda_status": "PROVISIONAL",
     "existing_dpa_status": "PENDING",
     "nda_details": {
       "draft_transmitted_by_vendor": "2024-02-19",
       "countersigned": false,
       "status_as_of_submission": "Draft transmitted by OptiChain; not yet countersigned by Lichen as of 2024-03-04",
-      "reviewer_note": "NDA STATUS: PENDING. ISP-001 §12.1.4 requires NDA execution before the information-exchange phase may proceed. Onboarding may not advance to data sharing or integration planning until Procurement confirms fully executed NDA. Owner: Procurement / Legal."
+      "reviewer_note": "NDA STATUS: PROVISIONAL. ISP-001 §12.1.4 requires NDA execution before the information-exchange phase may proceed. Onboarding may not advance to data sharing or integration planning until Procurement confirms fully executed NDA. Owner: Procurement / Legal."
     },
     "existing_msa": false,
     "prior_contract": false,
     "active_pilot": false,
     "first_engagement": true,
     "dpa_required": true,
-    "dpa_status": "NOT_STARTED",
+    "dpa_status": "NOT YET EXECUTED — hard blocker",
     "dpa_details": {
       "vendor_prepared_to_execute": true,
       "accepts_lichen_standard_terms": true,
@@ -287,11 +287,11 @@
     "blocking_items": [
       {
         "item_number": 1,
-        "issue": "ERP integration tier classification",
+        "issue": "ERP integration tier unclassified",
         "source_question": "Q2.2",
         "policy_reference": "ISP-001 §12.2 — ERP Integration Tier Table",
-        "status": "RESOLVED",
-        "required_action": "Direct API integration confirmed; assigned TIER_1 by IT Security. REGULATED data classification; fast-track disallowed; full security review required.",
+        "status": "PROVISIONAL",
+        "required_action": "IT Security to request architecture diagram from OptiChain. Assign tier before integration planning proceeds.",
         "owner": "IT Security"
       },
       {
@@ -308,7 +308,7 @@
         "issue": "NDA execution unconfirmed",
         "source_question": "Q5.1",
         "policy_reference": "ISP-001 §12.1.4",
-        "status": "PENDING",
+        "status": "PROVISIONAL",
         "required_action": "Procurement to confirm NDA execution with OptiChain's legal counterpart. Information-exchange phase blocked until confirmed.",
         "owner": "Procurement / Legal"
       }
