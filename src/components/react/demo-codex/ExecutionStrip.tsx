@@ -24,15 +24,6 @@ export default function ExecutionStrip() {
 
   return (
     <div className="relative">
-      <div className="mb-3 flex items-center justify-between gap-4">
-        <p className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-ink-500">
-          Execution strip
-        </p>
-        <p className="font-mono text-[0.62rem] uppercase tracking-[0.1em] text-ink-400">
-          {scenarios[scenario].steps.length} steps · {scenario === 'escalated' ? 'halts at STEP-03' : 'runs end-to-end'}
-        </p>
-      </div>
-
       <ol className="flex flex-col gap-3 md:flex-row md:items-stretch md:gap-0">
         {steps.map((step, idx) => {
           const computedStatus = computeStatus({
@@ -52,11 +43,13 @@ export default function ExecutionStrip() {
             computedStatus === 'BLOCKED';
 
           return (
-            <li key={step.id} className="flex items-stretch md:flex-1">
+            <li key={step.id} className="flex items-stretch md:min-w-0 md:flex-1">
               <ExecutionStepCard
                 step={step}
                 status={computedStatus}
                 focused={isFocused}
+                paused={mode === 'paused'}
+                playing={mode === 'playing'}
                 onClick={() => selectStep(step.stepNumber)}
               />
               {idx < steps.length - 1 && (
@@ -77,23 +70,41 @@ function ExecutionStepCard({
   step,
   status,
   focused,
+  paused,
+  playing,
   onClick,
 }: {
   step: DemoStep;
   status: StepStatus;
   focused: boolean;
+  paused: boolean;
+  playing: boolean;
   onClick: () => void;
 }) {
+  // Focused-card border tint reflects replay mode: green while playing,
+  // red while paused, accent (orange) when neither (stopped / ended).
+  const focusedBorderCls = playing
+    ? 'border-spruce-700 bg-paper'
+    : paused
+      ? 'border-rose-300 bg-paper'
+      : 'border-accent bg-paper';
+
   const ringStyle =
     status === 'NOT_RUN'
       ? 'border-dashed border-ink-200 bg-paper-muted/30 opacity-60'
       : focused
-        ? 'border-accent bg-paper'
+        ? focusedBorderCls
         : status === 'COMPLETE'
           ? 'border-spruce-700/30 bg-paper'
           : status === 'ESCALATED' || status === 'BLOCKED'
             ? 'border-accent/40 bg-paper'
             : 'border-ink-100 bg-paper';
+
+  const focusRingCls = playing
+    ? 'ring-spruce-700/70 shadow-[0_0_0_6px_rgba(33,71,60,0.10)]'
+    : paused
+      ? 'ring-rose-300 shadow-[0_0_0_6px_rgba(190,140,140,0.14)]'
+      : 'ring-accent shadow-[0_0_0_6px_rgba(157,87,40,0.10)]';
 
   const labelTone = status === 'NOT_RUN' ? 'text-ink-400' : 'text-ink-900';
 
@@ -103,13 +114,13 @@ function ExecutionStepCard({
       onClick={onClick}
       aria-current={focused ? 'step' : undefined}
       aria-label={`${step.id} — ${step.shortLabel} · ${status}`}
-      className={`group relative flex w-full flex-col gap-2 rounded-2xl border px-3 py-3 text-left transition-all md:min-w-[10rem] md:py-3.5 ${ringStyle} hover:-translate-y-0.5 hover:shadow-soft`}
+      className={`group relative flex w-full flex-col gap-2 rounded-2xl border px-3 py-3 text-left transition-all md:min-w-0 md:py-3.5 ${ringStyle} hover:-translate-y-0.5 hover:shadow-soft`}
     >
       {focused && (
         <motion.span
           layoutId="step-focus-ring"
           aria-hidden
-          className="absolute inset-0 -z-10 rounded-2xl ring-2 ring-accent shadow-[0_0_0_6px_rgba(157,87,40,0.10)]"
+          className={`absolute inset-0 -z-10 rounded-2xl ring-2 ${focusRingCls}`}
           transition={{ type: 'spring', bounce: 0.18, duration: 0.55 }}
         />
       )}
@@ -118,7 +129,13 @@ function ExecutionStepCard({
         <span className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-ink-400">
           {step.id}
         </span>
-        <StatusPill status={status} size="sm" withLabel={false} pulse={status === 'IN_PROGRESS'} />
+        <StatusPill
+          status={status}
+          size="sm"
+          withLabel={false}
+          pulse={status === 'IN_PROGRESS' && !paused}
+          paused={paused}
+        />
       </div>
 
       <div className="flex w-full flex-col items-start gap-0.5">

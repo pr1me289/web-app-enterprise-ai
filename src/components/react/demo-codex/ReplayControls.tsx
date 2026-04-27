@@ -53,14 +53,23 @@ export default function ReplayControls() {
     }
   }
 
+  // Primary CTA color flips based on mode: red while playing (the button
+  // becomes Pause), green while paused (becomes Resume), neutral dark for
+  // stopped/ended (Start replay / Replay).
+  const primaryCls = isPlaying
+    ? 'bg-rose-100 text-rose-800 hover:bg-rose-200'
+    : mode === 'paused'
+      ? 'bg-spruce-100 text-spruce-800 hover:bg-spruce-200'
+      : 'bg-ink-900 text-paper hover:bg-ink-800';
+
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-wrap items-center gap-2">
       {/* Primary CTA */}
       <motion.button
         type="button"
         onClick={onPrimary}
         whileTap={{ scale: 0.97 }}
-        className="inline-flex h-10 items-center gap-2 rounded-full bg-ink-900 px-5 text-paper transition-colors hover:bg-ink-800"
+        className={`inline-flex h-9 items-center gap-2 rounded-full px-5 transition-colors ${primaryCls}`}
       >
         {isPlaying ? <Pause size={14} /> : <Play size={14} />}
         <span className="font-mono text-[0.7rem] uppercase tracking-[0.12em]">
@@ -94,7 +103,7 @@ export default function ReplayControls() {
         onClick={jumpToEnd}
         disabled={isStopped || phase === 'completed'}
         aria-label="Jump to final state"
-        className="inline-flex h-10 items-center gap-2 rounded-full bg-accent px-3.5 text-paper shadow-soft transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent"
+        className="inline-flex h-9 items-center gap-2 rounded-full bg-accent px-3.5 text-paper shadow-soft transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-accent"
       >
         <FastForward size={14} />
         <span className="font-mono text-[0.65rem] uppercase tracking-[0.1em]">Jump to end</span>
@@ -166,7 +175,7 @@ function SecondaryButton({
       onClick={onClick}
       disabled={disabled}
       aria-label={label}
-      className="inline-flex h-10 items-center gap-2 rounded-full border border-ink-200 bg-paper px-3.5 text-ink-700 shadow-soft transition-colors hover:border-ink-900 hover:text-ink-900 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-ink-200 disabled:hover:text-ink-700"
+      className="inline-flex h-9 items-center gap-2 rounded-full border border-ink-200 bg-paper px-3.5 text-ink-700 shadow-soft transition-colors hover:border-ink-900 hover:text-ink-900 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-ink-200 disabled:hover:text-ink-700"
     >
       {children}
     </button>

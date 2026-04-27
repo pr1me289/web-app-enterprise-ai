@@ -1,14 +1,13 @@
 // The Demo page experience: scenario selector, replay controls, supervisor
 // rail, execution strip, current-step panel, technical drawers, final outputs,
 // takeaway. Single React island; all state lives in the codex Zustand store.
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MotionConfig } from 'framer-motion';
 import { useDemoCodexStore, lastExecutedStep, PHASE_INDEX, phaseIndex } from './store';
 import { scenarios } from '../../../data/demo-codex';
 import ScenarioSelector from './ScenarioSelector';
 import ReplayControls from './ReplayControls';
 import RunSummaryChips from './RunSummaryChips';
-import SupervisorRail from './SupervisorRail';
 import ExecutionStrip from './ExecutionStrip';
 import CurrentStepPanel from './CurrentStepPanel';
 import StepInspectionDrawers from './StepInspectionDrawers';
@@ -70,9 +69,53 @@ export default function DemoExperience() {
 
   const meta = scenarios[scenario];
 
+  // Hide the sticky strip + controls once the Final Outputs section enters
+  // the viewport. The user has reached the conclusion; the playback affordances
+  // are no longer relevant. Show them again when scrolling back up.
+  const finalOutputsSentinelRef = useRef<HTMLDivElement>(null);
+  const [hideStickyStack, setHideStickyStack] = useState(false);
+  useEffect(() => {
+    const target = finalOutputsSentinelRef.current;
+    if (!target) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setHideStickyStack(entry.isIntersecting),
+      { rootMargin: '0px' },
+    );
+    observer.observe(target);
+    return () => observer.disconnect();
+    // Re-observe when the branch switch remounts the sentinel div.
+  }, [runFinalized]);
+
+  // Scroll the focus frame back into view when the replay advances to a new
+  // step. Without this, the page collapses upward as the new step's stages
+  // 2–4 hide their bodies, leaving the user's viewport stranded in the Final
+  // Outputs section. Skip while the run is stopped (initial idle state) and
+  // skip the very first render so we don't yank the page on load.
+  const stepAnchorRef = useRef<HTMLDivElement>(null);
+  const isFirstRender = useRef(true);
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if (mode === 'stopped') return;
+    stepAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // mode is intentionally omitted from deps — only run on currentStep change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep]);
+
   return (
     <MotionConfig reducedMotion="user">
       <div className="flex flex-col gap-12">
+        {/* Scenario selector — sits above the scenario framing strip so the
+            user picks which scenario before reading its description. */}
+        <div className="flex flex-col items-center gap-2">
+          <ScenarioSelector />
+          <p className="text-center text-xs italic text-ink-400">
+            Click between our two full-pipeline runs here
+          </p>
+        </div>
+
         {/* Scenario framing strip */}
         <motion.div
           key={meta.id}
@@ -120,21 +163,27 @@ export default function DemoExperience() {
             </div>
         </motion.div>
 
-        {/* Scenario selector + replay controls */}
-        <div className="flex flex-col gap-4">
-          <ScenarioSelector />
-          <div className="rounded-2xl border border-ink-100 bg-paper p-3 shadow-soft md:p-4">
+        {/* Sticky stack — execution strip on top, replay controls as a
+            separate full-width bar below. The supervisor rail no longer
+            lives here; it sits in document flow above the focus frame.
+            Fades out once the Final Outputs section enters the viewport. */}
+        <div
+          className={`sticky top-2 z-30 -mx-4 flex flex-col gap-2 px-4 transition-opacity duration-300 md:top-4 md:mx-0 md:px-0 ${
+            hideStickyStack ? 'pointer-events-none opacity-0' : 'opacity-100'
+          }`}
+        >
+          <div className="rounded-2xl border border-ink-100 bg-paper/95 p-3 shadow-soft backdrop-blur md:p-4">
+            <ExecutionStrip />
+          </div>
+          <div className="rounded-2xl border border-ink-100 bg-paper/95 px-4 py-1.5 shadow-soft backdrop-blur">
             <ReplayControls />
           </div>
         </div>
 
-        {/* Sticky supervisor rail */}
-        <div className="sticky top-2 z-30 -mx-4 px-4 md:top-4 md:mx-0 md:px-0">
-          <SupervisorRail />
-        </div>
-
-        {/* Execution strip */}
-        <ExecutionStrip />
+        {/* Scroll anchor — used by the step-advance auto-scroll. Sits just
+            above the focus frame so the new step's stages land directly
+            below the sticky stack. scroll-mt-48 ≈ sticky stack height. */}
+        <div ref={stepAnchorRef} aria-hidden className="scroll-mt-48" />
 
         {/* Focus frame — wraps the in-flight stages during replay, then moves
             down to wrap the post-run summary once the last gate decides. */}
@@ -145,6 +194,7 @@ export default function DemoExperience() {
             </div>
             <StepInspectionDrawers />
             <div className="mt-12 flex flex-col gap-12 md:mt-16">
+              <div ref={finalOutputsSentinelRef} aria-hidden />
               <FinalOutputsPanel />
               <TakeawayPanel />
             </div>
@@ -154,6 +204,7 @@ export default function DemoExperience() {
             <CurrentStepPanel />
             <StepInspectionDrawers />
             <div className={`${FOCUS_FRAME} mt-12 flex flex-col gap-12 md:mt-16`}>
+              <div ref={finalOutputsSentinelRef} aria-hidden />
               <FinalOutputsPanel />
               <TakeawayPanel />
             </div>
