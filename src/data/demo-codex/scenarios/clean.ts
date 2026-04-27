@@ -176,7 +176,7 @@ export const cleanScenario: DemoScenario = {
           name: 'SLK-001 #infosec-vendor-review',
           type: 'Slack thread',
           lane: 'indexed_hybrid',
-          authorityTier: 4,
+          authorityTier: 3,
           treatment: 'supplementary',
           reason: 'Architect commentary; capped as supplementary — cannot drive determination.',
           chunksRetrieved: 12,
@@ -192,9 +192,9 @@ export const cleanScenario: DemoScenario = {
         ],
         evidence: [
           {
-            source: 'ISP-001 §12.2 row M-02',
+            source: 'ISP-001 §12.2',
             tier: 1,
-            note: 'Mediated tier matches read-only middleware integration.',
+            note: 'TIER_2 row matches the middleware-mediated integration pattern.',
           },
           {
             source: 'VQ-OC-001 Q18 / Q24',
@@ -203,7 +203,7 @@ export const cleanScenario: DemoScenario = {
           },
           {
             source: 'SLK-001 thread',
-            tier: 4,
+            tier: 3,
             note: 'Supports mediated tier read; supplementary only.',
           },
         ],
@@ -218,9 +218,17 @@ export const cleanScenario: DemoScenario = {
           'Do not infer tier from Slack alone if questionnaire is silent.',
         ],
         outputContract: [
-          'integration_tier: MEDIATED | INDIRECT | DIRECT | UNCLASSIFIED',
+          'integration_type_normalized: DIRECT_API | MIDDLEWARE | EXPORT_ONLY | AMBIGUOUS',
+          'integration_tier: TIER_1 | TIER_2 | TIER_3 | UNCLASSIFIED_PENDING_REVIEW',
+          'data_classification: REGULATED | UNREGULATED | AMBIGUOUS',
+          'eu_personal_data_present: boolean',
           'fast_track_eligible: boolean',
-          'follow_up_required: string[]',
+          'fast_track_rationale: DISALLOWED_REGULATED_DATA | DISALLOWED_INTEGRATION_RISK | DISALLOWED_AMBIGUOUS_SCOPE | ELIGIBLE_LOW_RISK',
+          'security_followup_required: boolean',
+          'nda_status_from_questionnaire: EXECUTED | PENDING | NOT_STARTED | UNKNOWN',
+          'required_security_actions: SecurityAction[]',
+          'policy_citations: PolicyCitation[]',
+          'status: complete | escalated | blocked',
         ],
         excluded: [
           {
@@ -231,24 +239,34 @@ export const cleanScenario: DemoScenario = {
       },
       output: {
         summary:
-          'Integration classified MEDIATED. Read-only middleware path matches ISP-001 §12.2 row M-02. Fast-track eligible; no follow-up required.',
+          'Integration classified as TIER_2 (mediated middleware) per ISP-001 §12.2. Data UNREGULATED, no EU personal data → fast_track_eligible=true (ELIGIBLE_LOW_RISK). NDA passthrough: EXECUTED.',
         structured: {
-          status: 'COMPLETE',
-          integration_tier: 'MEDIATED',
+          status: 'complete',
+          integration_type_normalized: 'MIDDLEWARE',
+          integration_tier: 'TIER_2',
+          data_classification: 'UNREGULATED',
+          eu_personal_data_present: false,
           fast_track_eligible: true,
-          follow_up_required: [],
-          policy_basis: 'ISP-001 §12.2 row M-02',
+          fast_track_rationale: 'ELIGIBLE_LOW_RISK',
+          security_followup_required: false,
+          nda_status_from_questionnaire: 'EXECUTED',
+          required_security_actions: [],
+          policy_citations: [
+            { source_id: 'ISP-001', version: '4.2', chunk_id: 'ISP-001__section_12', section_id: '12.2', citation_class: 'PRIMARY' },
+          ],
         },
         citations: [
-          { field: 'integration_tier', source: 'ISP-001 §12.2 row M-02' },
-          { field: 'fast_track_eligible', source: 'ISP-001 §12.2 row M-02' },
+          { field: 'integration_type_normalized', source: 'ISP-001 §12.2' },
+          { field: 'integration_tier', source: 'ISP-001 §12.2' },
+          { field: 'fast_track_eligible', source: 'ISP-001 §12.2' },
+          { field: 'data_classification', source: 'VQ-OC-001 Q18 / Q24' },
         ],
       },
       gateDecision: {
         status: 'COMPLETE',
         continueRun: true,
-        reason: 'Integration tier resolved to a named row; fast-track eligible; advance to STEP-03.',
-        expectedContract: ['integration_tier', 'fast_track_eligible', 'follow_up_required'],
+        reason: 'Integration classified TIER_2 with all required determinations resolved; fast_track_eligible=true; advance to STEP-03.',
+        expectedContract: ['integration_type_normalized', 'integration_tier', 'data_classification', 'eu_personal_data_present', 'fast_track_eligible', 'fast_track_rationale', 'security_followup_required', 'nda_status_from_questionnaire', 'required_security_actions', 'policy_citations', 'status'],
         contractValid: true,
       },
       auditEvents: [
@@ -265,13 +283,13 @@ export const cleanScenario: DemoScenario = {
         {
           timestamp: '2026-04-22T14:02:18.402Z',
           type: 'retrieval.capped',
-          payload: 'SLK-001 capped to supplementary (tier 4)',
+          payload: 'SLK-001 capped to supplementary (tier 3)',
           detail: 'Slack content cannot drive a tier determination.',
         },
         {
           timestamp: '2026-04-22T14:02:18.611Z',
           type: 'determination.logged',
-          payload: 'integration_tier=MEDIATED · fast_track_eligible=true',
+          payload: 'integration_tier=TIER_2 · data_classification=UNREGULATED · fast_track_eligible=true · status=complete',
         },
         {
           timestamp: '2026-04-22T14:02:18.622Z',
@@ -284,7 +302,7 @@ export const cleanScenario: DemoScenario = {
         bundling: 'Assembling 3-source bundle; capping Slack to supplementary.',
         dispatching: 'Dispatching to IT Security agent.',
         agent_working: 'Matching vendor description against tier table conditions.',
-        output_ready: 'MEDIATED tier resolved; fast-track eligible.',
+        output_ready: 'TIER_2 mediated · UNREGULATED · fast_track_eligible=true.',
         gating: 'Validating output contract; checking citations resolve.',
         decided: 'Gate passed → advance to STEP-03.',
       },
@@ -323,15 +341,15 @@ export const cleanScenario: DemoScenario = {
           chunksAdmitted: 2,
         },
         {
-          id: 'contracts-registry-clean',
-          name: 'CONTRACTS-REGISTRY · OptiChain',
-          type: 'Contracts registry',
+          id: 'vq-q-dpa-nda',
+          name: 'VQ-OC-001 existing_dpa_status / existing_nda_status',
+          type: 'Vendor questionnaire',
           lane: 'direct_structured',
-          authorityTier: 1,
+          authorityTier: 2,
           treatment: 'primary',
-          reason: 'Authoritative state on whether DPA/NDA are executed.',
-          chunksRetrieved: 1,
-          chunksAdmitted: 1,
+          reason: 'Vendor-reported DPA and NDA execution status, read directly from questionnaire fields.',
+          chunksRetrieved: 2,
+          chunksAdmitted: 2,
         },
       ],
       bundle: {
@@ -344,53 +362,54 @@ export const cleanScenario: DemoScenario = {
         evidence: [
           { source: 'DPA-TM-001 row A-01', tier: 1, note: 'EU personal data → DPA required.' },
           { source: 'ISP-001 §12.1.4', tier: 1, note: 'NDA must be executed.' },
-          {
-            source: 'CONTRACTS-REGISTRY · DPA-2026-0312',
-            tier: 1,
-            note: 'Executed 2026-04-19, signed by both parties.',
-          },
-          {
-            source: 'CONTRACTS-REGISTRY · NDA-2026-0288',
-            tier: 1,
-            note: 'Executed 2026-04-15, in force.',
-          },
+          { source: 'VQ-OC-001 existing_dpa_status', tier: 2, note: 'Reported as EXECUTED; reference DPA-2026-0312.' },
+          { source: 'VQ-OC-001 existing_nda_status', tier: 2, note: 'Reported as EXECUTED; reference NDA-2026-0288.' },
         ],
         citations: ['DPA-TM-001 row A-01', 'ISP-001 §12.1.4'],
-        permissions: ['Read DPA-TM-001', 'Read ISP-001 NDA section', 'Read CONTRACTS-REGISTRY (this vendor)'],
+        permissions: ['Read DPA-TM-001', 'Read ISP-001 NDA section', 'Read VQ-OC-001 (existing_dpa_status, existing_nda_status fields)'],
         nonGoals: [
           'Do not assess commercial terms — that is STEP-04.',
           'Do not synthesize new legal positions; restate what the matrix says.',
         ],
         outputContract: [
           'dpa_required: boolean',
-          'dpa_executed: boolean',
-          'nda_executed: boolean',
-          'blockers: Blocker[]',
+          'dpa_blocker: boolean',
+          'nda_status: EXECUTED | PENDING | NOT_STARTED | UNKNOWN',
+          'nda_blocker: boolean',
+          'trigger_rule_cited: TriggerRow[]',
+          'policy_citations: PolicyCitation[]',
+          'status: complete | escalated | blocked',
         ],
       },
       output: {
         summary:
-          'DPA required and executed (#DPA-2026-0312). NDA executed (#NDA-2026-0288). No legal blockers.',
+          'DPA required (DPA-TM-001 row A-01); existing_dpa_status=EXECUTED → dpa_blocker=false. NDA executed per ISP-001 §12.1.4. No legal blockers.',
         structured: {
-          status: 'COMPLETE',
+          status: 'complete',
           dpa_required: true,
-          dpa_executed: true,
-          dpa_reference: 'DPA-2026-0312',
-          nda_executed: true,
-          nda_reference: 'NDA-2026-0288',
-          blockers: [],
+          dpa_blocker: false,
+          nda_status: 'EXECUTED',
+          nda_blocker: false,
+          trigger_rule_cited: [
+            { source_id: 'DPA-TM-001', version: '2.1', row_id: 'A-01', trigger_condition: 'EU/EEA data subjects', citation_class: 'PRIMARY' },
+          ],
+          policy_citations: [
+            { source_id: 'DPA-TM-001', version: '2.1', row_id: 'A-01', trigger_condition: 'EU/EEA data subjects', citation_class: 'PRIMARY' },
+            { source_id: 'ISP-001', version: '4.2', chunk_id: 'ISP-001__section_12', section_id: '12.1.4', citation_class: 'PRIMARY' },
+          ],
         },
         citations: [
           { field: 'dpa_required', source: 'DPA-TM-001 row A-01' },
-          { field: 'dpa_executed', source: 'CONTRACTS-REGISTRY · DPA-2026-0312' },
-          { field: 'nda_executed', source: 'CONTRACTS-REGISTRY · NDA-2026-0288' },
+          { field: 'dpa_blocker', source: 'VQ-OC-001 existing_dpa_status' },
+          { field: 'nda_status', source: 'VQ-OC-001 existing_nda_status' },
+          { field: 'nda_blocker', source: 'ISP-001 §12.1.4' },
         ],
       },
       gateDecision: {
         status: 'COMPLETE',
         continueRun: true,
         reason: 'DPA + NDA both executed; no blockers; advance to STEP-04.',
-        expectedContract: ['dpa_required', 'dpa_executed', 'nda_executed', 'blockers'],
+        expectedContract: ['dpa_required', 'dpa_blocker', 'nda_status', 'nda_blocker', 'trigger_rule_cited', 'policy_citations', 'status'],
         contractValid: true,
       },
       auditEvents: [
@@ -406,13 +425,13 @@ export const cleanScenario: DemoScenario = {
         },
         {
           timestamp: '2026-04-22T14:02:26.301Z',
-          type: 'lookup.contracts_registry',
-          payload: 'DPA-2026-0312 · NDA-2026-0288 · both in force',
+          type: 'questionnaire.read',
+          payload: 'fields=[existing_dpa_status, existing_nda_status] · both EXECUTED',
         },
         {
           timestamp: '2026-04-22T14:02:26.418Z',
           type: 'determination.logged',
-          payload: 'dpa_required=true · dpa_executed=true · nda_executed=true',
+          payload: 'dpa_required=true · dpa_blocker=false · nda_status=EXECUTED · nda_blocker=false',
         },
         {
           timestamp: '2026-04-22T14:02:26.422Z',
@@ -421,7 +440,7 @@ export const cleanScenario: DemoScenario = {
         },
       ],
       replayMoments: {
-        retrieving: 'Pulling DPA matrix rows and contracts registry state.',
+        retrieving: 'Pulling DPA matrix rows and questionnaire DPA/NDA fields.',
         bundling: 'Assembling legal bundle (4 evidence items).',
         dispatching: 'Dispatching to Legal agent.',
         agent_working: 'Comparing matrix obligations to contracts on file.',
@@ -438,7 +457,7 @@ export const cleanScenario: DemoScenario = {
       shortLabel: 'Procurement',
       actor: 'Procurement',
       question:
-        'Which approval path applies, and is executive sign-off required?',
+        'Which approval path applies for this vendor and integration profile?',
       governancePrinciple: 'Approval routing reads the matrix row',
       retrievedEvidence: [
         {
@@ -465,40 +484,58 @@ export const cleanScenario: DemoScenario = {
         },
       ],
       bundle: {
-        task: 'Resolve commercial approval routing using upstream determinations and the approval matrix.',
+        task: 'Determine the approval path and assemble the required approver list using upstream determinations and PAM-001.',
         instructions: [
-          'Look up the approval matrix row for the resolved integration tier and legal posture.',
-          'Decide whether executive sign-off is required.',
+          'Apply PAM-001 strict primary-key match on vendor_class and integration_tier.',
+          'Assemble required_approvals[] from the matched row.',
+          'Pass through fast_track_eligible from STEP-02 unchanged.',
         ],
         evidence: [
           {
             source: 'PAM-001 row STD-04',
             tier: 1,
-            note: 'MEDIATED + cleared legal → STANDARD routing, no executive sign-off.',
+            note: 'TIER_2 + cleared legal → STANDARD routing.',
           },
         ],
         citations: ['PAM-001 row STD-04'],
         permissions: ['Read PAM-001', 'Read upstream determinations'],
         nonGoals: ['Do not re-evaluate legal or security determinations.'],
-        outputContract: ['approval_path', 'executive_signoff_required'],
+        outputContract: [
+          'approval_path: STANDARD | FAST_TRACK',
+          'fast_track_eligible: boolean',
+          'required_approvals: ApproverEntry[]',
+          'estimated_timeline: string',
+          'policy_citations: PolicyCitation[]',
+          'status: complete | escalated | blocked',
+        ],
       },
       output: {
         summary:
-          'Approval path: STANDARD. No executive sign-off required. Engagement cleared for fast-track.',
+          'Approval path: STANDARD per PAM-001 row STD-04. fast_track_eligible=true (passthrough from STEP-02). Required approvals assembled from matched matrix row.',
         structured: {
-          status: 'COMPLETE',
+          status: 'complete',
           approval_path: 'STANDARD',
-          executive_signoff_required: false,
           fast_track_eligible: true,
-          policy_basis: 'PAM-001 row STD-04',
+          required_approvals: [
+            { approver: 'A. Kowalski', domain: 'Procurement', status: 'PENDING', blocker: false, estimated_completion: '2026-04-25' },
+            { approver: 'D. Nguyen', domain: 'IT Security', status: 'PENDING', blocker: false, estimated_completion: '2026-04-24' },
+          ],
+          estimated_timeline: '3 business days',
+          policy_citations: [
+            { source_id: 'PAM-001', version: '1.0', row_id: 'STD-04', approval_path_condition: 'TIER_2 integration · UNREGULATED · fast_track_eligible=true · vendor_class<=B', citation_class: 'PRIMARY' },
+          ],
         },
-        citations: [{ field: 'approval_path', source: 'PAM-001 row STD-04' }],
+        citations: [
+          { field: 'approval_path', source: 'PAM-001 row STD-04' },
+          { field: 'fast_track_eligible', source: 'STEP-02 passthrough' },
+          { field: 'required_approvals', source: 'PAM-001 row STD-04' },
+        ],
       },
       gateDecision: {
         status: 'COMPLETE',
         continueRun: true,
-        reason: 'Approval path resolved deterministically from matrix row; advance to STEP-05.',
-        expectedContract: ['approval_path', 'executive_signoff_required'],
+        reason: 'Approval path resolved from PAM-001 row STD-04; required approvals assembled; advance to STEP-05.',
+        expectedContract: ['approval_path', 'fast_track_eligible', 'required_approvals', 'estimated_timeline', 'policy_citations', 'status'],
         contractValid: true,
       },
       auditEvents: [
@@ -510,7 +547,7 @@ export const cleanScenario: DemoScenario = {
         {
           timestamp: '2026-04-22T14:02:33.298Z',
           type: 'determination.logged',
-          payload: 'approval_path=STANDARD · executive_signoff_required=false',
+          payload: 'approval_path=STANDARD · required_approvals=2 · status=complete',
         },
         {
           timestamp: '2026-04-22T14:02:33.305Z',
@@ -523,7 +560,7 @@ export const cleanScenario: DemoScenario = {
         bundling: 'Assembling procurement bundle (2 evidence items).',
         dispatching: 'Dispatching to Procurement agent.',
         agent_working: 'Resolving routing path from matrix.',
-        output_ready: 'Approval path: STANDARD.',
+        output_ready: 'Approval path: STANDARD; 2 required approvers.',
         gating: 'Validating output contract.',
         decided: 'Gate passed → advance to STEP-05.',
       },
@@ -742,10 +779,10 @@ export const cleanScenario: DemoScenario = {
       },
       {
         id: 'CHK-02',
-        title: 'ERP integration tier assigned: MEDIATED',
+        title: 'ERP integration tier assigned: TIER_2',
         owner: 'IT Security · D. Nguyen',
         status: 'resolved',
-        detail: 'Per ISP-001 §12.2 row M-02.',
+        detail: 'Per ISP-001 §12.2 (middleware-mediated pattern).',
       },
       {
         id: 'CHK-03',
@@ -757,7 +794,7 @@ export const cleanScenario: DemoScenario = {
       {
         id: 'CHK-04',
         title: 'NDA in force',
-        owner: 'Legal Operations',
+        owner: 'Procurement',
         status: 'resolved',
         detail: 'NDA-2026-0288 in force 2026-04-15.',
       },
@@ -766,7 +803,7 @@ export const cleanScenario: DemoScenario = {
         title: 'Approval path: STANDARD',
         owner: 'Procurement · A. Kowalski',
         status: 'resolved',
-        detail: 'No executive sign-off required (PAM-001 row STD-04).',
+        detail: 'PAM-001 row STD-04; 2 required approvers.',
       },
       {
         id: 'CHK-06',

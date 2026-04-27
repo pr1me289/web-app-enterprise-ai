@@ -26,7 +26,7 @@ export type RetrievalLane =
   | 'indexed_hybrid'    // dense + lexical, cross-encoder reranked
   | 'non_retrieval';    // already-governed upstream output
 
-export type AuthorityTier = 1 | 2 | 3 | 4;
+export type AuthorityTier = 1 | 2 | 3;
 
 export type SourceType =
   | 'Policy document'
@@ -138,7 +138,7 @@ export interface FinalChecklistItem {
   id: string;
   title: string;
   owner: string;
-  status: 'resolved' | 'provisional' | 'blocker';
+  status: 'resolved' | 'escalated' | 'blocker';
   detail?: string;
 }
 

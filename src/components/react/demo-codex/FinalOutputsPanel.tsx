@@ -24,10 +24,10 @@ const checklistMeta: Record<
     cls: 'border-spruce-700/30 bg-spruce-50/70 text-spruce-700',
     label: 'Resolved',
   },
-  provisional: {
+  escalated: {
     icon: Wrench,
     cls: 'border-spruce-700/20 bg-spruce-50/40 text-spruce-700',
-    label: 'Provisional',
+    label: 'Escalated',
   },
   blocker: {
     icon: AlertTriangle,
