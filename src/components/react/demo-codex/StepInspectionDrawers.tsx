@@ -273,7 +273,7 @@ export default function StepInspectionDrawers() {
   return (
     <div className="mt-12 grid min-w-0 grid-cols-1 gap-3 md:mt-16">
       <p className="eyebrow text-accent">
-        Technical inspection · full document inputs/outputs throughout the pipeline
+        Technical inspection · optional for tech-savvy audiences
       </p>
 
       {/* Step selector */}

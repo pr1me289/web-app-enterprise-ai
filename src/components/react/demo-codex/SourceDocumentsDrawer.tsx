@@ -25,7 +25,7 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
   const base = `/scenarios/scenario-${n}/mock_documents`;
 
   // ISP-001 — IT Security Policy (.md)
-  if (name.startsWith('ISP-001')) {
+  if (name.startsWith('IT Security Policy')) {
     return {
       kind: 'markdown',
       src: `${base}/IT_Security_Policy_V4.2.md`,
@@ -33,8 +33,8 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
     };
   }
 
-  // DPA-TM-001 — DPA Legal Trigger Matrix (.csv → .xlsx in /mock-documents/)
-  if (name.startsWith('DPA-TM-001')) {
+  // DPA Legal Trigger Matrix (.csv → .xlsx in /mock-documents/)
+  if (name.startsWith('DPA Legal Trigger Matrix')) {
     return {
       kind: 'sheet',
       src: '/mock-documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx',
@@ -42,8 +42,8 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
     };
   }
 
-  // PAM-001 — Procurement Approval Matrix (.csv → .xlsx in /mock-documents/)
-  if (name.startsWith('PAM-001')) {
+  // Procurement Approval Matrix (.csv → .xlsx in /mock-documents/)
+  if (name.startsWith('Procurement Approval Matrix')) {
     return {
       kind: 'sheet',
       src: '/mock-documents/Procurement_Approval_Matrix_v2_0.xlsx',
@@ -51,8 +51,8 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
     };
   }
 
-  // VQ-OC-001 — OptiChain vendor questionnaire (.json)
-  if (name.startsWith('VQ-OC-001')) {
+  // Vendor Questionnaire — OptiChain (.json)
+  if (name.startsWith('Vendor Questionnaire')) {
     const filename =
       scenario === 'clean'
         ? 'OptiChain_VSQ_001_v2_1_scenario01.json'
@@ -60,8 +60,8 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
     return { kind: 'json', src: `${base}/${filename}`, title: 'OptiChain Vendor Security Questionnaire' };
   }
 
-  // STAKEHOLDER-MAP-001
-  if (name.startsWith('STAKEHOLDER-MAP-001')) {
+  // Stakeholder Map (.json)
+  if (name.startsWith('Stakeholder Map')) {
     return {
       kind: 'json',
       src: `${base}/Stakeholder_Map_PRQ_2024_0047.json`,
@@ -69,8 +69,8 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
     };
   }
 
-  // SLK-001 — Slack thread export (.md)
-  if (name.startsWith('SLK-001')) {
+  // Slack Thread export (.md)
+  if (name.startsWith('Slack Thread')) {
     const filename =
       scenario === 'clean'
         ? 'Slack_Thread_Export_scenario01.md'
@@ -91,8 +91,8 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
     };
   }
 
-  // CHKLST-TMPL-001 — template not captured
-  if (name.startsWith('CHKLST-TMPL-001')) {
+  // Checklist Template — not captured
+  if (name.startsWith('Checklist Template')) {
     return { kind: 'note', note: 'Mock template not yet captured.' };
   }
 

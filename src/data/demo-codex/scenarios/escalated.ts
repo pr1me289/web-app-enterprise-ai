@@ -29,7 +29,7 @@ export const escalatedScenario: DemoScenario = {
       retrievedEvidence: [
         {
           id: 'vq-oc-001-intake-esc',
-          name: 'VQ-OC-001 · VSQ-001',
+          name: 'Vendor Questionnaire · VSQ-001',
           type: 'Vendor questionnaire',
           lane: 'direct_structured',
           authorityTier: 2,
@@ -48,7 +48,7 @@ export const escalatedScenario: DemoScenario = {
         ],
         evidence: [
           {
-            source: 'VQ-OC-001 · VSQ-001',
+            source: 'VQ-OC-001 · VSQ-001 — Vendor Questionnaire',
             tier: 2,
             note: 'Questionnaire submitted 2024-03-04; all required fields present.',
           },
@@ -71,6 +71,8 @@ export const escalatedScenario: DemoScenario = {
       },
       output: {
         summary: 'Questionnaire VSQ-001 exists, all 12 required intake fields present, no version conflict. Pipeline cleared to launch domain review.',
+        plainSummary:
+          "We received the vendor questionnaire and confirmed it's complete and ready for review. The pipeline can begin its work.",
         structured: {
           status: 'complete',
           questionnaire_exists: true,
@@ -119,7 +121,7 @@ export const escalatedScenario: DemoScenario = {
       retrievedEvidence: [
         {
           id: 'isp-001-122',
-          name: 'ISP-001 §12.2',
+          name: 'IT Security Policy §12.2',
           type: 'Policy document',
           lane: 'indexed_hybrid',
           authorityTier: 1,
@@ -130,7 +132,7 @@ export const escalatedScenario: DemoScenario = {
         },
         {
           id: 'vq-q18-q24',
-          name: 'VQ-OC-001 Q18 / Q24',
+          name: 'Vendor Questionnaire Q18 / Q24',
           type: 'Vendor questionnaire',
           lane: 'direct_structured',
           authorityTier: 2,
@@ -141,7 +143,7 @@ export const escalatedScenario: DemoScenario = {
         },
         {
           id: 'slk-infosec',
-          name: 'SLK-001 #infosec-vendor-review',
+          name: 'Slack Thread #infosec-vendor-review',
           type: 'Slack thread',
           lane: 'indexed_hybrid',
           authorityTier: 3,
@@ -158,9 +160,9 @@ export const escalatedScenario: DemoScenario = {
           'If the questionnaire wording does not unambiguously match any ISP-001 §12.2 tier row, emit status=escalated with integration_tier=UNCLASSIFIED_PENDING_REVIEW. Do not guess.',
         ],
         evidence: [
-          { source: 'ISP-001 §12.2', tier: 1, note: 'No tier matches cleanly given vendor wording.' },
-          { source: 'VQ-OC-001 Q18 / Q24', tier: 2, note: 'Wording is ambiguous between mediated and indirect.' },
-          { source: 'SLK-001 thread', tier: 3, note: 'Supports architecture-review request.' },
+          { source: 'ISP-001 §12.2 — IT Security Policy', tier: 1, note: 'No tier matches cleanly given vendor wording.' },
+          { source: 'VQ-OC-001 Q18 / Q24 — Vendor Questionnaire', tier: 2, note: 'Wording is ambiguous between mediated and indirect.' },
+          { source: 'SLK-001 thread — Slack Thread', tier: 3, note: 'Supports architecture-review request.' },
         ],
         citations: ['ISP-001 §12.2'],
         permissions: ['Read ISP-001', 'Read VQ-OC-001 (this PRQ only)', 'Read SLK-001 (capped)'],
@@ -181,16 +183,12 @@ export const escalatedScenario: DemoScenario = {
           'policy_citations: PolicyCitation[]',
           'status: complete | escalated | blocked',
         ],
-        excluded: [
-          {
-            source: 'LEGAL-PRIVILEGED-MEMO-2024-Q1',
-            reason: 'Excluded at index time — attorney-client privileged.',
-          },
-        ],
       },
       output: {
         summary:
           'Integration pattern is AMBIGUOUS — vendor description references a possible extraction agent with service-account credentials, which does not clearly map to Tier 1, 2, or 3 per ISP-001 §12.2. Agent assigns integration_tier=UNCLASSIFIED_PENDING_REVIEW, data_classification=REGULATED (EU personal data present), fast_track_eligible=false (DISALLOWED_AMBIGUOUS_SCOPE), and emits three required security actions. Status: escalated.',
+        plainSummary:
+          "The vendor wants direct, live access to our systems and will be handling EU employee data — both make this a high-risk engagement that needs a full security review. Fast-track approval is not available, and a few security actions are queued up before onboarding can continue.",
         structured: {
           integration_type_normalized: 'DIRECT_API',
           integration_tier: 'TIER_1',
@@ -263,7 +261,7 @@ export const escalatedScenario: DemoScenario = {
       retrievedEvidence: [
         {
           id: 'dpa-tm-001',
-          name: 'DPA-TM-001 rows A-01 / E-01',
+          name: 'DPA Legal Trigger Matrix rows A-01 / E-01',
           type: 'Trigger matrix',
           lane: 'direct_structured',
           authorityTier: 1,
@@ -274,7 +272,7 @@ export const escalatedScenario: DemoScenario = {
         },
         {
           id: 'isp-001-1214',
-          name: 'ISP-001 §12.1.4',
+          name: 'IT Security Policy §12.1.4',
           type: 'Policy document',
           lane: 'indexed_hybrid',
           authorityTier: 1,
@@ -285,7 +283,7 @@ export const escalatedScenario: DemoScenario = {
         },
         {
           id: 'vq-q-dpa-nda',
-          name: 'VQ-OC-001 existing_dpa_status / existing_nda_status',
+          name: 'Vendor Questionnaire existing_dpa_status / existing_nda_status',
           type: 'Vendor questionnaire',
           lane: 'direct_structured',
           authorityTier: 2,
@@ -303,10 +301,10 @@ export const escalatedScenario: DemoScenario = {
           'If any obligation is unmet, emit ESCALATED with named blockers — do not soften.',
         ],
         evidence: [
-          { source: 'DPA-TM-001 row A-01', tier: 1, note: 'EU personal data → DPA required.' },
-          { source: 'ISP-001 §12.1.4', tier: 1, note: 'NDA must be executed before sensitive information exchange.' },
-          { source: 'VQ-OC-001 existing_dpa_status', tier: 2, note: 'Reported as NOT_STARTED — no DPA executed.' },
-          { source: 'VQ-OC-001 existing_nda_status', tier: 2, note: 'Reported as PENDING — NDA execution not confirmed.' },
+          { source: 'DPA-TM-001 row A-01 — DPA Trigger Matrix', tier: 1, note: 'EU personal data → DPA required.' },
+          { source: 'ISP-001 §12.1.4 — IT Security Policy', tier: 1, note: 'NDA must be executed before sensitive information exchange.' },
+          { source: 'VQ-OC-001 existing_dpa_status — Vendor Questionnaire', tier: 2, note: 'Reported as NOT_STARTED — no DPA executed.' },
+          { source: 'VQ-OC-001 existing_nda_status — Vendor Questionnaire', tier: 2, note: 'Reported as PENDING — NDA execution not confirmed.' },
         ],
         citations: ['DPA-TM-001 row A-01', 'ISP-001 §12.1.4'],
         permissions: ['Read DPA-TM-001', 'Read ISP-001 NDA section', 'Read VQ-OC-001 (existing_dpa_status, existing_nda_status fields)'],
@@ -327,6 +325,8 @@ export const escalatedScenario: DemoScenario = {
       output: {
         summary:
           'DPA required (DPA-TM-001 row A-01); existing_dpa_status=NOT_STARTED → dpa_blocker=true. NDA status=PENDING → nda_blocker=true. Two workflow blockers emitted; pipeline halts at STEP-03.',
+        plainSummary:
+          "Two legal blockers must be cleared before any data can change hands. A data-processing agreement is required (because EU personal data is involved) but hasn't been signed, and the vendor's NDA execution is unconfirmed. The pipeline halts here and routes the case to General Counsel.",
         structured: {
           dpa_required: true,
           dpa_blocker: true,

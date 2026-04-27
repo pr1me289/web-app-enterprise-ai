@@ -310,33 +310,7 @@ export function BundleStage({
               </ul>
             </BundleSection>
 
-            <BundleSection title="Permissions" delay={0.12}>
-              <ul className="space-y-1 text-[0.72rem] leading-relaxed text-spruce-700">
-                {step.bundle.permissions.map((p) => (
-                  <li
-                    key={p}
-                    className="rounded-md bg-spruce-50 px-2 py-1 font-mono"
-                  >
-                    {p}
-                  </li>
-                ))}
-              </ul>
-            </BundleSection>
-
-            <BundleSection title="Non-goals" delay={0.16}>
-              <ul className="space-y-1 text-[0.72rem] leading-relaxed text-rose-700">
-                {step.bundle.nonGoals.map((g) => (
-                  <li
-                    key={g}
-                    className="rounded-md bg-rose-50 px-2 py-1 font-mono"
-                  >
-                    {g}
-                  </li>
-                ))}
-              </ul>
-            </BundleSection>
-
-            <BundleSection title="Output contract" delay={0.2} span={2}>
+            <BundleSection title="Output contract" delay={0.12} span={2}>
               <pre className="overflow-x-auto rounded-md bg-ink-950 p-3 font-mono text-[0.72rem] leading-relaxed text-ink-100">
                 {step.bundle.outputContract.map((line) => `  ${line}`).join('\n')}
               </pre>
@@ -429,48 +403,68 @@ export function AgentStage({
             preserveAspectRatio="none"
             aria-hidden
           >
+            {/* Faint background track — always visible behind any active flow. */}
             <line
               x1="0"
               y1="16"
-              x2="180"
+              x2="168"
               y2="16"
-              stroke="rgba(157,87,40,0.4)"
-              strokeWidth="1.5"
-              strokeDasharray="4 4"
+              stroke="rgba(157,87,40,0.18)"
+              strokeWidth="1"
+              strokeDasharray="3 3"
             />
+
             {phaseIndex(phase) >= PHASE_INDEX.DISPATCHING &&
-              phaseIndex(phase) <= PHASE_INDEX.OUTPUT_READY &&
-              [0, 1, 2].map((i) => (
-                <motion.line
-                  key={i}
-                  x1={i * 60}
-                  y1="16"
-                  x2={(i + 1) * 60}
-                  y2="16"
-                  stroke="rgba(157,87,40,1)"
-                  strokeWidth="2"
-                  strokeDasharray="4 4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: [0, 0.95, 0] }}
-                  transition={{
-                    duration: 0.6,
-                    repeat: Infinity,
-                    repeatDelay: 0.6,
-                    delay: i * 0.4,
-                    ease: 'easeInOut',
-                  }}
-                />
-              ))}
-            <path d="M 180 16 L 172 11 L 172 21 Z" fill="rgba(157,87,40,0.7)" />
-            {dispatchState === 'active' && (
-              <motion.g
-                initial={{ x: 0, opacity: 0 }}
-                animate={{ x: 168, opacity: [0, 1, 1, 0] }}
-                transition={{ duration: 0.85, ease: 'easeOut' }}
-              >
-                <rect x="-6" y="10" width="12" height="12" rx="2" fill="rgba(157,87,40,1)" />
-              </motion.g>
-            )}
+              phaseIndex(phase) <= PHASE_INDEX.OUTPUT_READY && (
+                <>
+                  {/* Energy-direction track — dashes flow continuously toward the agent
+                      via strokeDashoffset, no segment-by-segment blink. */}
+                  <motion.line
+                    x1="0"
+                    y1="16"
+                    x2="168"
+                    y2="16"
+                    stroke="rgba(157,87,40,0.55)"
+                    strokeWidth="1.5"
+                    strokeDasharray="6 6"
+                    animate={{ strokeDashoffset: [0, -24] }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  />
+
+                  {/* Traveling glow particles — three staggered orbs of an outer
+                      soft halo + sharp inner core, sliding from bundle to agent. */}
+                  {[0, 1, 2].map((i) => (
+                    <motion.g
+                      key={`particle-${i}`}
+                      initial={{ x: 0, opacity: 0 }}
+                      animate={{
+                        x: [0, 17, 150, 168],
+                        opacity: [0, 1, 1, 0],
+                      }}
+                      transition={{
+                        duration: 1.6,
+                        repeat: Infinity,
+                        repeatDelay: 0.3,
+                        delay: i * 0.55,
+                        ease: 'linear',
+                        times: [0, 0.1, 0.9, 1],
+                      }}
+                    >
+                      <circle cy="16" r="5" fill="rgba(157,87,40,0.22)" />
+                      <circle cy="16" r="2.8" fill="rgba(157,87,40,0.5)" />
+                      <circle cy="16" r="1.6" fill="rgba(157,87,40,1)" />
+                    </motion.g>
+                  ))}
+                </>
+              )}
+
+            {/* Refined arrow head — soft outer glow + crisp filled triangle. */}
+            <path
+              d="M 184 16 L 168 8 L 168 24 Z"
+              fill="rgba(157,87,40,0.28)"
+              style={{ filter: 'blur(2.5px)' }}
+            />
+            <path d="M 184 16 L 168 8 L 168 24 Z" fill="rgba(157,87,40,0.9)" />
           </svg>
         </div>
 
@@ -501,15 +495,26 @@ export function AgentStage({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.32, ease: 'easeOut' }}
-            className="mt-4 grid gap-4"
+            className="mt-4 grid min-w-0 grid-cols-1 gap-4"
           >
-            <div className="flex items-start gap-3 rounded-xl border border-ink-100 bg-paper p-4">
+            <div className="flex min-w-0 items-start gap-3 rounded-xl border border-ink-100 bg-paper p-4">
               <FileCheck size={16} className="mt-0.5 shrink-0 text-spruce-700" aria-hidden />
-              <div>
+              <div className="min-w-0 flex-1">
                 <p className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-ink-500">
                   Plain-language summary
                 </p>
-                <p className="mt-1 font-serif text-base leading-relaxed text-ink-900">
+                <p className="mt-1 break-words font-serif text-base leading-relaxed text-ink-900">
+                  {step.output.plainSummary ?? step.output.summary}
+                </p>
+              </div>
+            </div>
+            <div className="flex min-w-0 items-start gap-3 rounded-xl border border-ink-100 bg-paper-muted/50 p-4">
+              <ShieldCheck size={16} className="mt-0.5 shrink-0 text-accent" aria-hidden />
+              <div className="min-w-0 flex-1">
+                <p className="font-mono text-[0.62rem] uppercase tracking-[0.12em] text-ink-500">
+                  Technical summary
+                </p>
+                <p className="mt-1 whitespace-pre-wrap break-words font-mono text-[0.78rem] leading-relaxed text-ink-800">
                   {step.output.summary}
                 </p>
               </div>

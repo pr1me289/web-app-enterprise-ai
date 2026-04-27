@@ -78,7 +78,8 @@ export interface OutputCitation {
 }
 
 export interface AgentOutputPayload {
-  summary: string;                          // plain-language determination
+  summary: string;                          // technical paragraph — used for the Technical Summary box
+  plainSummary?: string;                    // beginner-friendly plain-language summary; falls back to summary if absent
   structured: Record<string, unknown>;      // structured agent return
   citations: OutputCitation[];              // citations against fields in structured
 }

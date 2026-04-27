@@ -6,7 +6,7 @@
 //   - downstream not-yet-reached: PENDING (or NOT_RUN if scenario halted upstream)
 import { motion, AnimatePresence } from 'framer-motion';
 import StatusPill from './StatusPill';
-import { useDemoCodexStore } from './store';
+import { useDemoCodexStore, phasesForStep, PHASE_LABELS, type ReplayPhase } from './store';
 import { scenarios } from '../../../data/demo-codex';
 import type { DemoStep, StepNumber, StepStatus } from '../../../data/demo-codex/types';
 
@@ -50,6 +50,7 @@ export default function ExecutionStrip() {
                 focused={isFocused}
                 paused={mode === 'paused'}
                 playing={mode === 'playing'}
+                phase={phase}
                 onClick={() => selectStep(step.stepNumber)}
               />
               {idx < steps.length - 1 && (
@@ -72,6 +73,7 @@ function ExecutionStepCard({
   focused,
   paused,
   playing,
+  phase,
   onClick,
 }: {
   step: DemoStep;
@@ -79,6 +81,7 @@ function ExecutionStepCard({
   focused: boolean;
   paused: boolean;
   playing: boolean;
+  phase: ReplayPhase;
   onClick: () => void;
 }) {
   // Focused-card border tint reflects replay mode: green while playing,
@@ -146,6 +149,11 @@ function ExecutionStepCard({
           {step.actor}
         </span>
       </div>
+
+      {/* Phase progress dots — only on the focused step. Mirrors the phase
+          walk that used to live in the supervisor rail: active dot in
+          accent with a halo, past dots in spruce green, future dots gray. */}
+      {focused && <PhaseDots step={step} phase={phase} />}
 
       <AnimatePresence>
         {focused && (
@@ -238,4 +246,33 @@ function computeStatus({
   if (phase === 'decided') return step.status;
   // Mid-replay phases → in-progress.
   return 'IN_PROGRESS';
+}
+
+function PhaseDots({ step, phase }: { step: DemoStep; phase: ReplayPhase }) {
+  const sequence = phasesForStep(step.stepNumber);
+  // -1 when idle/completed so all dots read as future / all past respectively.
+  const progress =
+    phase === 'idle' || phase === 'completed' ? -1 : sequence.indexOf(phase);
+
+  return (
+    <div className="flex w-full items-center gap-1.5 pt-0.5">
+      {sequence.map((p, idx) => {
+        const isActive = idx === progress;
+        const isPast = idx < progress || phase === 'completed';
+        return (
+          <span
+            key={p}
+            title={PHASE_LABELS[p]}
+            className={`h-1.5 w-1.5 rounded-full transition-colors ${
+              isActive
+                ? 'bg-accent shadow-[0_0_0_2px_rgba(157,87,40,0.18)]'
+                : isPast
+                  ? 'bg-spruce-700'
+                  : 'bg-ink-200'
+            }`}
+          />
+        );
+      })}
+    </div>
+  );
 }

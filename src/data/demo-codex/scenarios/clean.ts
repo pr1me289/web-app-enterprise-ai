@@ -29,7 +29,7 @@ export const cleanScenario: DemoScenario = {
       retrievedEvidence: [
         {
           id: 'vq-oc-001-intake',
-          name: 'VQ-OC-001 · VSQ-PRQ-2024-0047-v2.1',
+          name: 'Vendor Questionnaire · VSQ-PRQ-2024-0047-v2.1',
           type: 'Vendor questionnaire',
           lane: 'direct_structured',
           authorityTier: 2,
@@ -48,7 +48,7 @@ export const cleanScenario: DemoScenario = {
         ],
         evidence: [
           {
-            source: 'VQ-OC-001 · VSQ-PRQ-2024-0047-v2.1',
+            source: 'VQ-OC-001 · VSQ-PRQ-2024-0047-v2.1 — Vendor Questionnaire',
             tier: 2,
             note: 'Questionnaire submitted 2024-03-04T17:42:00Z; all required fields present.',
           },
@@ -75,6 +75,8 @@ export const cleanScenario: DemoScenario = {
       output: {
         summary:
           'Questionnaire VSQ-PRQ-2024-0047-v2.1 exists, all 12 required intake fields present, no version conflict. Pipeline cleared to launch domain review.',
+        plainSummary:
+          "We received OptiChain's vendor questionnaire and confirmed it's complete, unique, and ready for review. The pipeline can begin its work.",
         structured: {
           status: 'complete',
           questionnaire_exists: true,
@@ -145,7 +147,7 @@ export const cleanScenario: DemoScenario = {
       retrievedEvidence: [
         {
           id: 'isp-001-122',
-          name: 'ISP-001 §12.2',
+          name: 'IT Security Policy §12.2',
           type: 'Policy document',
           lane: 'indexed_hybrid',
           authorityTier: 1,
@@ -156,7 +158,7 @@ export const cleanScenario: DemoScenario = {
         },
         {
           id: 'vq-q18-q24',
-          name: 'VQ-OC-001 Q18 / Q24',
+          name: 'Vendor Questionnaire Q18 / Q24',
           type: 'Vendor questionnaire',
           lane: 'direct_structured',
           authorityTier: 2,
@@ -167,7 +169,7 @@ export const cleanScenario: DemoScenario = {
         },
         {
           id: 'slk-infosec',
-          name: 'SLK-001 #infosec-vendor-review',
+          name: 'Slack Thread #infosec-vendor-review',
           type: 'Slack thread',
           lane: 'indexed_hybrid',
           authorityTier: 3,
@@ -186,17 +188,17 @@ export const cleanScenario: DemoScenario = {
         ],
         evidence: [
           {
-            source: 'ISP-001 §12.2',
+            source: 'ISP-001 §12.2 — IT Security Policy',
             tier: 1,
             note: 'TIER_2 row matches the middleware-mediated integration pattern.',
           },
           {
-            source: 'VQ-OC-001 Q18 / Q24',
+            source: 'VQ-OC-001 Q18 / Q24 — Vendor Questionnaire',
             tier: 2,
             note: 'Vendor describes middleware-mediated read-only integration.',
           },
           {
-            source: 'SLK-001 thread',
+            source: 'SLK-001 thread — Slack Thread',
             tier: 3,
             note: 'Supports mediated tier read; supplementary only.',
           },
@@ -224,16 +226,12 @@ export const cleanScenario: DemoScenario = {
           'policy_citations: PolicyCitation[]',
           'status: complete | escalated | blocked',
         ],
-        excluded: [
-          {
-            source: 'LEGAL-PRIVILEGED-MEMO-2024-Q1',
-            reason: 'Excluded at index time — attorney-client privileged.',
-          },
-        ],
       },
       output: {
         summary:
           'Integration classified as TIER_3 (export-only file-based) per ISP-001 §12.2. Data UNREGULATED, no EU personal data → fast_track_eligible=true (ELIGIBLE_LOW_RISK). NDA passthrough: EXECUTED.',
+        plainSummary:
+          "OptiChain's connection to our systems is the lowest-risk type — they only receive file exports, never live or interactive access. No regulated or personal data is involved, so this engagement qualifies for fast-track approval.",
         structured: {
           status: 'complete',
           integration_type_normalized: 'EXPORT_ONLY',
@@ -313,7 +311,7 @@ export const cleanScenario: DemoScenario = {
       retrievedEvidence: [
         {
           id: 'dpa-tm-001',
-          name: 'DPA-TM-001 rows A-01 / E-01',
+          name: 'DPA Legal Trigger Matrix rows A-01 / E-01',
           type: 'Trigger matrix',
           lane: 'direct_structured',
           authorityTier: 1,
@@ -324,7 +322,7 @@ export const cleanScenario: DemoScenario = {
         },
         {
           id: 'isp-001-1214',
-          name: 'ISP-001 §12.1.4',
+          name: 'IT Security Policy §12.1.4',
           type: 'Policy document',
           lane: 'indexed_hybrid',
           authorityTier: 1,
@@ -335,7 +333,7 @@ export const cleanScenario: DemoScenario = {
         },
         {
           id: 'vq-q-dpa-nda',
-          name: 'VQ-OC-001 existing_dpa_status / existing_nda_status',
+          name: 'Vendor Questionnaire existing_dpa_status / existing_nda_status',
           type: 'Vendor questionnaire',
           lane: 'direct_structured',
           authorityTier: 2,
@@ -353,10 +351,10 @@ export const cleanScenario: DemoScenario = {
           'If any obligation is unmet, emit ESCALATED with named blockers.',
         ],
         evidence: [
-          { source: 'DPA-TM-001 row A-01', tier: 1, note: 'EU personal data → DPA required.' },
-          { source: 'ISP-001 §12.1.4', tier: 1, note: 'NDA must be executed.' },
-          { source: 'VQ-OC-001 existing_dpa_status', tier: 2, note: 'Reported as EXECUTED; reference DPA-2026-0312.' },
-          { source: 'VQ-OC-001 existing_nda_status', tier: 2, note: 'Reported as EXECUTED; reference NDA-2026-0288.' },
+          { source: 'DPA-TM-001 row A-01 — DPA Trigger Matrix', tier: 1, note: 'EU personal data → DPA required.' },
+          { source: 'ISP-001 §12.1.4 — IT Security Policy', tier: 1, note: 'NDA must be executed.' },
+          { source: 'VQ-OC-001 existing_dpa_status — Vendor Questionnaire', tier: 2, note: 'Reported as EXECUTED; reference DPA-2026-0312.' },
+          { source: 'VQ-OC-001 existing_nda_status — Vendor Questionnaire', tier: 2, note: 'Reported as EXECUTED; reference NDA-2026-0288.' },
         ],
         citations: ['DPA-TM-001 row A-01', 'ISP-001 §12.1.4'],
         permissions: ['Read DPA-TM-001', 'Read ISP-001 NDA section', 'Read VQ-OC-001 (existing_dpa_status, existing_nda_status fields)'],
@@ -377,6 +375,8 @@ export const cleanScenario: DemoScenario = {
       output: {
         summary:
           'No DPA trigger fired (data is UNREGULATED, no EU personal data); dpa_required=false, dpa_blocker=false. NDA executed per ISP-001 §12.1.4; nda_blocker=false. No legal blockers.',
+        plainSummary:
+          "No data-processing agreement is needed for this engagement because no personal data is exchanged. The vendor's NDA is already signed and on file. Nothing here blocks onboarding.",
         structured: {
           status: 'complete',
           dpa_required: false,
@@ -450,7 +450,7 @@ export const cleanScenario: DemoScenario = {
       retrievedEvidence: [
         {
           id: 'pam-001-std',
-          name: 'PAM-001 row STD-04',
+          name: 'Procurement Approval Matrix row STD-04',
           type: 'Approval matrix',
           lane: 'direct_structured',
           authorityTier: 1,
@@ -480,7 +480,7 @@ export const cleanScenario: DemoScenario = {
         ],
         evidence: [
           {
-            source: 'PAM-001 row STD-04',
+            source: 'PAM-001 row STD-04 — Procurement Approval Matrix',
             tier: 1,
             note: 'TIER_2 + cleared legal → STANDARD routing.',
           },
@@ -500,6 +500,8 @@ export const cleanScenario: DemoScenario = {
       output: {
         summary:
           'Approval path: FAST_TRACK per PAM-001 row C-T1 (Class C vendor, Tier 3 integration, UNREGULATED, no DPA required). fast_track_eligible=true (passthrough from STEP-02). Two required approvals assembled.',
+        plainSummary:
+          'Based on the security and legal findings, this engagement gets the fast-track approval path. Two people need to sign off: the Procurement Manager and the Business Owner.',
         structured: {
           status: 'complete',
           approval_path: 'FAST_TRACK',
@@ -582,7 +584,7 @@ export const cleanScenario: DemoScenario = {
         },
         {
           id: 'chklst-tmpl-001',
-          name: 'CHKLST-TMPL-001 v1.3',
+          name: 'Checklist Template v1.3',
           type: 'Required-source manifest',
           lane: 'direct_structured',
           authorityTier: 1,
@@ -605,7 +607,7 @@ export const cleanScenario: DemoScenario = {
             tier: 1,
             note: 'Already governed; consumed without further retrieval.',
           },
-          { source: 'CHKLST-TMPL-001 v1.3', tier: 1, note: 'Defines section ordering and required fields.' },
+          { source: 'CHKLST-TMPL-001 v1.3 — Checklist Template', tier: 1, note: 'Defines section ordering and required fields.' },
         ],
         citations: ['CHKLST-TMPL-001 v1.3'],
         permissions: ['Read upstream determinations', 'Read CHKLST-TMPL-001'],
@@ -630,6 +632,8 @@ export const cleanScenario: DemoScenario = {
       output: {
         summary:
           'Checklist assembled with all domain determinations passed through. Overall status COMPLETE; approval_path=FAST_TRACK; no blockers; 3 citations.',
+        plainSummary:
+          'All findings from the previous steps were combined into a single approval checklist. Every item is resolved — nothing outstanding.',
         structured: {
           status: 'COMPLETE',
           overall_status: 'COMPLETE',
@@ -701,7 +705,7 @@ export const cleanScenario: DemoScenario = {
         },
         {
           id: 'stakeholder-map-001',
-          name: 'STAKEHOLDER-MAP-001',
+          name: 'Stakeholder Map',
           type: 'Stakeholder map',
           lane: 'direct_structured',
           authorityTier: 1,
@@ -720,7 +724,7 @@ export const cleanScenario: DemoScenario = {
         ],
         evidence: [
           { source: 'STEP-05 checklist', tier: 1, note: 'All items resolved.' },
-          { source: 'STAKEHOLDER-MAP-001 · PRQ-2024-0047', tier: 1, note: 'Routes to four named owners.' },
+          { source: 'STAKEHOLDER-MAP-001 · PRQ-2024-0047 — Stakeholder Map', tier: 1, note: 'Routes to four named owners.' },
         ],
         citations: ['STAKEHOLDER-MAP-001'],
         permissions: ['Read STEP-05 output', 'Read STAKEHOLDER-MAP-001', 'Emit notifications'],
@@ -733,6 +737,8 @@ export const cleanScenario: DemoScenario = {
       output: {
         summary:
           'Stakeholder guidance emitted to Procurement Manager and Business Owner. Fast-track approval path confirmed; no blockers or security follow-up actions required. Status: complete.',
+        plainSummary:
+          'The final approval package has been routed to the relevant stakeholders. OptiChain is approved through the fast-track process — no further blockers or follow-ups.',
         structured: {
           status: 'COMPLETE',
           package_emitted: true,

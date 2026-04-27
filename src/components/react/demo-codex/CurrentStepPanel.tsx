@@ -24,7 +24,7 @@ export default function CurrentStepPanel() {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-      className="flex flex-col gap-5"
+      className="flex min-w-0 flex-col gap-5"
     >
         {/* Step heading */}
         <header>
@@ -63,7 +63,7 @@ export default function CurrentStepPanel() {
             supervisor intake, so it skips bundle assembly and agent dispatch and
             renumbers the gate as Stage 2. */}
         {!prevented && (
-          <div className="grid gap-4">
+          <div className="grid min-w-0 grid-cols-1 gap-4">
             <RetrievalStage step={step} phase={phase} prevented={false} />
             {step.stepNumber !== 1 && (
               <>

@@ -40,7 +40,7 @@ export function AuthorityBadge({ tier, size = 'md' }: { tier: AuthorityTier; siz
   return (
     <span
       title={c.description}
-      className={`inline-flex items-center gap-1.5 rounded border font-mono font-medium uppercase tracking-[0.1em] ${padding} ${text} ${c.cls}`}
+      className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded border font-mono font-medium uppercase tracking-[0.1em] ${padding} ${text} ${c.cls}`}
     >
       <span aria-hidden className={`h-1.5 w-1.5 rounded-full ${c.dotCls}`} />
       {c.label}
