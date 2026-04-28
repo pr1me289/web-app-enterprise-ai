@@ -15,12 +15,16 @@ import FinalOutputsPanel from './FinalOutputsPanel';
 import TakeawayPanel from './TakeawayPanel';
 import { motion } from 'framer-motion';
 
-// Focus frame styling — black border, faintly tinted translucent gray fill,
-// radiating warm-accent halo so the framed content stands out from the page.
+// Focus frame styling — black border, faintly tinted translucent gray fill.
+// Halo (warm-accent ambiance) is applied separately so it can move between the
+// stages frame and the final-outputs frame depending on run progress.
 // `min-w-0` prevents intrinsic-width children (long mono-font tokens, dashed
 // SVGs, etc.) from pushing the frame past its parent's width.
-const FOCUS_FRAME =
-  'min-w-0 overflow-hidden rounded-3xl border-2 border-ink-900 bg-ink-900/[0.04] p-5 md:p-7 shadow-[0_0_90px_-20px_rgba(157,87,40,0.4),0_0_32px_-8px_rgba(157,87,40,0.25)]';
+const FRAME_BOX =
+  'min-w-0 overflow-hidden rounded-3xl border-2 border-ink-900 bg-ink-900/[0.04] p-5 md:p-7 transition-shadow duration-700 ease-out';
+const HALO_ACTIVE =
+  'shadow-[0_0_180px_-10px_rgba(157,87,40,0.65),0_0_80px_-6px_rgba(157,87,40,0.5),0_0_28px_-4px_rgba(157,87,40,0.35)]';
+const HALO_DIM = 'shadow-none';
 
 export default function DemoExperience() {
   const scenario = useDemoCodexStore((s) => s.scenario);
@@ -34,9 +38,9 @@ export default function DemoExperience() {
   const currentStep = useDemoCodexStore((s) => s.currentStep);
   const phase = useDemoCodexStore((s) => s.phase);
 
-  // Frame moves once the run reaches Stage 4 (Gate decision) of the last
-  // executed step. Before that, the frame focuses the in-progress stages;
-  // after, it focuses the post-run summary (drawers + final outputs + takeaway).
+  // True once the run has reached the gating decision of the last executed
+  // step (or otherwise completed). Used to move the warm-accent halo between
+  // the stages frame and the final-outputs frame.
   const lastStep = lastExecutedStep(scenario);
   const runFinalized =
     phase === 'completed' ||
@@ -85,8 +89,7 @@ export default function DemoExperience() {
     );
     observer.observe(target);
     return () => observer.disconnect();
-    // Re-observe when the branch switch remounts the sentinel div.
-  }, [runFinalized]);
+  }, []);
 
   // Scroll the focus frame back into view when the replay advances to a new
   // step. Without this, the page collapses upward as the new step's stages
@@ -105,6 +108,24 @@ export default function DemoExperience() {
     // mode is intentionally omitted from deps — only run on currentStep change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep]);
+
+  // Same auto-scroll, but for the "select-then-play" path: clicking a step
+  // parks at phase 'decided' (all stages exposed); pressing Play rewinds the
+  // same step to phase 'retrieving' (Stages 2–4 collapse), which would
+  // otherwise leave the viewport stranded in the now-shrunken content.
+  const prevPhaseRef = useRef(phase);
+  const prevStepRef = useRef(currentStep);
+  useEffect(() => {
+    const prevPhase = prevPhaseRef.current;
+    const prevStep = prevStepRef.current;
+    prevPhaseRef.current = phase;
+    prevStepRef.current = currentStep;
+
+    if (mode === 'stopped') return;
+    if (currentStep === prevStep && prevPhase === 'decided' && phase === 'retrieving') {
+      stepAnchorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [phase, currentStep, mode]);
 
   return (
     <MotionConfig reducedMotion="user">
@@ -187,31 +208,22 @@ export default function DemoExperience() {
             below the sticky stack. scroll-mt-48 ≈ sticky stack height. */}
         <div ref={stepAnchorRef} aria-hidden className="scroll-mt-48" />
 
-        {/* Focus frame — wraps the in-flight stages during replay, then moves
-            down to wrap the post-run summary once the last gate decides. */}
-        {!runFinalized ? (
-          <>
-            <div className={FOCUS_FRAME}>
-              <CurrentStepPanel />
-            </div>
-            <StepInspectionDrawers />
-            <div className="mt-12 flex flex-col gap-12 md:mt-16">
-              <div ref={finalOutputsSentinelRef} aria-hidden />
-              <FinalOutputsPanel />
-              <TakeawayPanel />
-            </div>
-          </>
-        ) : (
-          <>
-            <CurrentStepPanel />
-            <StepInspectionDrawers />
-            <div className={`${FOCUS_FRAME} mt-12 flex flex-col gap-12 md:mt-16`}>
-              <div ref={finalOutputsSentinelRef} aria-hidden />
-              <FinalOutputsPanel />
-              <TakeawayPanel />
-            </div>
-          </>
-        )}
+        {/* Stages frame — always present. Halo is bright while the run is
+            in progress and dims once the pipeline reaches its final gate. */}
+        <div className={`${FRAME_BOX} ${runFinalized ? HALO_DIM : HALO_ACTIVE}`}>
+          <CurrentStepPanel />
+        </div>
+        <StepInspectionDrawers />
+
+        {/* Final-outputs frame — always present. Halo lights up only once
+            the pipeline has finalized; otherwise it sits with a quiet border. */}
+        <div
+          className={`${FRAME_BOX} ${runFinalized ? HALO_ACTIVE : HALO_DIM} mt-12 flex flex-col gap-12 md:mt-16`}
+        >
+          <div ref={finalOutputsSentinelRef} aria-hidden />
+          <FinalOutputsPanel />
+          <TakeawayPanel />
+        </div>
       </div>
     </MotionConfig>
   );

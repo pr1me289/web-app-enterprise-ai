@@ -14,12 +14,12 @@ import SchoolsOfThought from '../components/astro/SchoolsOfThought.astro';
 import TakeawayCard from '../components/astro/TakeawayCard.astro';
 import ActCard from '../components/astro/ActCard.astro';
 import AgentIcon from '../components/astro/AgentIcon.astro';
-import Quote from '../components/astro/Quote.astro';
 import StatBlock from '../components/astro/StatBlock.astro';
 import HeadlineMarquee from '../components/astro/HeadlineMarquee.astro';
 import DetailExpander from '../components/react/DetailExpander';
 import StackedCards from '../components/react/StackedCards';
 import DocumentViewer from '../components/react/DocumentViewer';
+import ZoomableImage from '../components/react/ZoomableImage';
 
 const parts = (await getCollection('parts')).sort((a, b) => a.data.order - b.data.order);
 const titlePart = parts.find((p) => p.data.key === 'title')!;
@@ -551,10 +551,15 @@ const documentStack: StackStage[] = [
             </a>
           </div>
 
-          <Quote source="Working thesis">
-            The gap is not model capability. It is the governed translation from enterprise intent
-            into executable context.
-          </Quote>
+          <figure class="mt-12 border-l-[3px] border-accent bg-accent-soft/40 py-6 pl-7 pr-6">
+            <p class="eyebrow mb-4 text-accent">Working thesis</p>
+            <blockquote
+              class="font-serif text-2xl font-semibold leading-snug tracking-tight text-ink-900 md:text-3xl"
+            >
+              The gap is not model capability. It is the
+              <span class="text-accent">governed translation from enterprise intent into executable context.</span>
+            </blockquote>
+          </figure>
         </div>
 
         <div class="panel self-center p-6">
@@ -743,6 +748,10 @@ const documentStack: StackStage[] = [
       </Fragment>
     </CompetitorGrid>
 
+    <div class="mt-20 max-w-3xl">
+      <p class="eyebrow mb-3 text-accent">Some of the approaches to better context</p>
+    </div>
+
     <div class="mt-8 grid gap-4 md:grid-cols-2">
       {/* Row 1 — Common pattern + Data structure approach */}
       <article class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors">
@@ -810,12 +819,17 @@ const documentStack: StackStage[] = [
           lede={intro.data.lede}
         />
 
-        <p class="mt-10 max-w-prose text-lg leading-relaxed text-ink-800">
-          <strong class="font-semibold text-ink-900">My argument:</strong> A fitted orchestration
-          layer and context engine is not architecture for its own sake. It is the only path that
-          forces the enterprise to confront security, reliability, and profitability — rather
-          than inheriting someone else’s answers.
-        </p>
+        <figure class="mt-12 border-l-[3px] border-accent bg-accent-soft/40 py-6 pl-7 pr-6">
+          <p class="eyebrow mb-4 text-accent">My argument</p>
+          <blockquote
+            class="font-serif text-2xl font-semibold leading-snug tracking-tight text-ink-900 md:text-3xl"
+          >
+            A hand-built orchestration layer is not architecture for its own sake. It is the only
+            path that forces the enterprise to
+            <span class="text-accent">confront security, reliability, and business constraints</span>
+            — rather than inheriting someone else’s answers.
+          </blockquote>
+        </figure>
 
         <figure class="mt-12" aria-label="Three pillars: Security, Reliability, Profitability">
       <svg
@@ -1039,18 +1053,20 @@ const documentStack: StackStage[] = [
     </div>
 
     <div class="mt-6 flex justify-center">
-      <img
+      <ZoomableImage
+        client:visible
         src="/retrieval.png"
         alt="Diagram of the retrieval flow"
-        class="h-auto w-full"
+        className="h-auto w-full"
       />
     </div>
 
     <div class="mt-8 flex justify-center">
-      <img
+      <ZoomableImage
+        client:visible
         src="/retrieval-explain.png"
         alt="Explanation of the retrieval flow"
-        class="h-auto w-full"
+        className="h-auto w-full"
       />
     </div>
 
@@ -1100,15 +1116,31 @@ const documentStack: StackStage[] = [
     </div>
 
     <div class="mt-6 flex justify-center">
-      <img
+      <ZoomableImage
+        client:visible
         src="/robot_diagram_fixed.png"
         alt="Diagram of the deterministic orchestration layer governing domain agents"
-        class="h-auto w-full"
+        className="h-auto w-full"
       />
     </div>
 
     <h3 class="mt-16 font-serif text-xl text-ink-900">Operating principles</h3>
     <PrincipleList items={approachPrinciples} />
+
+    <div class="mt-28 max-w-3xl">
+      <p class="eyebrow mb-3 text-accent">
+        Bird&rsquo;s-eye view of my spec-driven approach to enterprise context engineering
+      </p>
+    </div>
+
+    <div class="mt-6 flex justify-center">
+      <ZoomableImage
+        client:visible
+        src="/outlook.png"
+        alt="Bird's-eye view of the spec-driven approach to enterprise context engineering"
+        className="h-auto w-full"
+      />
+    </div>
 
   </NarrativeSection>
 
@@ -1213,7 +1245,7 @@ const documentStack: StackStage[] = [
     </div>
 
     <div class="mt-24">
-      <p class="eyebrow mb-3 text-accent">What this agentic workflow must do</p>
+      <p class="eyebrow mb-3 text-accent">What this agentic workflow does</p>
       <h3 class="font-serif text-2xl font-semibold text-ink-900">
         One vendor. One pipeline. Five acts.
       </h3>
@@ -1314,24 +1346,62 @@ const documentStack: StackStage[] = [
                   viewBox="0 0 240 260"
                   preserveAspectRatio="xMinYMin meet"
                 >
-                  <g
+                  <defs>
+                    <path
+                      id={`informs-path-${i}`}
+                      d="M 10 24 C 120 10 198 60 200 132 C 202 204 112 248 18 234"
+                    />
+                    <marker
+                      id={`informs-arrow-tip-${i}`}
+                      viewBox="0 0 12 12"
+                      refX="10"
+                      refY="6"
+                      markerWidth="9"
+                      markerHeight="9"
+                      orient="auto"
+                    >
+                      <path
+                        d="M 1.5 1.5 L 10.5 6 L 1.5 10.5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </marker>
+                  </defs>
+
+                  <circle cx="10" cy="24" r="6.5" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.35" />
+                  <circle cx="10" cy="24" r="2.4" fill="currentColor" />
+
+                  <use
+                    href={`#informs-path-${i}`}
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="1.8"
+                    stroke-width="0.7"
                     stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path d="M6 18 C 68 6 142 28 182 86 C 214 136 188 198 120 224 C 96 234 74 234 54 228" />
-                    <path d="M6 22 C 70 10 140 30 178 86" opacity="0.45" />
-                    <path d="M54 228 L 72 220 M 54 228 L 64 244" />
-                  </g>
+                    stroke-dasharray="1 5"
+                    opacity="0.45"
+                    transform="translate(3 4)"
+                  />
+
+                  <use
+                    href={`#informs-path-${i}`}
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    marker-end={`url(#informs-arrow-tip-${i})`}
+                  />
+
                   <text
-                    x="120"
-                    y="70"
-                    transform="rotate(14 120 70)"
+                    x="186"
+                    y="138"
+                    transform="rotate(-6 186 138)"
                     fill="currentColor"
-                    class="font-serif text-[18px] italic"
-                    style="letter-spacing: 0.02em"
+                    text-anchor="end"
+                    class="font-serif italic"
+                    style="font-size: 17px; letter-spacing: 0.06em;"
                   >
                     informs
                   </text>
