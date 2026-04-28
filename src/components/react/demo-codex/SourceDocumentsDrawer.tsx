@@ -16,8 +16,15 @@ type DocRef =
   | { kind: DocKind; src: string; title: string }
   | { kind: 'note'; note: string };
 
+const SCENARIO_NUMBER: Record<ScenarioId, string> = {
+  clean: '1',
+  escalated: '2',
+  blocked: '3',
+  escalated_step4: '4',
+};
+
 function scenarioNumber(scenario: ScenarioId): string {
-  return scenario === 'clean' ? '1' : '2';
+  return SCENARIO_NUMBER[scenario];
 }
 
 function resolveDoc(name: string, scenario: ScenarioId): DocRef {
@@ -56,7 +63,11 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
     const filename =
       scenario === 'clean'
         ? 'OptiChain_VSQ_001_v2_1_scenario01.json'
-        : 'OptiChain_VSQ_001_v2_1.json';
+        : scenario === 'blocked'
+          ? 'OptiChain_VSQ_001_v2_1_blocked.json'
+          : scenario === 'escalated_step4'
+            ? 'OptiChain_VSQ_001_v2_1_escalated_step4.json'
+            : 'OptiChain_VSQ_001_v2_1.json';
     return { kind: 'json', src: `${base}/${filename}`, title: 'OptiChain Vendor Security Questionnaire' };
   }
 
@@ -70,9 +81,9 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
   }
 
   // Slack Thread export (.md)
-  if (name.startsWith('Slack Thread')) {
+  if (name.startsWith('Slack Thread') || name.startsWith('Slack thread')) {
     const filename =
-      scenario === 'clean'
+      scenario === 'clean' || scenario === 'blocked' || scenario === 'escalated_step4'
         ? 'Slack_Thread_Export_scenario01.md'
         : 'Slack_Thread_Export_001.md';
     return { kind: 'markdown', src: `${base}/${filename}`, title: 'Slack Thread Export' };

@@ -5,7 +5,14 @@ import { useDemoCodexStore } from './store';
 import { scenarios } from '../../../data/demo-codex';
 import type { ScenarioId } from '../../../data/demo-codex/types';
 
-const ORDER: ScenarioId[] = ['escalated', 'clean'];
+const ORDER: ScenarioId[] = ['escalated', 'clean', 'blocked', 'escalated_step4'];
+
+const PILL_SUBTITLE: Record<ScenarioId, string> = {
+  escalated: 'Halts at STEP-03 · ESCALATED',
+  clean: 'Six steps · COMPLETE',
+  blocked: 'Halts at STEP-04 · BLOCKED',
+  escalated_step4: 'Halts at STEP-04 · ESCALATED',
+};
 
 export default function ScenarioSelector() {
   const scenario = useDemoCodexStore((s) => s.scenario);
@@ -47,9 +54,7 @@ export default function ScenarioSelector() {
                 isActive ? 'text-accent' : 'text-ink-400'
               }`}
             >
-              {meta.outcome === 'COMPLETE'
-                ? 'Six steps · COMPLETE'
-                : 'Halts at STEP-03 · ESCALATED'}
+              {PILL_SUBTITLE[id]}
             </span>
           </button>
         );

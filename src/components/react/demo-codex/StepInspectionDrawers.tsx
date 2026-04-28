@@ -13,18 +13,35 @@ import type { DemoStep } from '../../../data/demo-codex/types';
 import type { ScenarioId, StepNumber } from '../../../data/demo-codex/types';
 
 // Hardcoded map of which (scenario, stepNumber) combinations have a captured bundle on disk.
-// scenario-1 has STEP-02 through STEP-06; scenario-2 has STEP-02 and STEP-03 (run halts at STEP-03).
+// scenario-1 has STEP-02 through STEP-06; scenario-2 halts at STEP-03; scenario-3 halts at
+// STEP-04 (BLOCKED); scenario-4 halts at STEP-04 (ESCALATED).
 const BUNDLE_EXISTS: Record<ScenarioId, Set<StepNumber>> = {
   clean: new Set([2, 3, 4, 5, 6] as StepNumber[]),
   escalated: new Set([2, 3] as StepNumber[]),
+  blocked: new Set([2, 3, 4] as StepNumber[]),
+  escalated_step4: new Set([2, 3, 4] as StepNumber[]),
+};
+
+const SCENARIO_NUMBER: Record<ScenarioId, string> = {
+  clean: '1',
+  escalated: '2',
+  blocked: '3',
+  escalated_step4: '4',
+};
+
+const SCENARIO_LABEL: Record<ScenarioId, string> = {
+  clean: 'Complete',
+  escalated: 'Escalated',
+  blocked: 'Blocked',
+  escalated_step4: 'Escalated (STEP-04)',
 };
 
 function scenarioNumber(scenario: ScenarioId): string {
-  return scenario === 'clean' ? '1' : '2';
+  return SCENARIO_NUMBER[scenario];
 }
 
 function scenarioLabel(scenario: ScenarioId): string {
-  return scenario === 'clean' ? 'Complete' : 'Escalated';
+  return SCENARIO_LABEL[scenario];
 }
 
 function bundlePath(scenario: ScenarioId, stepNumber: StepNumber): string {

@@ -215,8 +215,8 @@ export const useDemoCodexStore = create<DemoState>((set, get) => {
       }
       // decided → advance step or finalize
       const lastStep = lastExecutedStep(scenario);
-      const haltedHere =
-        scenarios[scenario].steps.find((s) => s.stepNumber === currentStep)?.status === 'ESCALATED';
+      const haltedStatus = scenarios[scenario].steps.find((s) => s.stepNumber === currentStep)?.status;
+      const haltedHere = haltedStatus === 'ESCALATED' || haltedStatus === 'BLOCKED';
       if (haltedHere || currentStep >= lastStep) {
         set({ phase: 'completed', mode: 'ended' });
         return;

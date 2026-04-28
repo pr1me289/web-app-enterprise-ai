@@ -1,7 +1,7 @@
 // Schema for the Demo page replay system.
 // Real run artifacts will replace placeholder fixtures; the schema is the contract.
 
-export type ScenarioId = 'clean' | 'escalated';
+export type ScenarioId = 'clean' | 'escalated' | 'blocked' | 'escalated_step4';
 
 export type StepNumber = 1 | 2 | 3 | 4 | 5 | 6;
 

@@ -135,7 +135,7 @@ export default function DemoExperience() {
         <div className="flex flex-col items-center gap-2">
           <ScenarioSelector />
           <p className="text-center text-xs italic text-ink-400">
-            Click between the two full-pipeline replays here
+            Click between the four full-pipeline replays here
           </p>
         </div>
 
@@ -149,7 +149,15 @@ export default function DemoExperience() {
         >
             <div className="flex flex-col gap-3">
               <p className="eyebrow text-accent">
-                Scenario {meta.id === 'escalated' ? '1' : '2'} · {meta.outcome}
+                Scenario{' '}
+                {meta.id === 'escalated'
+                  ? '1'
+                  : meta.id === 'clean'
+                    ? '2'
+                    : meta.id === 'blocked'
+                      ? '3'
+                      : '4'}{' '}
+                · {meta.outcome}
               </p>
               <h2 className="font-serif text-2xl font-semibold text-ink-900 md:text-3xl">
                 {meta.title}
@@ -165,7 +173,11 @@ export default function DemoExperience() {
                 <p className="mt-1 font-serif text-sm leading-relaxed text-ink-700">
                   {meta.id === 'escalated'
                     ? 'Below is a replay of a scenario in which intake is complete, but authoritative evidence reveals unresolved legal blockers. The pipeline reaches STEP-03, the legal agent emits an escalated status, and halts rather than continuing through conflicting or incomplete conditions.'
-                    : 'Below is a replay of a scenario in which intake is complete and the evidence is sufficient across all required steps. The pipeline moves cleanly through each stage, produces governed domain determinations, and completes with a final approval package instead of halting for escalation.'}
+                    : meta.id === 'clean'
+                      ? 'Below is a replay of a scenario in which intake is complete and the evidence is sufficient across all required steps. The pipeline moves cleanly through each stage, produces governed domain determinations, and completes with a final approval package instead of halting for escalation.'
+                      : meta.id === 'blocked'
+                        ? 'Below is a replay of a scenario in which the upstream pipeline runs cleanly, but at STEP-04 a required source — the Procurement Approval Matrix — is not registered in the index. The router fails closed, the bundle arrives empty, and the procurement agent emits BLOCKED and awaits the required document before proceeding. The pipeline halts before checklist assembly.'
+                        : 'Below is a replay of a scenario in which the upstream pipeline runs cleanly, but at STEP-04 the approval matrix returns rows that do not match the vendor profile. The agent has authoritative evidence in hand, but no row resolves the question — so it emits ESCALATED and routes the coverage gap to the Procurement Director rather than substituting the nearest row. The pipeline halts before checklist assembly.'}
                 </p>
               </div>
               <div className="flex flex-col gap-1.5">
