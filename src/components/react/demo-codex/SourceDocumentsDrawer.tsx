@@ -12,8 +12,15 @@ import type { ScenarioId } from '../../../data/demo-codex/types';
 
 // ---- Document path resolution ----
 
+interface SheetOverrideShape {
+  tabs?: string[];
+  skipRowsPerSheet?: number[];
+  firstCellOverrides?: string[];
+  columnWidthsPerSheet?: (string[] | undefined)[];
+}
+
 type DocRef =
-  | { kind: DocKind; src: string; title: string }
+  | { kind: DocKind; src: string; title: string; overrides?: SheetOverrideShape }
   | { kind: 'note'; note: string };
 
 const SCENARIO_NUMBER: Record<ScenarioId, string> = {
@@ -55,6 +62,37 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
       kind: 'sheet',
       src: '/mock-documents/Procurement_Approval_Matrix_v2_0.xlsx',
       title: 'Procurement Approval Matrix v2.0',
+      overrides: {
+        // Sheet 0 (Approval Matrix) — drop the two-row title block (LICHEN
+        // header + PROC-MATRIX-001 metadata) so the table starts at the
+        // Class | Tier | … row.
+        skipRowsPerSheet: [2, 0, 0, 0, 0, 0, 0],
+        // Renumber sections downstream of Fast-Track Rules so the visible
+        // tab order matches the section number (the source XLSX numbers
+        // these as 5/6/7/8 because Section 4 covers procurement workflow
+        // integration in the legacy spec — collapsed in this view).
+        firstCellOverrides: [
+          '',
+          '',
+          '',
+          'Section 4 — Fast-Track Eligibility Rules',
+          'Section 5 — OptiChain Classification',
+          'Section 6 — Approval Workflow',
+          'Section 7 — Version History',
+        ],
+        columnWidthsPerSheet: [
+          // Sheet 0 — Approval Matrix: Class + Tier kept narrow; long
+          // notes column gets the lion's share so it wraps cleanly.
+          ['7%', '6%', '12%', '11%', '11%', '11%', '12%', '10%', '20%'],
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          // Sheet 5 — Approval Workflow: Step column kept narrow.
+          ['7%', '23%', '15%', '20%', '17%', '18%'],
+          undefined,
+        ],
+      },
     };
   }
 
@@ -202,6 +240,7 @@ function SourceCard({
       title={doc.title}
       kind={doc.kind}
       label={item.name}
+      overrides={doc.overrides}
       trigger={cardTrigger}
     />
   );

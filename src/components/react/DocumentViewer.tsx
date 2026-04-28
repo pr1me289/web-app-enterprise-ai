@@ -8,6 +8,11 @@ interface SheetOverrides {
   tabs?: string[];
   skipRowsPerSheet?: number[];
   firstCellOverrides?: string[];
+  // Per-sheet column-width hints. When a sheet has widths defined the table
+  // switches to table-fixed and a <colgroup> applies the widths. Each entry
+  // is the active sheet's array of CSS width strings (e.g. '8%', '120px').
+  // Entries left undefined fall back to auto layout for that sheet.
+  columnWidthsPerSheet?: (string[] | undefined)[];
 }
 
 interface Props {
@@ -226,8 +231,19 @@ export default function DocumentViewer({ src, title, kind, label, overrides, tri
                   {!sheetData && (
                     <p className="p-4 text-sm text-ink-500">Loading…</p>
                   )}
-                  {sheetData && (
-                    <table className="w-full border-collapse text-xs">
+                  {sheetData && (() => {
+                    const widths = overrides?.columnWidthsPerSheet?.[activeSheet];
+                    return (
+                    <table
+                      className={`w-full border-collapse text-xs ${widths ? 'table-fixed' : ''}`}
+                    >
+                      {widths && (
+                        <colgroup>
+                          {widths.map((w, i) => (
+                            <col key={i} style={w ? { width: w } : undefined} />
+                          ))}
+                        </colgroup>
+                      )}
                       <tbody>
                         {sheetData.sheets[activeSheet]?.rows
                           .slice(overrides?.skipRowsPerSheet?.[activeSheet] ?? 0)
@@ -255,7 +271,7 @@ export default function DocumentViewer({ src, title, kind, label, overrides, tri
                                 <td
                                   key={cIdx}
                                   className={`border border-ink-100 px-3 py-2 align-top text-ink-800 ${
-                                    rIdx === 0 ? 'whitespace-nowrap' : ''
+                                    rIdx === 0 ? 'whitespace-nowrap' : 'break-words'
                                   }`}
                                 >
                                   {displayCell}
@@ -266,7 +282,8 @@ export default function DocumentViewer({ src, title, kind, label, overrides, tri
                         ))}
                       </tbody>
                     </table>
-                  )}
+                    );
+                  })()}
                 </div>
               </div>
             )}
