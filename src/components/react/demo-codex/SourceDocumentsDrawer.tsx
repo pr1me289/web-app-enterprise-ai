@@ -53,6 +53,32 @@ function resolveDoc(name: string, scenario: ScenarioId): DocRef {
       kind: 'sheet',
       src: '/mock-documents/DPA_Legal_Trigger_Matrix_v1_3.xlsx',
       title: 'DPA Legal Trigger Matrix v1.3',
+      overrides: {
+        // Sheet 0 (Trigger Matrix) — drop the two-row title block (LICHEN
+        // header + Document ID metadata) so the table starts at the ID |
+        // Trigger Condition | … row.
+        skipRowsPerSheet: [2, 0, 0, 0, 0],
+        // Renumber the trailing tabs so the visible tab order matches the
+        // section number. The source XLSX numbers these as 3/4/5/6 because
+        // its legacy spec collapses Section 2 — fix to 2/3/4/5.
+        firstCellOverrides: [
+          '',
+          'Section 2 — Regulatory Framework Reference',
+          'Section 3 — Status Legend',
+          'Section 4 — Procurement Workflow Integration',
+          'Section 5 — Maintenance and Version History',
+        ],
+        columnWidthsPerSheet: [
+          // Sheet 0 — Trigger Matrix: ID column kept narrow (just A-01,
+          // B-01, etc.); long policy / clause columns get the largest share
+          // so they wrap cleanly.
+          ['5%', '14%', '14%', '12%', '9%', '17%', '17%', '12%'],
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+        ],
+      },
     };
   }
 
