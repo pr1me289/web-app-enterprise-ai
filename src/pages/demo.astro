@@ -32,31 +32,71 @@ import DemoExperience from '../components/react/demo-codex/DemoExperience';
           </div>
         </div>
 
-        <aside class="silver-panel max-w-none text-[0.95rem]">
-          <span class="silver-panel__corner silver-panel__corner--tl" aria-hidden="true"></span>
-          <span class="silver-panel__corner silver-panel__corner--br" aria-hidden="true"></span>
-          <p class="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-ink-500">
-            How to read this page
-          </p>
-          <ul class="mt-3 space-y-2 text-sm leading-relaxed text-ink-700">
-            <li>
-              <strong class="font-semibold text-ink-900">Pick a scenario</strong> with the selector.
-              Escalated is the default — it shows governance more clearly than the happy path.
-            </li>
-            <li>
-              <strong class="font-semibold text-ink-900">Press Start Replay</strong>. The supervisor
-              rail animates each phase: retrieve, bundle, dispatch, validate, decide.
-            </li>
-            <li>
-              <strong class="font-semibold text-ink-900">Pause anytime</strong> and use Step or
-              click any node to inspect a single step in detail.
-            </li>
-            <li>
-              <strong class="font-semibold text-ink-900">Open the drawers</strong> below each step
-              for the audit log, raw structured output, and source previews.
-            </li>
-          </ul>
-        </aside>
+        <div class="flex flex-col gap-4">
+          <aside class="silver-panel max-w-none text-[0.95rem]">
+            <span class="silver-panel__corner silver-panel__corner--tl" aria-hidden="true"></span>
+            <span class="silver-panel__corner silver-panel__corner--br" aria-hidden="true"></span>
+            <p class="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-ink-500">
+              How to read this page
+            </p>
+            <ul class="mt-3 space-y-2 text-sm leading-relaxed text-ink-700">
+              <li>
+                <strong class="font-semibold text-ink-900">Pick a scenario</strong> with the selector.
+                Escalated is the default — it shows governance more clearly than the happy path.
+              </li>
+              <li>
+                <strong class="font-semibold text-ink-900">Press Start Replay</strong>. The supervisor
+                rail animates each phase: retrieve, bundle, dispatch, validate, decide.
+              </li>
+              <li>
+                <strong class="font-semibold text-ink-900">Pause anytime</strong> and use Step or
+                click any node to inspect a single step in detail.
+              </li>
+              <li>
+                <strong class="font-semibold text-ink-900">Open the drawers</strong> below each step
+                for the audit log, raw structured output, and source previews.
+              </li>
+            </ul>
+          </aside>
+
+          <aside class="rounded-xl border border-ink-100 bg-paper p-5 shadow-soft">
+            <p class="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-ink-500">
+              Status emissions
+            </p>
+            <ul class="mt-3 space-y-2.5">
+              <li class="flex items-start gap-3">
+                <span
+                  class="inline-flex shrink-0 items-center rounded-full border border-spruce-700/30 bg-spruce-50 px-2.5 py-0.5 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-spruce-700"
+                >
+                  Complete
+                </span>
+                <p class="text-xs leading-relaxed text-ink-700">
+                  Step finished; pipeline continues.
+                </p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="inline-flex shrink-0 items-center rounded-full border border-accent/40 bg-accent-soft/60 px-2.5 py-0.5 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-accent"
+                >
+                  Escalated
+                </span>
+                <p class="text-xs leading-relaxed text-ink-700">
+                  Evidence present but unresolvable; pipeline halts.
+                </p>
+              </li>
+              <li class="flex items-start gap-3">
+                <span
+                  class="inline-flex shrink-0 items-center rounded-full border border-rose-700/30 bg-rose-50 px-2.5 py-0.5 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-rose-700"
+                >
+                  Blocked
+                </span>
+                <p class="text-xs leading-relaxed text-ink-700">
+                  Required evidence absent; pipeline halts.
+                </p>
+              </li>
+            </ul>
+          </aside>
+        </div>
       </div>
     </Container>
   </section>

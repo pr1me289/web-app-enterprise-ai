@@ -671,7 +671,7 @@ export const escalatedStep4Scenario: DemoScenario = {
     approvalPath: 'Halted',
     fastTrack: 'INELIGIBLE',
     haltedAt: 'STEP-04',
-    artifactName: 'Escalation package · OptiChain · PRQ-2024-0047',
+    artifactName: 'Escalation package',
     checklist: [
       {
         id: 'CHK-01',
@@ -702,20 +702,6 @@ export const escalatedStep4Scenario: DemoScenario = {
         status: 'escalated',
         detail:
           'PAM-001 returned three Tier-1 rows (Class A, B, C); none carry Class D. Agent emitted approval_path=null and escalated rather than substituting the nearest row.',
-      },
-      {
-        id: 'CHK-05',
-        title: 'Approval checklist assembly',
-        owner: 'Checklist Assembler',
-        status: 'blocker',
-        detail: 'Cannot assemble a checklist without a resolved approval path.',
-      },
-      {
-        id: 'CHK-06',
-        title: 'Stakeholder checkoff and routing',
-        owner: 'Checkoff',
-        status: 'blocker',
-        detail: 'No checklist to route. The escalation package itself is the final artifact.',
       },
     ],
     blockers: [

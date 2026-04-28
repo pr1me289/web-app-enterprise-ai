@@ -153,7 +153,7 @@ export default function DocumentViewer({ src, title, kind, label, overrides, tri
         <Dialog.Overlay className="fixed inset-0 z-50 bg-ink-950/60 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
         <Dialog.Content
           aria-describedby={undefined}
-          className="fixed left-1/2 top-1/2 z-50 flex h-[85vh] w-[92vw] max-w-5xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl bg-paper shadow-2xl"
+          className="fixed left-1/2 top-1/2 z-50 flex h-[88vh] w-[95vw] max-w-[1400px] -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl bg-paper shadow-2xl"
         >
           <header className="flex items-start justify-between gap-4 border-b border-ink-100 bg-paper px-5 py-4">
             <div className="min-w-0">
@@ -193,7 +193,7 @@ export default function DocumentViewer({ src, title, kind, label, overrides, tri
             )}
             {!error && kind === 'markdown' && (
               <div
-                className="prose-narrative mx-auto bg-paper p-8 text-sm leading-relaxed text-ink-800 [&_h1]:font-serif [&_h1]:text-2xl [&_h2]:mt-6 [&_h2]:font-serif [&_h2]:text-xl [&_h3]:mt-5 [&_h3]:font-serif [&_h3]:text-lg [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-6 [&_code]:rounded [&_code]:bg-paper-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-xs"
+                className="prose-narrative max-w-none bg-paper p-8 text-sm leading-relaxed text-ink-800 [&_h1]:font-serif [&_h1]:text-2xl [&_h2]:mt-6 [&_h2]:font-serif [&_h2]:text-xl [&_h3]:mt-5 [&_h3]:font-serif [&_h3]:text-lg [&_p]:mt-3 [&_ul]:mt-3 [&_ul]:list-disc [&_ul]:pl-6 [&_code]:rounded [&_code]:bg-paper-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-xs [&_code]:break-all [&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:whitespace-pre-wrap [&_pre]:break-words [&_pre]:rounded [&_pre]:bg-paper-muted [&_pre]:p-4 [&_pre]:font-mono [&_pre]:text-xs [&_pre]:leading-relaxed [&_pre_code]:bg-transparent [&_pre_code]:px-0 [&_table]:mt-4 [&_table]:w-full [&_table]:table-fixed [&_table]:border-collapse [&_table]:text-xs [&_td]:border [&_td]:border-ink-100 [&_td]:px-3 [&_td]:py-2 [&_td]:align-top [&_td]:break-words [&_th]:border [&_th]:border-ink-100 [&_th]:bg-paper-muted [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:font-semibold [&_th]:break-words"
                 dangerouslySetInnerHTML={{
                   __html: content ? (marked.parse(content) as string) : 'Loading…',
                 }}

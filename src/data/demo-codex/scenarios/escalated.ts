@@ -5,7 +5,7 @@ import type { DemoScenario } from '../types';
 
 export const escalatedScenario: DemoScenario = {
   id: 'escalated',
-  title: 'Governed escalation',
+  title: 'Legal blockers · ESCALATED',
   subtitle:
     'OptiChain submits a complete questionnaire indicating EU personal data exposure, but the GDPR Art. 28 DPA is missing and NDA execution is unconfirmed. The pipeline halts at STEP-03 and routes an escalation package to General Counsel.',
   outcome: 'ESCALATED',
@@ -476,7 +476,7 @@ export const escalatedScenario: DemoScenario = {
     approvalPath: 'Halted',
     fastTrack: 'INELIGIBLE',
     haltedAt: 'STEP-03',
-    artifactName: 'Escalation package · OptiChain · PRQ-2024-0049',
+    artifactName: 'Escalation package',
     checklist: [
       {
         id: 'CHK-01',
