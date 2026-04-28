@@ -272,8 +272,13 @@ export default function StepInspectionDrawers() {
 
   return (
     <div className="mt-12 grid min-w-0 grid-cols-1 gap-3 md:mt-16">
-      <p className="eyebrow text-accent">
-        Technical inspection · optional for tech-savvy audiences
+      <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <span className="eyebrow text-accent">
+          Technical inspection · optional for tech-savvy audiences
+        </span>
+        <span className="text-sm italic text-ink-500">
+          Click any of the steps to see the full agent inputs/outputs
+        </span>
       </p>
 
       {/* Step selector */}

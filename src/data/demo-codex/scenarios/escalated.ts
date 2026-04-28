@@ -548,11 +548,6 @@ export const escalatedScenario: DemoScenario = {
   takeaway: {
     headline: 'Halting is the system working',
     body:
-      'STEP-02 found the integration pattern ambiguous between MIDDLEWARE and DIRECT_API and assigned UNCLASSIFIED_PENDING_REVIEW — a governed escalation that lets the run continue. STEP-03 found two human-owned legal blockers (missing DPA, unconfirmed NDA) and halted everything downstream. The system never conflated the two: an ambiguous classification flows forward; a blocker stops the run.',
-    bullets: [
-      'Status ESCALATED is a correct governed outcome, not a failure.',
-      'An ambiguous classification flows forward as UNCLASSIFIED_PENDING_REVIEW; a blocker halts the run. The system never conflates them.',
-      'STEP-04 through STEP-06 did not run — that is visible to the reader, not invisible.',
-    ],
+      'STEP-03 surfaced two human-owned legal blockers — a missing DPA and an unconfirmed NDA — that the system cannot resolve on its own. The supervisor emits an ESCALATED status, halts the downstream pipeline, and routes the open items to legal for review. This is the system working as designed: when authoritative evidence is missing, the run stops and the conflict is handed to the people who own it rather than silently passed forward.',
   },
 };

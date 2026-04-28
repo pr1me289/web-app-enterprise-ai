@@ -33,19 +33,21 @@ export default function TakeawayPanel() {
         </h3>
         <p className="max-w-3xl text-base leading-relaxed text-ink-700">{t.body}</p>
 
-        <ul className="mt-3 grid gap-2 md:grid-cols-3">
-          {t.bullets.map((b, i) => (
-            <li
-              key={i}
-              className="flex items-start gap-2 rounded-xl border border-ink-100 bg-paper-muted/40 p-3"
-            >
-              <span className="mt-0.5 font-mono text-[0.65rem] uppercase tracking-[0.1em] text-accent">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <p className="text-sm leading-relaxed text-ink-700">{b}</p>
-            </li>
-          ))}
-        </ul>
+        {t.bullets && t.bullets.length > 0 && (
+          <ul className="mt-3 grid gap-2 md:grid-cols-3">
+            {t.bullets.map((b, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-2 rounded-xl border border-ink-100 bg-paper-muted/40 p-3"
+              >
+                <span className="mt-0.5 font-mono text-[0.65rem] uppercase tracking-[0.1em] text-accent">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <p className="text-sm leading-relaxed text-ink-700">{b}</p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </motion.aside>
   );

@@ -174,6 +174,6 @@ export interface DemoScenario {
   takeaway: {
     headline: string;
     body: string;
-    bullets: string[];
+    bullets?: string[];
   };
 }

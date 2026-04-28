@@ -850,7 +850,7 @@ export const cleanScenario: DemoScenario = {
       },
       {
         audience: 'Procurement Manager',
-        nextStep: 'Issue PO under fast-track terms; review vendor classification (Class C) and integration tier (Tier 3 — Export Only) against procurement standards.',
+        nextStep: 'Issue purchase order under fast-track terms; review vendor classification (Class C) and integration tier (Tier 3 — Export Only) against procurement standards.',
       },
       {
         audience: 'IT Security',
@@ -865,11 +865,6 @@ export const cleanScenario: DemoScenario = {
   takeaway: {
     headline: 'A clean run is unremarkable on purpose',
     body:
-      'Every step found exactly the evidence it needed in the right lane, the supervisor validated each output contract, and the pipeline produced a stakeholder-ready checklist without human intervention. The architecture earns its keep by making "boring" the default outcome when the inputs are right.',
-    bullets: [
-      'Six steps · five distinct agents · one supervisor · zero escalations.',
-      'Every determination cites the exact source row that justifies it.',
-      'EXPORT_ONLY / TIER_3 classification matched unambiguously against ISP-001 §12.2; no DPA trigger fired; fast-track approved.',
-    ],
+      'The supervisor walked all six steps to a clean COMPLETE — every domain agent grounded its determination in authoritative evidence, every output contract validated, and the pipeline produced a stakeholder-ready approval checklist without human intervention. This is the system working as designed: when inputs are sufficient and the evidence is unambiguous, the run completes traceably and without escalation.',
   },
 };
