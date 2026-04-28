@@ -442,6 +442,7 @@ interface StackStage {
   subtitle?: string;
   jurisdiction: string;
   documents: StackDoc[];
+  note?: string;
 }
 
 const documentStack: StackStage[] = [
@@ -507,14 +508,8 @@ const documentStack: StackStage[] = [
     name: 'Agent Specs',
     jurisdiction:
       'Agent behavior — used by the agents; defines DOs, DON’Ts, scope boundaries, and output contracts.',
-    documents: [
-      {
-        title: 'Agent Spec Version Log',
-        label: 'Agent_Spec_Version_Log.md',
-        src: '/stack-documents/Agent_Spec_Version_Log.md',
-        kind: 'markdown',
-      },
-    ],
+    documents: [],
+    note: 'See domain agent specs in next section',
   },
 ];
 ---
@@ -1320,15 +1315,19 @@ const documentStack: StackStage[] = [
                 {stage.jurisdiction}
               </p>
               <div class="mt-4 flex flex-wrap gap-2 border-t border-ink-100 pt-4">
-                {stage.documents.map((doc) => (
-                  <DocumentViewer
-                    client:visible
-                    src={doc.src}
-                    title={doc.title}
-                    label={doc.label}
-                    kind={doc.kind}
-                  />
-                ))}
+                {stage.note ? (
+                  <p class="text-sm italic text-ink-500">{stage.note}</p>
+                ) : (
+                  stage.documents.map((doc) => (
+                    <DocumentViewer
+                      client:visible
+                      src={doc.src}
+                      title={doc.title}
+                      label={doc.label}
+                      kind={doc.kind}
+                    />
+                  ))
+                )}
               </div>
             </div>
             <div class="relative hidden self-stretch md:block">
