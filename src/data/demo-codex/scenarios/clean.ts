@@ -5,7 +5,7 @@ import type { DemoScenario } from '../types';
 
 export const cleanScenario: DemoScenario = {
   id: 'clean',
-  title: 'Clean governed completion',
+  title: 'Happy path fast-track · COMPLETE',
   subtitle:
     'OptiChain submits a complete questionnaire with an export-only integration profile, no EU personal data, and an executed NDA. The pipeline runs all six steps and emits a stakeholder-ready fast-track approval package.',
   outcome: 'COMPLETE',
@@ -790,7 +790,7 @@ export const cleanScenario: DemoScenario = {
     status: 'COMPLETE',
     approvalPath: 'FAST_TRACK',
     fastTrack: 'APPROVED',
-    artifactName: 'Approval checklist · OptiChain · PRQ-2024-0047',
+    artifactName: 'Approval checklist',
     checklist: [
       {
         id: 'CHK-01',

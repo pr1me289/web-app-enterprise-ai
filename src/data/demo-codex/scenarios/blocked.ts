@@ -677,7 +677,7 @@ export const blockedScenario: DemoScenario = {
     status: 'BLOCKED',
     fastTrack: 'INELIGIBLE',
     haltedAt: 'STEP-04',
-    artifactName: 'Blocker package · OptiChain · PRQ-2024-0047',
+    artifactName: 'Blocker package',
     checklist: [
       {
         id: 'CHK-01',
@@ -709,41 +709,22 @@ export const blockedScenario: DemoScenario = {
         detail:
           'Router denied PAM-001 at retrieval. Bundle approval_path_matrix_rows is empty. Agent emitted status=blocked rather than fabricating approval rows.',
       },
-      {
-        id: 'CHK-05',
-        title: 'Approval checklist assembly',
-        owner: 'Checklist Assembler',
-        status: 'blocker',
-        detail: 'Cannot assemble a checklist without a resolved approval path.',
-      },
-      {
-        id: 'CHK-06',
-        title: 'Stakeholder checkoff and routing',
-        owner: 'Checkoff',
-        status: 'blocker',
-        detail: 'No checklist to route. The blocker package itself is the final artifact.',
-      },
     ],
     blockers: [
       {
         id: 'BLK-INF-001',
-        title: 'Register PAM-001 in the index',
-        owner: 'Data Engineering',
+        title: 'Register PAM-001 in the retrieval layer',
+        owner: 'Procurement Manager',
         requiredAction:
-          'Ingest Procurement_Approval_Matrix_v2_0 into the scenario index registry (chunk → embed → register). The file exists in mock_documents/ but was not indexed; rerunning will re-route the retrieval and complete STEP-04.',
-        citation: 'Procurement Agent Spec §10 · index_registry.json',
+          'PAM-001 is missing from the retrieval layer. The Procurement agent has no rows to consult and execution cannot proceed until the document is present in the retrieval layer and added to the index registry.',
+        citation: 'Procurement Agent Spec §10',
       },
     ],
     stakeholderGuidance: [
       {
-        audience: 'Data Engineering',
-        nextStep:
-          'Register PAM-001 in data/indexes/scenario_blocked_demo/index_registry.json and rebuild the indexed-hybrid store. The pipeline will recover at STEP-04 on the next run.',
-      },
-      {
         audience: 'Procurement Manager',
         nextStep:
-          'No procurement action yet — approval routing is blocked at the system level, not by anything procurement owes. Stand by until Data Engineering confirms PAM-001 is registered.',
+          'Track down the Procurement Approval Matrix, register it in the retrieval layer, and add it to the index registry so the pipeline can recover at STEP-04 on the next run.',
       },
       {
         audience: 'IT Security',
@@ -763,8 +744,8 @@ export const blockedScenario: DemoScenario = {
     ],
   },
   takeaway: {
-    headline: 'BLOCKED is the third governed outcome',
+    headline: 'BLOCKED is a guaranteed status emission whenever expected sources are missing',
     body:
-      'STEP-04 issued an approval-matrix query against PAM-001, but the source was absent from the index registry. The router failed closed, the bundle arrived without approval-matrix rows, and the Procurement agent emitted BLOCKED rather than inventing rows that did not exist. The supervisor halted; STEP-05 and STEP-06 did not run. This is the system working as designed: when an authoritative source has not been ingested, the registry-driven fail-closed model surfaces that absence as a terminal blocker routed to the team who owns ingestion, instead of letting an agent silently fabricate a path.',
+      'At STEP-04 the Procurement Approval Matrix was missing from the retrieval layer. The deterministic orchestration layer guarantees that missing source material surfaces as a BLOCKED status signal — never silently swallowed, never substituted by inference — and the Procurement agent reiterates the same signal at the determination boundary. The supervisor then halts the pipeline and routes the BLOCKED signal to the document owner, who must register the source in the retrieval layer and add it to the index registry before the run can proceed. STEP-05 and STEP-06 do not run.',
   },
 };
