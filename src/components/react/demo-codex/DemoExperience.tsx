@@ -84,7 +84,14 @@ export default function DemoExperience() {
     const target = finalOutputsSentinelRef.current;
     if (!target) return;
     const observer = new IntersectionObserver(
-      ([entry]) => setHideStickyStack(entry.isIntersecting),
+      ([entry]) => {
+        // Hide while the sentinel is intersecting (Final Outputs region in view)
+        // OR has scrolled above the viewport (we're below it). Without the
+        // top-side check, the bars would reappear once the sentinel exits at
+        // the top — i.e., when scrolling further down into the page footer.
+        const aboveViewport = entry.boundingClientRect.top < 0;
+        setHideStickyStack(entry.isIntersecting || aboveViewport);
+      },
       { rootMargin: '0px' },
     );
     observer.observe(target);
