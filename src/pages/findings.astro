@@ -7,29 +7,91 @@ import Container from '../components/astro/Container.astro';
   title="Summary"
   description="A concise closing summary of the spec-driven enterprise context engineering presentation."
 >
-  <section class="relative overflow-hidden border-b border-ink-100">
-    <div class="summary-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
-    <Container width="wide" class="relative py-16 md:py-24">
-      <div class="mx-auto max-w-5xl">
-        <p class="eyebrow text-accent">Part 07 · Summary</p>
-        <h1
-          class="display-balance mt-5 max-w-4xl font-serif text-display-sm font-semibold tracking-tight text-ink-900 md:text-display"
+  <section class="relative isolate overflow-hidden border-b border-ink-100 bg-paper">
+    <div class="summary-aurora pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <div class="summary-grain pointer-events-none absolute inset-0" aria-hidden="true"></div>
+
+    <Container width="wide" class="relative py-4 md:py-6">
+      <!-- Title — anchored to the top of the page -->
+      <h1
+        class="display-balance mx-auto max-w-5xl text-center font-serif text-display-sm font-semibold leading-[1.05] tracking-tight text-ink-900 md:text-display"
+      >
+        The story this project
+        <span class="mt-1 block italic text-accent">is really telling.</span>
+      </h1>
+
+      <!-- Ornamental divider -->
+      <div
+        class="mx-auto mt-10 flex w-full max-w-md items-center gap-3 md:mt-14"
+        aria-hidden="true"
+      >
+        <span class="h-px flex-1 bg-gradient-to-r from-transparent via-ink-200 to-transparent"
+        ></span>
+        <span class="text-sm text-accent">◆</span>
+        <span class="h-px flex-1 bg-gradient-to-l from-transparent via-ink-200 to-transparent"
+        ></span>
+      </div>
+
+      <!-- The two theses -->
+      <div class="mx-auto mt-10 max-w-5xl space-y-12 md:mt-14 md:space-y-16">
+        <!-- Thesis I — warm / accent · anchored left -->
+        <article
+          class="grid gap-6 md:max-w-3xl md:grid-cols-[minmax(0,5rem)_minmax(0,1fr)] md:items-start md:gap-12"
         >
-          The story this project is really telling.
-        </h1>
-        <div class="mt-14 space-y-8 md:mt-20 md:space-y-10">
-          <p class="summary-thesis summary-thesis--left">
-            Hand building enterprise-ready agentic infrastructure from scratch forces stakeholders
-            to
-            <span class="summary-thesis__accent"
-              >confront the friction between LLM behavior and enterprise constraints.</span
-            >
+          <p
+            aria-hidden="true"
+            class="font-serif text-7xl font-semibold italic leading-none tracking-tight text-accent/90 md:text-[8rem]"
+          >
+            I
           </p>
-          <p class="summary-thesis summary-thesis--right">
-            End-to-end spec-driven development forces <strong>ALL stakeholders</strong> to confront the
-            security, compliance, governance, and reliability demands of deploying AI inside a real business.
+          <div>
+            <p class="thesis-prose thesis-prose--warm">
+              Hand building enterprise-ready agentic infrastructure from scratch
+              <em class="thesis-emphasis thesis-emphasis--warm">forces</em>
+              stakeholders to confront the friction between LLM behavior and enterprise constraints.
+            </p>
+            <span
+              aria-hidden="true"
+              class="mt-6 block h-px w-16 bg-gradient-to-r from-accent/70 to-transparent"
+            ></span>
+          </div>
+        </article>
+
+        <!-- Thesis II — cool / spruce · anchored right -->
+        <article
+          class="ml-auto grid gap-6 md:max-w-3xl md:grid-cols-[minmax(0,1fr)_minmax(0,5rem)] md:items-start md:gap-12"
+        >
+          <div class="md:order-1 md:text-right">
+            <p class="thesis-prose thesis-prose--cool md:ml-auto">
+              End-to-end spec-driven development
+              <em class="thesis-emphasis thesis-emphasis--cool">forces</em>
+              ALL stakeholders to confront the security, compliance, governance, and reliability
+              demands of deploying AI inside a real business.
+            </p>
+            <span
+              aria-hidden="true"
+              class="mt-6 block h-px w-16 bg-gradient-to-l from-spruce-700/70 to-transparent md:ml-auto"
+            ></span>
+          </div>
+          <p
+            aria-hidden="true"
+            class="font-serif text-7xl font-semibold italic leading-none tracking-tight text-spruce-700/85 md:order-2 md:text-[8rem]"
+          >
+            II
           </p>
-        </div>
+        </article>
+      </div>
+
+      <!-- Closing rule -->
+      <div
+        class="mx-auto mt-14 flex w-full max-w-md items-center gap-3 md:mt-20"
+        aria-hidden="true"
+      >
+        <span class="h-px flex-1 bg-gradient-to-r from-transparent via-ink-200 to-transparent"
+        ></span>
+        <span class="text-[0.7rem] text-accent">◆</span>
+        <span class="h-px flex-1 bg-gradient-to-l from-transparent via-ink-200 to-transparent"
+        ></span>
       </div>
     </Container>
   </section>
@@ -120,57 +182,107 @@ import Container from '../components/astro/Container.astro';
 </BaseLayout>
 
 <style>
-  .summary-glow {
+  /* ----- Hero ambiance ---------------------------------------------------- */
+
+  .summary-aurora {
     background:
-      radial-gradient(circle at 20% 20%, rgba(157, 87, 40, 0.16), transparent 28rem),
-      radial-gradient(circle at 80% 10%, rgba(33, 71, 60, 0.14), transparent 26rem);
+      radial-gradient(72% 60% at 82% -4%, rgba(157, 87, 40, 0.22), transparent 62%),
+      radial-gradient(56% 48% at 0% 22%, rgba(157, 87, 40, 0.1), transparent 64%),
+      radial-gradient(70% 60% at 100% 78%, rgba(33, 71, 60, 0.18), transparent 60%),
+      radial-gradient(76% 60% at 14% 100%, rgba(33, 71, 60, 0.1), transparent 70%),
+      linear-gradient(180deg, rgba(252, 250, 245, 0) 0%, rgba(252, 250, 245, 0.55) 100%);
   }
 
-  .summary-thesis {
+  .summary-grain {
+    background-image: radial-gradient(rgba(24, 33, 38, 0.06) 0.6px, transparent 0.7px);
+    background-size: 18px 18px;
+    mask-image: radial-gradient(ellipse at center, black 28%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 28%, transparent 78%);
+    opacity: 0.6;
+  }
+
+  /* ----- Two-thesis prose ------------------------------------------------- */
+
+  .thesis-prose {
     position: relative;
     isolation: isolate;
-    max-width: 42rem;
-    margin: 0;
     font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-    font-size: clamp(1.45rem, 2vw, 2.25rem);
-    font-weight: 650;
-    line-height: 1.18;
-    letter-spacing: -0.018em;
+    font-size: clamp(1.4rem, 2vw, 2.15rem);
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.014em;
     color: #182126;
+    max-width: 38rem;
     text-wrap: balance;
+    margin: 0;
   }
 
-  .summary-thesis::before {
+  /* Translucent ambient glow behind each thesis paragraph */
+  .thesis-prose::before {
     content: '';
     position: absolute;
-    inset: -0.6rem -1rem;
+    inset: -1.75rem -2.25rem;
     z-index: -1;
     border-radius: 999px;
-    filter: blur(18px);
-    opacity: 0.76;
+    filter: blur(40px);
+    opacity: 0.55;
+    pointer-events: none;
   }
 
-  .summary-thesis--left::before {
-    background: linear-gradient(100deg, rgba(157, 87, 40, 0.24), rgba(252, 250, 245, 0));
+  .thesis-prose--warm::before {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(157, 87, 40, 0.55),
+      rgba(157, 87, 40, 0) 70%
+    );
   }
 
-  .summary-thesis--right {
-    margin-left: auto;
+  .thesis-prose--cool::before {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(33, 71, 60, 0.5),
+      rgba(33, 71, 60, 0) 70%
+    );
+  }
+
+  /* ----- "forces" emphasis — soft glow underline -------------------------- */
+
+  .thesis-emphasis {
+    position: relative;
+    font-style: italic;
+    font-weight: 700;
+    padding: 0 0.04em;
+  }
+
+  .thesis-emphasis::after {
+    content: '';
+    position: absolute;
+    left: 0.05em;
+    right: 0.05em;
+    bottom: -0.08em;
+    height: 0.32em;
+    z-index: -1;
+    border-radius: 999px;
+    filter: blur(2px);
+  }
+
+  .thesis-emphasis--warm {
+    color: #9d5728;
+  }
+
+  .thesis-emphasis--warm::after {
+    background: linear-gradient(120deg, rgba(157, 87, 40, 0.32), rgba(157, 87, 40, 0));
+  }
+
+  .thesis-emphasis--cool {
     color: #21473c;
   }
 
-  .summary-thesis--right::before {
-    background: linear-gradient(100deg, rgba(252, 250, 245, 0), rgba(33, 71, 60, 0.2));
+  .thesis-emphasis--cool::after {
+    background: linear-gradient(240deg, rgba(33, 71, 60, 0.28), rgba(33, 71, 60, 0));
   }
 
-  .summary-thesis strong {
-    color: #9d5728;
-    font-weight: 750;
-  }
-
-  .summary-thesis__accent {
-    color: #9d5728;
-  }
+  /* ----- Below-fold cards (unchanged) ------------------------------------ */
 
   .summary-card {
     border: 1px solid rgba(24, 33, 38, 0.08);
