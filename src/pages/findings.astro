@@ -96,86 +96,169 @@ import Container from '../components/astro/Container.astro';
     </Container>
   </section>
 
-  <section class="py-section-sm md:py-section">
-    <Container width="wide">
-      <div class="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
-        <article class="panel p-7 md:p-9">
-          <p class="eyebrow text-accent">My argument</p>
-          <p class="mt-5 font-serif text-2xl font-semibold leading-snug text-ink-900 md:text-3xl">
-            A custom orchestration layer is not extra architecture for its own sake. It is how an
-            enterprise makes its own security, reliability, and business constraints unavoidable
-            parts of the AI system.
-          </p>
-          <p class="mt-6 text-base leading-relaxed text-ink-700">
-            Without that layer, the organization inherits someone else&rsquo;s assumptions about
-            what matters, which sources count, when uncertainty is acceptable, and when a human
-            needs to step in. My approach treats those questions as the core product problem.
-          </p>
-        </article>
+  <section class="relative isolate overflow-hidden py-section-sm md:py-section">
+    <div class="repos-aurora pointer-events-none absolute inset-0" aria-hidden="true"></div>
 
-        <aside class="rounded-[1.25rem] border border-accent/20 bg-accent-soft/45 p-7 shadow-soft">
-          <p class="eyebrow text-accent">What changed</p>
-          <p class="mt-4 text-sm leading-relaxed text-ink-700">
-            The project reframes enterprise AI from &ldquo;give an agent more context&rdquo; to
-            <strong class="font-semibold text-ink-900">
-              govern what context it receives, why it receives it, and what it may do next</strong
-            >.
-          </p>
-        </aside>
-      </div>
-
-      <div class="mt-8 grid gap-4 md:grid-cols-3">
-        <article class="summary-card">
-          <span class="summary-card__number">01</span>
-          <h2>Research</h2>
-          <p>
-            The landscape showed why generic context engines, long-context prompts, and naive RAG
-            are not enough by themselves. Enterprise data carries authority, permissions, freshness,
-            and political ownership.
-          </p>
-        </article>
-        <article class="summary-card">
-          <span class="summary-card__number">02</span>
-          <h2>Approach</h2>
-          <p>
-            The proposed answer was spec-driven enterprise context engineering: a document stack,
-            hybrid source-aware retrieval, scoped context bundles, domain agents, and a
-            deterministic supervisor.
-          </p>
-        </article>
-        <article class="summary-card">
-          <span class="summary-card__number">03</span>
-          <h2>Demo</h2>
-          <p>
-            The replay made the architecture visible. Each step retrieved only what it needed,
-            produced structured output, passed through a supervisor gate, and either continued or
-            halted safely.
-          </p>
-        </article>
-      </div>
-
-      <div
-        class="mt-8 rounded-[1.5rem] border border-ink-100 bg-ink-900 p-7 text-paper shadow-soft md:p-9"
-      >
-        <p class="eyebrow text-paper/55">The core lesson</p>
-        <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,0.6fr)]">
-          <p class="font-serif text-2xl font-semibold leading-snug text-paper md:text-3xl">
-            The system should not feel magical. It should feel accountable.
-          </p>
-          <p class="text-sm leading-relaxed text-paper/70">
-            A complete run is valuable because every determination is traceable. An escalation is
-            valuable because ambiguity is preserved instead of hidden. The win is not just
-            automation; it is a workflow that business, legal, security, procurement, and
-            engineering can all inspect and trust.
-          </p>
+    <Container width="wide" class="relative">
+      <div class="mx-auto max-w-5xl">
+        <div class="text-center">
+          <p class="eyebrow text-accent">The source</p>
+          <h2
+            class="display-balance mx-auto mt-4 max-w-3xl font-serif text-3xl font-semibold leading-tight tracking-tight text-ink-900 md:text-4xl"
+          >
+            Two repositories — the presentation, and the system that powers it.
+          </h2>
         </div>
-      </div>
 
-      <div class="mx-auto mt-10 max-w-3xl text-center">
-        <p class="font-serif text-2xl leading-snug text-ink-900">
-          In short: this project argues that enterprise AI becomes useful when context is not merely
-          retrieved, but <strong class="font-semibold text-accent">governed</strong>.
-        </p>
+        <div class="mt-12 grid gap-6 md:mt-16 md:grid-cols-2 md:gap-8">
+          <!-- Repo I — Web app presentation (warm) -->
+          <article class="repo-card repo-card--warm">
+            <div class="flex items-center gap-3">
+              <span class="repo-card__index repo-card__index--warm">I</span>
+              <p
+                class="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-accent"
+              >
+                Web app presentation
+              </p>
+            </div>
+            <h3
+              class="mt-5 font-serif text-2xl font-semibold leading-snug text-ink-900 md:text-[1.6rem]"
+            >
+              This narrative site.
+            </h3>
+            <p class="mt-3 text-base leading-relaxed text-ink-700">
+              The Astro / MDX / React static build presenting the spec-driven approach, the
+              architecture, the four captured pipeline replays, and everything you have been
+              clicking through.
+            </p>
+            <a
+              href="https://github.com/pr1me289/web-app-enterprise-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="repo-card__link"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-4 w-4 shrink-0"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.16-.01-2.1-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.19 1.78 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.13 0 1.54-.01 2.78-.01 3.16 0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"
+                />
+              </svg>
+              <span class="truncate">github.com/pr1me289/web-app-enterprise-ai</span>
+              <span aria-hidden="true" class="ml-1 shrink-0">↗</span>
+            </a>
+          </article>
+
+          <!-- Repo II — The system (cool) -->
+          <article class="repo-card repo-card--cool">
+            <div class="flex items-center gap-3">
+              <span class="repo-card__index repo-card__index--cool">II</span>
+              <p
+                class="font-mono text-[0.62rem] uppercase tracking-[0.18em] text-spruce-700"
+              >
+                The system
+              </p>
+            </div>
+            <h3
+              class="mt-5 font-serif text-2xl font-semibold leading-snug text-ink-900 md:text-[1.6rem]"
+            >
+              The engineering repository.
+            </h3>
+            <p class="mt-3 text-base leading-relaxed text-ink-700">
+              The orchestration layer, retrieval layer, chunking and embedding, storage and
+              indexing, cross-encoder reranking, the deterministic supervisor, and the agent
+              specs that govern every domain agent.
+            </p>
+            <span class="repo-card__link repo-card__link--pending">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-4 w-4 shrink-0"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.16-.01-2.1-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.19 1.78 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.13 0 1.54-.01 2.78-.01 3.16 0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"
+                />
+              </svg>
+              <span class="italic">repository link coming soon</span>
+            </span>
+          </article>
+        </div>
+
+        <!-- Contact / colophon -->
+        <div class="mx-auto mt-20 max-w-3xl text-center md:mt-28">
+          <div
+            class="mx-auto flex w-full max-w-md items-center gap-3"
+            aria-hidden="true"
+          >
+            <span
+              class="h-px flex-1 bg-gradient-to-r from-transparent via-ink-200 to-transparent"
+            ></span>
+            <span class="text-sm text-accent">◆</span>
+            <span
+              class="h-px flex-1 bg-gradient-to-l from-transparent via-ink-200 to-transparent"
+            ></span>
+          </div>
+
+          <p class="eyebrow mt-10 text-accent">Get in touch</p>
+
+          <p
+            class="mx-auto mt-5 max-w-2xl font-serif text-xl leading-snug text-ink-800 md:text-2xl"
+          >
+            I&rsquo;d welcome the conversation — about this project, the architecture behind it,
+            or related work in the space.
+          </p>
+
+          <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href="https://www.linkedin.com/in/pierce-nellessen-188366197/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="contact-pill"
+              aria-label="LinkedIn — Pierce Nellessen"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="h-4 w-4 shrink-0"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"
+                />
+              </svg>
+              <span>linkedin.com/in/pierce-nellessen</span>
+              <span aria-hidden="true" class="ml-0.5 text-ink-400">↗</span>
+            </a>
+            <a
+              href="mailto:nellessen.pierce12@gmail.com"
+              class="contact-pill"
+              aria-label="Email — nellessen.pierce12@gmail.com"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="h-4 w-4 shrink-0"
+                aria-hidden="true"
+              >
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="m3 7 9 6 9-6"></path>
+              </svg>
+              <span>nellessen.pierce12@gmail.com</span>
+            </a>
+          </div>
+        </div>
       </div>
     </Container>
   </section>
@@ -282,39 +365,159 @@ import Container from '../components/astro/Container.astro';
     background: linear-gradient(240deg, rgba(33, 71, 60, 0.28), rgba(33, 71, 60, 0));
   }
 
-  /* ----- Below-fold cards (unchanged) ------------------------------------ */
+  /* ----- Repository cards (second-page source presentation) -------------- */
 
-  .summary-card {
-    border: 1px solid rgba(24, 33, 38, 0.08);
-    border-radius: 1.25rem;
-    background: rgba(252, 250, 245, 0.88);
-    padding: 1.5rem;
-    box-shadow:
-      0 8px 24px rgba(24, 33, 38, 0.06),
-      0 1px 2px rgba(24, 33, 38, 0.05);
+  .repos-aurora {
+    background:
+      radial-gradient(60% 50% at 12% 15%, rgba(157, 87, 40, 0.08), transparent 64%),
+      radial-gradient(60% 50% at 88% 90%, rgba(33, 71, 60, 0.08), transparent 64%);
   }
 
-  .summary-card__number {
+  .repo-card {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(24, 33, 38, 0.08);
+    background: rgba(252, 250, 245, 0.85);
+    padding: 1.75rem;
+    box-shadow:
+      0 18px 42px -22px rgba(24, 33, 38, 0.18),
+      0 1px 2px rgba(24, 33, 38, 0.04);
+    transition:
+      transform 220ms ease,
+      box-shadow 220ms ease,
+      border-color 220ms ease;
+  }
+
+  @media (min-width: 768px) {
+    .repo-card {
+      padding: 2.25rem;
+    }
+  }
+
+  .repo-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0.55;
+    pointer-events: none;
+  }
+
+  .repo-card--warm::before {
+    background: radial-gradient(120% 120% at 0% 0%, rgba(157, 87, 40, 0.18), transparent 60%);
+  }
+
+  .repo-card--cool::before {
+    background: radial-gradient(120% 120% at 100% 100%, rgba(33, 71, 60, 0.18), transparent 60%);
+  }
+
+  .repo-card--warm:hover {
+    border-color: rgba(157, 87, 40, 0.45);
+    transform: translateY(-2px);
+  }
+
+  .repo-card--cool:hover {
+    border-color: rgba(33, 71, 60, 0.45);
+  }
+
+  .repo-card__index {
     display: inline-flex;
-    margin-bottom: 1rem;
+    align-items: center;
+    justify-content: center;
+    min-width: 2rem;
+    height: 2rem;
+    padding: 0 0.55rem;
+    border-radius: 999px;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .repo-card__index--warm {
+    color: #9d5728;
+    background: rgba(157, 87, 40, 0.1);
+    border: 1px solid rgba(157, 87, 40, 0.28);
+  }
+
+  .repo-card__index--cool {
+    color: #21473c;
+    background: rgba(33, 71, 60, 0.1);
+    border: 1px solid rgba(33, 71, 60, 0.28);
+  }
+
+  .repo-card__link {
+    margin-top: auto;
+    padding-top: 1.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    align-self: flex-start;
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.68rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.01em;
+    color: #182126;
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  .repo-card__link[href]:hover {
     color: #9d5728;
   }
 
-  .summary-card h2 {
-    font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #182126;
+  .repo-card__link[href]:hover svg {
+    transform: translate(0, -1px);
   }
 
-  .summary-card p {
-    margin-top: 0.75rem;
-    font-size: 0.95rem;
-    line-height: 1.7;
-    color: #47616d;
+  .repo-card__link svg {
+    transition: transform 200ms ease;
+  }
+
+  .repo-card__link--pending {
+    color: rgba(24, 33, 38, 0.5);
+    cursor: default;
+    font-style: normal;
+  }
+
+  .repo-card__link--pending svg {
+    opacity: 0.55;
+  }
+
+  /* ----- Contact pills (colophon) ---------------------------------------- */
+
+  .contact-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.65rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid rgba(24, 33, 38, 0.12);
+    background: rgba(252, 250, 245, 0.85);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.01em;
+    color: #182126;
+    text-decoration: none;
+    transition:
+      border-color 200ms ease,
+      color 200ms ease,
+      transform 200ms ease,
+      background 200ms ease;
+  }
+
+  .contact-pill:hover {
+    color: #9d5728;
+    border-color: rgba(157, 87, 40, 0.45);
+    background: rgba(252, 250, 245, 1);
+    transform: translateY(-1px);
+  }
+
+  .contact-pill:hover svg {
+    color: #9d5728;
   }
 </style>
