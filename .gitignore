@@ -8,7 +8,7 @@ dist/
 # Deploy
 .vercel/
 
-# Environment — never commit secrets (see CLAUDE.md)
+# Environment — never commit secrets
 .env
 .env.*
 !.env.example

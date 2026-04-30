@@ -1,6 +1,6 @@
 # USER_MANUAL
 
-Operator reference for the `web-app-enterprise-ai` repo. For _why_ over _how_, see `README.md` and `CLAUDE.md`.
+Operator reference for the `web-app-enterprise-ai` repo. For _why_ over _how_, see `README.md`.
 
 ## Stack at a glance
 
@@ -71,7 +71,7 @@ product_docs/                    # Canonical PRD / Design Doc / Context Contract
 tests/                           # Reserved (empty)
 ```
 
-Root docs: `README.md`, `CLAUDE.md`, `AGENTS.md`, `master_log.md`, `presentation_flow.md`, `summary_notes.md`, `USER_MANUAL.md` (this file). `past_prompts.md` is operator-private — do not read or modify.
+Root docs: `README.md`, `master_log.md`, `presentation_flow.md`, `summary_notes.md`, `USER_MANUAL.md` (this file). `past_prompts.md` is operator-private — do not read or modify.
 
 ## Entry points / routes
 
@@ -180,6 +180,6 @@ First-time setup: `corepack enable pnpm && nvm use && pnpm install`.
 ## Workflow reminders
 
 - Never commit to `main` directly. Branch as `feat/...`, `fix/...`, `chore/...`, `content/...`.
-- Log meaningful changes in `master_log.md` (format in `CLAUDE.md`).
+- Log meaningful changes in `master_log.md`.
 - Keep `public/stack-documents/` PDFs in sync with `product_docs/core_docs/` by manual copy.
 - Never read or modify `past_prompts.md`.
