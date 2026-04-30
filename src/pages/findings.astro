@@ -15,4 +15,131 @@ import SectionHero from '../components/astro/SectionHero.astro';
       />
     </Container>
   </section>
+
+  <section>
+    <Container width="wide" class="py-16 md:py-24">
+      <div class="mx-auto max-w-3xl space-y-14 text-ink-800">
+        <div>
+          <p class="eyebrow mb-3 text-accent">The paradox</p>
+          <p class="text-base leading-relaxed">
+            Enterprises have invested heavily in AI and seen comparatively little operational
+            impact. The bottleneck is not model capability — it is the
+            <strong class="font-semibold text-ink-900"
+              >governed translation from enterprise intent into context an agent can actually act
+              on.</strong
+            >
+          </p>
+        </div>
+
+        <div>
+          <p class="eyebrow mb-3 text-accent">Why most existing answers fall short</p>
+          <p class="text-base leading-relaxed">
+            Platform AI products tend to treat enterprises as interchangeable. They are not.
+            Security models, authority hierarchies, internal systems, and compliance obligations
+            are specific to the organization, and a generic context engine flattens differences
+            that matter. Most of the 2026 context-engine boom has focused on retrieval over code;
+            <strong class="font-semibold text-ink-900"
+              >far fewer products are solving governed translation from enterprise intent into
+              scoped, authority-aware agent context.</strong
+            >
+          </p>
+        </div>
+
+        <figure class="border-l-[3px] border-accent bg-accent-soft/40 py-6 pl-7 pr-6">
+          <p class="eyebrow mb-4 text-accent">My argument</p>
+          <blockquote
+            class="font-serif text-2xl font-semibold leading-snug tracking-tight text-ink-900 md:text-3xl"
+          >
+            A hand-built orchestration layer is not architectural ambition. It is a forcing
+            function — the path that makes an enterprise
+            <span class="text-accent"
+              >confront its own security, reliability, and business constraints</span
+            > rather than inherit someone else&rsquo;s answers.
+          </blockquote>
+        </figure>
+
+        <div>
+          <p class="eyebrow mb-3 text-accent">The approach in three notes</p>
+          <div class="space-y-4 text-base leading-relaxed">
+            <p>
+              <strong class="font-semibold text-ink-900">Spec-driven before runtime.</strong> A
+              four-document stack (PRD → Design Doc → Context Contract → Agent Specs) governs what
+              context can be assembled, who can see it, and what each agent must produce. The
+              behavior of the system is decided in writing before any code runs.
+            </p>
+            <p>
+              <strong class="font-semibold text-ink-900">Deterministic supervisor at runtime.</strong>
+              A Python state machine owns step order, retrieval routing, and the conditions under
+              which the pipeline advances, escalates, or halts. The supervisor never invents — it
+              preserves.
+            </p>
+            <p>
+              <strong class="font-semibold text-ink-900">Governed agentic retrieval.</strong>
+              Per-source lanes — dense, lexical, and direct structured access — feed scoped bundles
+              assembled by the supervisor. Authority tiers and permissions are honored before the
+              agent ever sees anything.
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <p class="eyebrow mb-3 text-accent">What the demo showed</p>
+          <p class="text-base leading-relaxed">
+            Four recorded runs of a vendor-onboarding pipeline. Three terminal status emissions
+            surfaced exactly when they should:
+          </p>
+          <ul class="mt-5 space-y-3">
+            <li class="flex items-start gap-3">
+              <span
+                class="inline-flex shrink-0 items-center rounded-full border border-spruce-700/30 bg-spruce-50 px-2.5 py-0.5 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-spruce-700"
+              >
+                Complete
+              </span>
+              <p class="text-sm leading-relaxed text-ink-700">
+                when evidence resolves the question and the pipeline can proceed.
+              </p>
+            </li>
+            <li class="flex items-start gap-3">
+              <span
+                class="inline-flex shrink-0 items-center rounded-full border border-accent/40 bg-accent-soft/60 px-2.5 py-0.5 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-accent"
+              >
+                Escalated
+              </span>
+              <p class="text-sm leading-relaxed text-ink-700">
+                when evidence is conflicting or the decision is ambiguous, and a human owner must
+                decide.
+              </p>
+            </li>
+            <li class="flex items-start gap-3">
+              <span
+                class="inline-flex shrink-0 items-center rounded-full border border-rose-700/30 bg-rose-50 px-2.5 py-0.5 font-mono text-[0.62rem] uppercase tracking-[0.1em] text-rose-700"
+              >
+                Blocked
+              </span>
+              <p class="text-sm leading-relaxed text-ink-700">
+                when required evidence is absent, and the run cannot honestly continue.
+              </p>
+            </li>
+          </ul>
+          <p class="mt-6 text-base leading-relaxed">
+            These are not error codes. They are
+            <strong class="font-semibold text-ink-900">governed signals</strong> — the system telling
+            its operators what is true, what is in question, and what is missing.
+          </p>
+        </div>
+
+        <div>
+          <p class="eyebrow mb-3 text-accent">Closing</p>
+          <p class="text-base leading-relaxed">
+            Enterprise AI does not become trustworthy by adding more context. It becomes
+            trustworthy when the
+            <strong class="font-semibold text-ink-900">context layer is built deliberately</strong>,
+            the orchestration is inspectable, and the system&rsquo;s answers — including its
+            refusals — are routable to the people who own them. That, more than anything else, is
+            what this project set out to demonstrate.
+          </p>
+        </div>
+      </div>
+    </Container>
+  </section>
 </BaseLayout>
