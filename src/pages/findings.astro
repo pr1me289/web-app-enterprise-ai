@@ -11,7 +11,7 @@ import Container from '../components/astro/Container.astro';
     <div class="summary-aurora pointer-events-none absolute inset-0" aria-hidden="true"></div>
     <div class="summary-grain pointer-events-none absolute inset-0" aria-hidden="true"></div>
 
-    <Container width="wide" class="relative py-4 md:py-6">
+    <Container width="wide" class="relative py-6 md:py-10">
       <!-- Title — anchored to the top of the page -->
       <h1
         class="display-balance mx-auto max-w-5xl text-center font-serif text-display-sm font-semibold leading-[1.05] tracking-tight text-ink-900 md:text-display"
@@ -191,7 +191,12 @@ import Container from '../components/astro/Container.astro';
               indexing, cross-encoder reranking, the deterministic supervisor, and the agent
               specs that govern every domain agent.
             </p>
-            <span class="repo-card__link repo-card__link--pending">
+            <a
+              href="https://github.com/pr1me289/enterprise_ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="repo-card__link"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -203,8 +208,9 @@ import Container from '../components/astro/Container.astro';
                   d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55 0-.27-.01-1.16-.01-2.1-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.69-1.28-1.69-1.05-.72.08-.7.08-.7 1.16.08 1.78 1.19 1.78 1.19 1.03 1.77 2.71 1.26 3.37.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.18 1.18.92-.26 1.91-.39 2.89-.39.98 0 1.97.13 2.89.39 2.21-1.49 3.18-1.18 3.18-1.18.62 1.58.23 2.75.11 3.04.74.81 1.18 1.84 1.18 3.1 0 4.43-2.69 5.41-5.25 5.69.41.36.78 1.06.78 2.13 0 1.54-.01 2.78-.01 3.16 0 .31.21.67.8.55C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z"
                 />
               </svg>
-              <span class="italic">repository link coming soon</span>
-            </span>
+              <span class="truncate">github.com/pr1me289/enterprise_ai</span>
+              <span aria-hidden="true" class="ml-1 shrink-0">↗</span>
+            </a>
           </article>
         </div>
 
@@ -285,13 +291,15 @@ import Container from '../components/astro/Container.astro';
 <style>
   /* ----- Hero ambiance ---------------------------------------------------- */
 
+  /* Hero ends with rich cool blooms at the bottom — no paper-fade at the
+     seam so the section blends into the second-page aurora rather than
+     resetting to bare paper. */
   .summary-aurora {
     background:
       radial-gradient(72% 60% at 82% -4%, rgba(157, 87, 40, 0.22), transparent 62%),
       radial-gradient(56% 48% at 0% 22%, rgba(157, 87, 40, 0.1), transparent 64%),
-      radial-gradient(70% 60% at 100% 78%, rgba(33, 71, 60, 0.18), transparent 60%),
-      radial-gradient(76% 60% at 14% 100%, rgba(33, 71, 60, 0.1), transparent 70%),
-      linear-gradient(180deg, rgba(252, 250, 245, 0) 0%, rgba(252, 250, 245, 0.55) 100%);
+      radial-gradient(72% 62% at 100% 86%, rgba(33, 71, 60, 0.2), transparent 60%),
+      radial-gradient(78% 62% at 14% 104%, rgba(33, 71, 60, 0.16), transparent 70%);
   }
 
   .summary-grain {
@@ -385,13 +393,17 @@ import Container from '../components/astro/Container.astro';
 
   /* ----- Repository cards (second-page source presentation) -------------- */
 
+  /* Second section picks up where the hero leaves off — cool blooms at the
+     top edge meet the hero's cool-bottom blooms for a continuous wash, then
+     the warmth returns at the bottom of the page so the colour cycles
+     warm → cool → cool → warm vertically across the two sections. */
   .repos-aurora {
     background:
-      radial-gradient(58% 50% at 8% 14%, rgba(157, 87, 40, 0.16), transparent 65%),
-      radial-gradient(48% 42% at 92% 8%, rgba(33, 71, 60, 0.1), transparent 66%),
-      radial-gradient(60% 55% at 94% 92%, rgba(33, 71, 60, 0.18), transparent 62%),
-      radial-gradient(52% 44% at 4% 96%, rgba(157, 87, 40, 0.1), transparent 70%),
-      linear-gradient(180deg, rgba(252, 250, 245, 0) 0%, rgba(252, 250, 245, 0.45) 100%);
+      radial-gradient(64% 50% at 8% -4%, rgba(33, 71, 60, 0.18), transparent 64%),
+      radial-gradient(56% 44% at 96% -2%, rgba(33, 71, 60, 0.14), transparent 66%),
+      radial-gradient(64% 54% at 96% 70%, rgba(157, 87, 40, 0.18), transparent 62%),
+      radial-gradient(60% 52% at 4% 96%, rgba(157, 87, 40, 0.16), transparent 68%),
+      radial-gradient(50% 38% at 50% 50%, rgba(252, 250, 245, 0.35), transparent 70%);
   }
 
   .repos-grain {
@@ -402,27 +414,28 @@ import Container from '../components/astro/Container.astro';
     opacity: 0.55;
   }
 
-  /* Soft accent halo behind the section heading */
+  /* Soft halo behind the section heading — paper-cream so it pops out of
+     the cool zone at the top of this section without clashing. */
   .repos-heading-glow {
     position: absolute;
-    inset: -1.5rem 25% -1rem;
+    inset: -1.5rem 22% -1rem;
     z-index: -1;
     border-radius: 999px;
     background: radial-gradient(
       ellipse at center,
-      rgba(157, 87, 40, 0.16),
-      rgba(157, 87, 40, 0) 70%
+      rgba(252, 250, 245, 0.65),
+      rgba(252, 250, 245, 0) 72%
     );
-    filter: blur(38px);
+    filter: blur(34px);
     pointer-events: none;
   }
 
-  /* Ornamental corner glyphs — subtle outlined diamonds bracketing the section */
+  /* Ornamental corner glyphs — colors mirror their nearest aurora bloom:
+     cool at top-left, warm at bottom-right. */
   .repos-corner {
     position: absolute;
     width: 22px;
     height: 22px;
-    border: 1px solid rgba(157, 87, 40, 0.5);
     transform: rotate(45deg);
     pointer-events: none;
   }
@@ -430,12 +443,13 @@ import Container from '../components/astro/Container.astro';
   .repos-corner--tl {
     top: 2.5rem;
     left: 2rem;
+    border: 1px solid rgba(33, 71, 60, 0.5);
   }
 
   .repos-corner--br {
     right: 2rem;
     bottom: 2.5rem;
-    border-color: rgba(33, 71, 60, 0.5);
+    border: 1px solid rgba(157, 87, 40, 0.5);
   }
 
   @media (max-width: 767px) {

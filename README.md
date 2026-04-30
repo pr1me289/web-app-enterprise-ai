@@ -1,4 +1,4 @@
-# Spec-Driven Enterprise Context Engineering
+# Narrative Web-app for Enterprise-AI Project
 
 > A narrative web application presenting a spec-driven approach to enterprise context engineering — a governance philosophy and multi-agent architecture for deploying LLM agents safely and effectively over enterprise data.
 
