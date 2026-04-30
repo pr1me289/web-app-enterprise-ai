@@ -36,7 +36,7 @@ The approach is demonstrated end-to-end through a mock vendor-onboarding pipelin
 
 The system being presented consists of:
 
-- **Four-document spec hierarchy** — PRD → Design Doc → Context Contract → Agent Specs. Each document owns a non-overlapping governance dimension.
+- **Five-document spec hierarchy** — PRD → Design Doc → Context Contract → Orchestration Plan → Agent Specs. Each document owns a non-overlapping governance dimension.
 - **Deterministic supervisor orchestration** — a Python state machine walking six pipeline steps with explicit gate conditions, retrieval routing, and `PipelineState` mutation rules.
 - **Hybrid agentic retrieval** — per-source Chroma (dense) + BM25 (lexical) collections, row-targeted matrix retrieval, cross-encoder re-ranking, authority-weighted bundle assembly across multiple governed source types.
 - **LLM domain agents** — five agents (IT Security, Legal, Procurement, Checklist Assembler, Checkoff), each governed by a behavioral spec with strict DOs / DON'Ts, output contracts, and distinct `complete` / `escalated` / `blocked` output shapes.
