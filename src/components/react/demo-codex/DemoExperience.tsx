@@ -75,22 +75,24 @@ export default function DemoExperience() {
 
   const meta = scenarios[scenario];
 
-  // Hide the sticky strip + controls once the Final Outputs section enters
-  // the viewport. The user has reached the conclusion; the playback affordances
-  // are no longer relevant. Show them again when scrolling back up.
-  const finalOutputsSentinelRef = useRef<HTMLDivElement>(null);
+  // Hide the sticky strip + controls once the bottom of the stages frame has
+  // scrolled above the top of the viewport — i.e., the user can no longer see
+  // any of the stages box. While any portion of the stages frame is still
+  // visible (or sits below the viewport), the bar follows the user. Show again
+  // when scrolling back up.
+  const stagesBottomSentinelRef = useRef<HTMLDivElement>(null);
   const [hideStickyStack, setHideStickyStack] = useState(false);
   useEffect(() => {
-    const target = finalOutputsSentinelRef.current;
+    const target = stagesBottomSentinelRef.current;
     if (!target) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Hide while the sentinel is intersecting (Final Outputs region in view)
-        // OR has scrolled above the viewport (we're below it). Without the
-        // top-side check, the bars would reappear once the sentinel exits at
-        // the top — i.e., when scrolling further down into the page footer.
-        const aboveViewport = entry.boundingClientRect.top < 0;
-        setHideStickyStack(entry.isIntersecting || aboveViewport);
+        // The sentinel sits immediately after the stages frame, so it marks
+        // the bottom edge of the stages box. When its top edge moves above
+        // the viewport top (rect.top < 0), the stages box has fully scrolled
+        // off the top — hide. While the sentinel is still in view or below
+        // the viewport, the stages box is at least partially visible — show.
+        setHideStickyStack(entry.boundingClientRect.top < 0);
       },
       { rootMargin: '0px' },
     );
@@ -232,6 +234,10 @@ export default function DemoExperience() {
         <div className={`${FRAME_BOX} ${runFinalized ? HALO_DIM : HALO_ACTIVE}`}>
           <CurrentStepPanel />
         </div>
+        {/* Sentinel for the sticky-stack hide trigger: marks the bottom of
+            the stages frame. Sticky bars stay visible while this element is
+            anywhere from in-view to below the viewport. */}
+        <div ref={stagesBottomSentinelRef} aria-hidden />
         <StepInspectionDrawers />
 
         {/* Final-outputs frame — always present. Halo lights up only once
@@ -239,7 +245,6 @@ export default function DemoExperience() {
         <div
           className={`${FRAME_BOX} ${runFinalized ? HALO_ACTIVE : HALO_DIM} mt-12 flex flex-col gap-12 md:mt-16`}
         >
-          <div ref={finalOutputsSentinelRef} aria-hidden />
           <FinalOutputsPanel />
           <TakeawayPanel />
         </div>
