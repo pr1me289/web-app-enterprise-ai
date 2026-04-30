@@ -7,7 +7,6 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Node](https://img.shields.io/badge/Node-20%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-9%2B-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
-[![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-lightgrey)](#license)
 
 The system being presented was built in a separate engineering repository. **This site presents the approach, architecture, and findings** — backed by four pre-captured pipeline runs the visitor can replay step-by-step.
 
