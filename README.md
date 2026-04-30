@@ -10,6 +10,10 @@
 
 The system being presented was built in a separate engineering repository. **This site presents the approach, architecture, and findings** — backed by four pre-captured pipeline runs the visitor can replay step-by-step.
 
+Link to the narrative web-app presentation: [https://www.piercenellessen.com](https://www.piercenellessen.com)
+
+Github repo for the main build: [https://github.com/pr1me289/enterprise_ai](https://github.com/pr1me289/enterprise_ai)
+
 ---
 
 ## Table of contents
