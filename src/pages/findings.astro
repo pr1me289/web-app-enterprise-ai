@@ -10,23 +10,26 @@ import Container from '../components/astro/Container.astro';
   <section class="relative overflow-hidden border-b border-ink-100">
     <div class="summary-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
     <Container width="wide" class="relative py-16 md:py-24">
-      <div class="mx-auto max-w-4xl text-center">
+      <div class="mx-auto max-w-5xl">
         <p class="eyebrow text-accent">Part 07 · Summary</p>
         <h1
-          class="display-balance mt-5 font-serif text-display-sm font-semibold tracking-tight text-ink-900 md:text-display"
+          class="display-balance mt-5 max-w-4xl font-serif text-display-sm font-semibold tracking-tight text-ink-900 md:text-display"
         >
           The story this project is really telling.
         </h1>
-        <p class="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-ink-600 md:text-xl">
-          Hand building enterprise-ready agentic infrastructure from scratch <em
-            class="font-semibold italic text-ink-900">forces</em
-          > stakeholders to confront the friction between LLM behavior and enterprise constraints.
-        </p>
-        <p class="mx-auto mt-5 max-w-3xl text-lg leading-relaxed text-ink-600 md:text-xl">
-          End-to-end spec-driven development <em class="font-semibold italic text-ink-900">forces</em> ALL stakeholders to
-          confront the security, compliance, governance, and reliability demands of deploying AI
-          inside a real business.
-        </p>
+        <div class="mt-14 space-y-8 md:mt-20 md:space-y-10">
+          <p class="summary-thesis summary-thesis--left">
+            Hand building enterprise-ready agentic infrastructure from scratch forces stakeholders
+            to
+            <span class="summary-thesis__accent"
+              >confront the friction between LLM behavior and enterprise constraints.</span
+            >
+          </p>
+          <p class="summary-thesis summary-thesis--right">
+            End-to-end spec-driven development forces <strong>ALL stakeholders</strong> to confront the
+            security, compliance, governance, and reliability demands of deploying AI inside a real business.
+          </p>
+        </div>
       </div>
     </Container>
   </section>
@@ -121,6 +124,52 @@ import Container from '../components/astro/Container.astro';
     background:
       radial-gradient(circle at 20% 20%, rgba(157, 87, 40, 0.16), transparent 28rem),
       radial-gradient(circle at 80% 10%, rgba(33, 71, 60, 0.14), transparent 26rem);
+  }
+
+  .summary-thesis {
+    position: relative;
+    isolation: isolate;
+    max-width: 42rem;
+    margin: 0;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: clamp(1.45rem, 2vw, 2.25rem);
+    font-weight: 650;
+    line-height: 1.18;
+    letter-spacing: -0.018em;
+    color: #182126;
+    text-wrap: balance;
+  }
+
+  .summary-thesis::before {
+    content: '';
+    position: absolute;
+    inset: -0.6rem -1rem;
+    z-index: -1;
+    border-radius: 999px;
+    filter: blur(18px);
+    opacity: 0.76;
+  }
+
+  .summary-thesis--left::before {
+    background: linear-gradient(100deg, rgba(157, 87, 40, 0.24), rgba(252, 250, 245, 0));
+  }
+
+  .summary-thesis--right {
+    margin-left: auto;
+    color: #21473c;
+  }
+
+  .summary-thesis--right::before {
+    background: linear-gradient(100deg, rgba(252, 250, 245, 0), rgba(33, 71, 60, 0.2));
+  }
+
+  .summary-thesis strong {
+    color: #9d5728;
+    font-weight: 750;
+  }
+
+  .summary-thesis__accent {
+    color: #9d5728;
   }
 
   .summary-card {
