@@ -1,4 +1,4 @@
-# Engineering & Project Development Guidelines — Narrative Web App for Enterprise-AI Project
+# Engineering & Project Development Guidelines — Narrative Web App for Enterprise-AI
 
 ---
 

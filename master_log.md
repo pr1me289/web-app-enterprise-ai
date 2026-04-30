@@ -1,6 +1,6 @@
 # Master Log
 
-### [#1] 2026-04-21 | Claude Code
+### [#1] 2026-04-21 | Claude
 
 **Task:** Initial repo setup per README.md and CLAUDE.md — install the full tech stack, create configuration, and scaffold the Astro project structure.
 **Plan:**
