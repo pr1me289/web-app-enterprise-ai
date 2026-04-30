@@ -1,211 +1,263 @@
-# Enterprise AI Narrative Web App
+# Spec-Driven Enterprise Context Engineering
 
-A presentation website walking through a spec-driven approach to enterprise context engineering — a governance philosophy and multi-agent architecture for deploying LLM agents safely and effectively over enterprise data.
+> A narrative web application presenting a spec-driven approach to enterprise context engineering — a governance philosophy and multi-agent architecture for deploying LLM agents safely and effectively over enterprise data.
 
-The approach is demonstrated via a mock business scenario featuring a fictional manufacturer ("Lichen Manufacturing") onboarding a fictional software vendor ("OptiChain"). The scenario makes the governance and architectural principles concrete; it is not the subject.
+[![Built with Astro](https://img.shields.io/badge/built%20with-Astro%204-FF5D01?logo=astro&logoColor=white)](https://astro.build)
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.x-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Node](https://img.shields.io/badge/Node-20%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-9%2B-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-lightgrey)](#license)
 
-The underlying pipeline was built in a separate repository. This repository presents the approach, architecture, and findings.
-
----
-
-## Overview
-
-This site is a narrative web application structured around seven content parts, split across three deployable pages:
-
-**Main page (long-scroll, parts 1–5):**
-
-1. **Title** — framing the enterprise AI paradox: investment vs. impact
-2. **Introduction** — a spec-driven approach to enterprise context engineering
-3. **Problem & Landscape** — current approaches, players, and constraints in enterprise AI
-4. **Approach** — spec-driven development philosophy, deterministic supervisor rationale, hybrid agentic retrieval architecture, domain agent model
-5. **Business Scenario** — the mock scenario used for demonstration; stakeholders, problem shape
-
-**/demo page (part 6):** Interactive replay of a captured pipeline run on the mock scenario.
-
-**/findings page (part 7):** What was learned, evaluation results, reflections.
-
-Every section uses progressive disclosure — a plain-language default view with optional expanders revealing spec excerpts, architectural detail, and design rationale. The site is built to serve both non-technical and technical readers without compromising either.
+The system being presented was built in a separate engineering repository. **This site presents the approach, architecture, and findings** — backed by four pre-captured pipeline runs the visitor can replay step-by-step.
 
 ---
 
-## Prior To Working (IMPORTANT)
+## Table of contents
 
-Read presentation_flow.md
-
-This is our current working (subject to change) presentation flow and ideation doc
+- [What this site is](#what-this-site-is)
+- [Pages](#pages)
+- [The spec stack](#the-spec-stack)
+- [The demo](#the-demo)
+- [Tech stack](#tech-stack)
+- [Project structure](#project-structure)
+- [Getting started](#getting-started)
+- [Build pipeline](#build-pipeline)
+- [Commands](#commands)
+- [Deployment](#deployment)
+- [License](#license)
 
 ---
 
-## What This Site Presents
+## What this site is
 
-The subject is a governance philosophy and architecture for enterprise AI: how to deploy LLM agents over sensitive enterprise data with auditability, role-based access, and determinism built in from the start rather than retrofitted. The approach is demonstrated end-to-end through a working pipeline, but the principles generalize across enterprise workflows and are not tied to any particular business function.
+The subject is a **governance philosophy and architecture for enterprise AI**: how to deploy LLM agents over sensitive enterprise data with auditability, role-based access, and determinism built in from the start rather than retrofitted. The presentation is structured for two audiences in parallel — recruiters / hiring managers / non-technical stakeholders, and engineers / architects — using progressive disclosure throughout.
+
+The approach is demonstrated end-to-end through a mock vendor-onboarding pipeline (a fictional manufacturer "Lichen Manufacturing" onboarding a fictional vendor "OptiChain"). The scenario is the vehicle, not the subject; the principles generalize across enterprise workflows.
 
 The system being presented consists of:
 
-- **Four-document spec hierarchy** — PRD → Design Doc → Context Contract → Agent Specs. Each document owns a specific governance dimension with no overlapping authority.
-- **Deterministic supervisor orchestration** — a Python state machine walks six pipeline steps with explicit gate conditions, retrieval routing, and PipelineState mutation rules.
+- **Four-document spec hierarchy** — PRD → Design Doc → Context Contract → Agent Specs. Each document owns a non-overlapping governance dimension.
+- **Deterministic supervisor orchestration** — a Python state machine walking six pipeline steps with explicit gate conditions, retrieval routing, and `PipelineState` mutation rules.
 - **Hybrid agentic retrieval** — per-source Chroma (dense) + BM25 (lexical) collections, row-targeted matrix retrieval, cross-encoder re-ranking, authority-weighted bundle assembly across multiple governed source types.
-- **LLM domain agents** — five agents (IT Security, Legal, Procurement, Checklist Assembler, Checkoff), each governed by a behavioral spec with strict DOs/DON'Ts, output contracts, and distinct blocked/escalated/complete output shapes.
-- **Scenario-based evaluation** — 15+ adversarial test fixtures exercising specific behavioral dimensions: silent-swallow of upstream escalation, policy-over-questionnaire conflict, retrieval-layer failure handling, null-passthrough discipline, cross-agent escalation cascades.
-
-The mock business scenario is built from realistic production-format enterprise documents (PDF policies, XLSX matrices, JSON questionnaires, Slack thread exports) and instantiates a vendor onboarding pipeline — a concrete setting that illustrates the architectural principles without defining them.
+- **LLM domain agents** — five agents (IT Security, Legal, Procurement, Checklist Assembler, Checkoff), each governed by a behavioral spec with strict DOs / DON'Ts, output contracts, and distinct `complete` / `escalated` / `blocked` output shapes.
+- **Scenario-based evaluation** — adversarial test fixtures exercising specific behavioral dimensions: silent-swallow of upstream escalation, policy-over-questionnaire conflict, retrieval-layer failure handling, null-passthrough discipline, cross-agent escalation cascades.
 
 ---
 
-## Guiding Philosophies
+## Pages
 
-A few principles drive how this site is built:
+The site is organized as **seven content parts across three deployable pages**.
 
-- **Substance over polish.** The work being presented is the value proposition. Visual refinement matters but never at the cost of substance.
-- **Progressive disclosure as core pattern.** Default views stay approachable; technical detail lives one click away. Applied consistently across every section.
-- **Content in MDX as single source of truth.** No duplicated prose across components, no content trapped in React props.
-- **Ship end-to-end before iterating.** Placeholder content on every section beats polished content on half of them.
-- **Simplicity over cleverness.** Reach for frameworks only where interactivity demands them. Most of the site is static HTML by design.
+| Route       | Page              | Contents                                                                                                  |
+| ----------- | ----------------- | --------------------------------------------------------------------------------------------------------- |
+| `/`         | **Overview**      | Parts 1–5: title framing, problem & landscape, introduction, approach, business scenario                  |
+| `/demo`     | **Demo**          | Part 6: interactive replay of four pre-captured pipeline runs                                             |
+| `/findings` | **Summary**       | Part 7: closing thoughts, the working argument, status-emission semantics                                 |
 
----
-
-## Tech Stack
-
-| Layer                  | Tool                                                 | Purpose                                                                                                                                                             |
-| ---------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Framework**          | [Astro](https://astro.build)                         | Content-first static site generator with React island support. Fast to build, low framework overhead, MDX-native — ideal for narrative sites with interactive bits. |
-| **Styling**            | [Tailwind CSS](https://tailwindcss.com)              | Utility-first CSS framework. Inline classes mean fast iteration, no separate CSS files to maintain, pairs natively with Astro.                                      |
-| **Content**            | [MDX](https://mdxjs.com)                             | Markdown with embedded JSX components. Prose as markdown, React components inline wherever interactivity is needed. Native Astro support.                           |
-| **UI primitives**      | [Radix UI](https://www.radix-ui.com)                 | Headless accessible component primitives (accordions, modals, tabs, dialogs). Tailwind styling on top. Comprehensive and battle-tested.                             |
-| **Component patterns** | [shadcn/ui](https://ui.shadcn.com)                   | Copy-paste component patterns built on Radix + Tailwind. You own the code. Excellent starting points for expanders, tabs, dialogs.                                  |
-| **Animation**          | [Framer Motion](https://motion.dev)                  | React animation library. Wrap elements in `<motion.div>`, add props. Handles scroll-driven reveals, state transitions, gestures.                                    |
-| **Data visualization** | [D3.js](https://d3js.org)                            | Low-level visualization library for the orchestration graph, retrieval flow, and any custom data viz.                                                               |
-| **Diagrams**           | [Mermaid](https://mermaid.js.org)                    | Text-to-diagram rendering (flowcharts, sequence diagrams, state machines). Write diagrams as code.                                                                  |
-| **Hosting**            | [Vercel](https://vercel.com)                         | One-command deploys, automatic preview URLs on every push, free tier covers portfolio traffic. Native Astro integration.                                            |
-| **Runtime**            | [Node.js 20+](https://nodejs.org)                    | Required by Astro. Managed via `nvm`.                                                                                                                               |
-| **Package manager**    | [pnpm](https://pnpm.io)                              | Faster than npm, disk-efficient, clean workspace support.                                                                                                           |
-| **Editor**             | [VSCode](https://code.visualstudio.com)              | With Astro, MDX, and Tailwind IntelliSense extensions.                                                                                                              |
-| **AI pair**            | [Claude Code](https://www.anthropic.com/claude-code) | Agentic coding for scaffolding and iteration. Driven by `CLAUDE.md`.                                                                                                |
+Top-nav labels: **Overview · Demo · Summary**.
 
 ---
 
-## Architecture
+## The spec stack
+
+The architecture is governed by a tight hierarchy of authoritative documents. Each one is previewable directly in the site (PDF, MDX, DOCX, XLSX, JSON — all rendered in a unified `DocumentViewer` modal):
+
+| Stage | Document            | Jurisdiction                                                                              |
+| ----- | ------------------- | ----------------------------------------------------------------------------------------- |
+| 01    | **PRD**             | Stakeholder intent — what the system must do, why it exists, who it is for.              |
+| 02    | **Design Doc**      | System architecture — how the system is designed and what technical shape it takes.       |
+| 03    | **Context Contract**| Context governance — source authority, retrieval rules, agent visibility boundaries.      |
+| 04    | **Orchestration Plan** | Runtime workflow — execution order, gates, state changes, escalation flow.             |
+| 05    | **Agent Specs**     | Agent behavior — DOs, DON'Ts, scope boundaries, output contracts (one per domain agent).  |
+
+---
+
+## The demo
+
+The `/demo` page replays **four captured runs** of the vendor-onboarding pipeline, each illustrating a different terminal status emission of the deterministic supervisor:
+
+| # | Scenario                                | Outcome    | Halts at  | Demonstrates                                                                  |
+| - | --------------------------------------- | ---------- | --------- | ----------------------------------------------------------------------------- |
+| 1 | **Legal blockers**                      | ESCALATED  | STEP-03   | DPA missing + NDA unconfirmed → escalation routes to legal                    |
+| 2 | **Happy path fast-track**               | COMPLETE   | —         | Six steps complete; fast-track approved; stakeholder-ready package emitted    |
+| 3 | **Missing source**                      | BLOCKED    | STEP-04   | Required matrix not registered in retrieval layer; agent refuses to fabricate |
+| 4 | **Coverage gap**                        | ESCALATED  | STEP-04   | Matrix returns rows but none match vendor profile; escalates to Procurement   |
+
+The supervisor's **three terminal status emissions** are first-class concepts:
+
+- **`COMPLETE`** — step succeeds and pipeline proceeds.
+- **`ESCALATED`** — conflicting evidence or ambiguous decision; pipeline halts and routes to a human owner.
+- **`BLOCKED`** — required evidence absent; pipeline halts before work begins.
+
+Each replay exposes the underlying signals — supervisor audit log, agent input bundles, raw structured outputs, and source documents — so the architecture is not just narrated but **inspectable**.
+
+---
+
+## Tech stack
+
+| Layer                    | Tool                                                                                                                | Purpose                                                                                              |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **Framework**            | [Astro 4](https://astro.build)                                                                                       | Content-first static site generator with React island support; native MDX                            |
+| **UI runtime**           | [React 18](https://react.dev) (islands only)                                                                         | Interactive components — `DocumentViewer`, `ZoomableImage`, the entire `/demo` experience            |
+| **State (demo)**         | [Zustand](https://github.com/pmndrs/zustand)                                                                         | Single-store state for the replay machine (mode, scenario, currentStep, phase)                       |
+| **Styling**              | [Tailwind CSS 3](https://tailwindcss.com)                                                                            | Utility-first; extended `ink` / `paper` / `accent` / `spruce` / `rose` palette                       |
+| **Content**              | [MDX](https://mdxjs.com) + [Astro content collections](https://docs.astro.build/en/guides/content-collections/)      | Overview prose lives in MDX; schema enforced by `src/content/config.ts`                              |
+| **UI primitives**        | [Radix UI](https://www.radix-ui.com)                                                                                 | Headless accessibility (Dialog, Accordion, Collapsible, Tabs, Tooltip)                               |
+| **Animation**            | [Framer Motion](https://motion.dev)                                                                                  | Sliding scenario selector, replay-phase transitions, scroll-driven reveals                           |
+| **Icons**                | [lucide-react](https://lucide.dev)                                                                                   | Consistent line-icon set                                                                             |
+| **Document rendering**   | [`marked`](https://marked.js.org), [`mammoth`](https://github.com/mwilliamson/mammoth.js), [`xlsx`](https://sheetjs.com) | Markdown → HTML; DOCX → HTML (build-time); XLSX → JSON (build-time)                                  |
+| **Data viz** (available) | [D3.js](https://d3js.org), [Mermaid](https://mermaid.js.org)                                                          | Bundled for upcoming visualizations                                                                  |
+| **Hosting**              | [Vercel](https://vercel.com)                                                                                         | Static hosting with preview deploys per branch                                                       |
+| **Runtime**              | [Node.js 20+](https://nodejs.org)                                                                                    | Required by Astro; managed via `nvm`                                                                 |
+| **Package manager**      | [pnpm](https://pnpm.io)                                                                                              | Strict, fast, disk-efficient                                                                         |
+| **Quality**              | [TypeScript](https://www.typescriptlang.org/) (strict), [ESLint](https://eslint.org), [Prettier](https://prettier.io) | Static checking + lint + format                                                                      |
+
+---
+
+## Project structure
 
 ```
 src/
-├── pages/              # Route files — one per deployable page
-│   ├── index.astro     # Parts 1–5 (long-scroll)
-│   ├── demo.astro      # Part 6 (interactive pipeline replay)
-│   └── findings.astro  # Part 7 (results and reflections)
-├── layouts/            # Shared page layouts and site chrome
+├── pages/                       # Routes
+│   ├── index.astro              # /          — Overview (Parts 1–5)
+│   ├── demo.astro               # /demo      — DemoExperience React island
+│   └── findings.astro           # /findings  — Summary & closing thoughts
+├── layouts/
+│   └── BaseLayout.astro         # <html>, SiteHeader, SiteFooter, global styles
 ├── components/
-│   ├── react/          # Interactive React islands
-│   │   ├── DetailExpander.tsx   # Progressive-disclosure pattern used site-wide
-│   │   ├── ReasoningCallout.tsx # Consistent design-note treatment
-│   │   ├── DemoReplay.tsx       # Pipeline run playback component
-│   │   └── ...
-│   └── astro/          # Static Astro components (headers, footers, section frames)
-├── content/            # MDX content organized by section
-│   ├── part-01-title.mdx
-│   ├── part-02-intro.mdx
-│   └── ...
-├── data/               # JSON — e.g., captured pipeline run state for demo replay
-└── styles/             # Global CSS, Tailwind extensions
+│   ├── astro/                   # Static primitives — Container, NarrativeSection,
+│   │                            # SectionHero, Callout, StatementCallout, Quote,
+│   │                            # StatBlock, TakeawayCard, PrincipleList,
+│   │                            # ComparisonBlock, SpecHierarchy, PipelineStep,
+│   │                            # ActCard, AgentIcon, CompetitorGrid, HeadlineMarquee,
+│   │                            # SchoolsOfThought, SiteHeader, SiteFooter
+│   └── react/
+│       ├── DocumentViewer.tsx   # Site-wide modal for PDF / JSON / MD / XLSX / DOCX
+│       ├── DetailExpander.tsx   # Progressive-disclosure expander
+│       ├── ZoomableImage.tsx    # Hover magnifier + lightbox
+│       ├── StackedCards.tsx     # Stacked-card list
+│       └── demo-codex/          # The /demo replay experience (16 files)
+├── content/
+│   ├── config.ts                # 'parts' content-collection schema
+│   └── parts/                   # part-01..05 MDX (Overview source-of-truth)
+├── data/
+│   └── demo-codex/              # Four-scenario replay data
+│       ├── index.ts             # scenarios registry
+│       ├── types.ts             # DemoScenario / DemoStep / RetrievedEvidenceItem / …
+│       └── scenarios/           # clean.ts, escalated.ts, blocked.ts, escalatedStep4.ts
+└── styles/
+    └── global.css               # Tailwind layers + .eyebrow / .lede / .prose-narrative
+
+public/
+├── favicon.svg
+├── headlines/                   # Press-headline images (Part 01 marquee)
+├── stack-documents/             # PRD / Design Doc / Context Contract / Agent Specs
+├── mock-documents/              # Cross-scenario mock corpus (.xlsx + generated siblings)
+├── scenarios/scenario-{1..4}/   # Per-scenario captured artefacts (bundles, outputs, audit log)
+└── *.png, *.svg                 # Inline diagrams (retrieval, robot, outlook, three-pillars)
+
+scripts/
+├── convert-xlsx.mjs             # Build-time: .xlsx → .sheet.json siblings
+└── convert-docx.mjs             # Build-time: .docx → .html.json siblings
 ```
 
-The site is static by default. Interactivity is added via React islands for the expander, demo replay, and any animated visualizations. There is no backend in v1 — the "demo" plays back a pre-captured run.
+A more granular reference (including the `demo-codex/` internals and asset layout) lives in [`USER_MANUAL.md`](./USER_MANUAL.md).
 
 ---
 
-## Setup
+## Getting started
 
 ### Prerequisites
 
-- [Node.js 20+](https://nodejs.org) (install via [nvm](https://github.com/nvm-sh/nvm))
-- [pnpm](https://pnpm.io/installation)
-- Git
+- **Node.js 20+** — install via [nvm](https://github.com/nvm-sh/nvm). The repo pins the version in `.nvmrc`.
+- **pnpm 9+** — enable via Corepack: `corepack enable pnpm`.
+- **Git**
 
-### Installation
+### Clone and install
 
 ```bash
-# Clone the repository
 git clone <repo-url>
-cd <repo-name>
-
-# Install Node.js version specified in .nvmrc
-nvm use
-
-# Install dependencies
-pnpm install
+cd web-app-enterprise-ai
+nvm use            # picks up the pinned Node version
+pnpm install       # installs deps + builds .sheet.json / .html.json siblings on first dev/build
 ```
+
+### Run the dev server
+
+```bash
+pnpm dev
+```
+
+Visit <http://localhost:4321>.
 
 ### Environment variables
 
-None required for v1. If a "try it live" backend is added later, Anthropic API credentials will be managed via Vercel environment variables — never committed to the repo.
-
-See `.env.example` (if present) for any forward-looking variables.
+None required for v1. If a "try it live" backend is added later, Anthropic API credentials will be managed via Vercel environment variables — never committed.
 
 ---
 
-## Project Commands
+## Build pipeline
 
-> Keep this section updated as the project evolves.
+The site ships a small two-step content pipeline that runs automatically on every `pnpm dev` and `pnpm build`:
+
+1. **`scripts/convert-xlsx.mjs`** — walks `public/**/*.xlsx` and writes `<name>.sheet.json` siblings (consumed by `DocumentViewer kind="sheet"`).
+2. **`scripts/convert-docx.mjs`** — walks `public/**/*.docx` and writes `<name>.html.json` siblings via [Mammoth](https://github.com/mwilliamson/mammoth.js) (consumed by `DocumentViewer kind="docx"`).
+
+Both can be invoked manually:
 
 ```bash
-# Install dependencies
-pnpm install
+pnpm docs:sheets
+pnpm docs:docx
+```
 
-# Run development server (http://localhost:4321)
-pnpm dev
+PDFs and Markdown are served directly with no conversion step. When updating a PDF in `product_docs/`, copy it into `public/stack-documents/` manually.
 
-# Run tests (when added)
-pnpm test
+---
 
-# Lint
-pnpm lint
+## Commands
 
-# Format
-pnpm format
-
-# Check formatting without writing
-pnpm format:check
-
-# Build for production
-pnpm build
-
-# Preview production build locally
-pnpm preview
+```bash
+pnpm install              # install dependencies (--frozen-lockfile in CI)
+pnpm dev                  # convert-xlsx + convert-docx → dev server on :4321
+pnpm build                # convert-xlsx + convert-docx → static build → dist/
+pnpm preview              # serve the built site locally
+pnpm docs:sheets          # one-off: regenerate .sheet.json siblings
+pnpm docs:docx            # one-off: regenerate .html.json siblings
+pnpm lint                 # ESLint across .js/.jsx/.ts/.tsx/.astro
+pnpm format               # Prettier write
+pnpm format:check         # Prettier check (CI)
 ```
 
 ---
 
 ## Deployment
 
-The site deploys automatically to Vercel on every push to `main`. Pull requests get automatic preview deploys at a unique URL, visible in the PR's Vercel comment.
+The site deploys to **Vercel** on every push. Pull requests get automatic preview deploys at a unique URL, visible in the PR's Vercel comment.
 
-To deploy manually:
+To deploy manually with the Vercel CLI:
 
 ```bash
-# From repo root, after installing Vercel CLI globally
 vercel
 ```
 
 The production domain is managed via Cloudflare Registrar / Vercel domain settings.
 
----
+CI (Vercel build runner) executes:
 
-## System Requirements
+- `pnpm install --frozen-lockfile`
+- `pnpm lint`
+- `pnpm format:check`
+- `pnpm build`
 
-- **Node.js**: 20 or higher
-- **pnpm**: 9 or higher
-- **OS**: macOS, Linux, or Windows (WSL2 recommended for Windows)
-- **Browser** (for local development): any modern evergreen browser
-
----
-
-## Repository Conventions
-
-- Commits follow [Conventional Commits](https://www.conventionalcommits.org/): `feat(...)`, `fix(...)`, `chore(...)`, `content(...)` for copy changes.
-- Feature branches are used for all changes — nothing commits directly to `main`.
-- See `CLAUDE.md` for the full engineering protocol followed in this repository.
+All checks must pass.
 
 ---
 
 ## License
 
-All rights reserved. Pierce Nellessen, 2026.
+All rights reserved. © 2026 Pierce Nellessen.
+
+---
+
+<sub>Built with [Astro](https://astro.build), [React](https://react.dev), and [Tailwind CSS](https://tailwindcss.com).</sub>
