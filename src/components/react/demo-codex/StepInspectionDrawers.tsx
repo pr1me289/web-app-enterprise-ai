@@ -288,7 +288,7 @@ export default function StepInspectionDrawers() {
   const docsId = `docs-${scenario}-${step.id}`;
 
   return (
-    <div className="mt-12 grid min-w-0 grid-cols-1 gap-3 md:mt-16">
+    <div className="mt-24 grid min-w-0 grid-cols-1 gap-3 border-t border-ink-100 pt-12 md:mt-32 md:pt-16">
       <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
         <span className="eyebrow text-accent">
           Technical inspection · optional for tech-savvy audiences

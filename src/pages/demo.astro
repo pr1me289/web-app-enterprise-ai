@@ -20,16 +20,11 @@ import DemoExperience from '../components/react/demo-codex/DemoExperience';
           <p class="lede mt-6 max-w-2xl">
             Watch the supervisor walk a precomputed onboarding pipeline through six governed steps —
             retrieving evidence by lane, assembling scoped bundles, dispatching to domain agents,
-            validating output contracts, and either advancing or halting at each gate. This is a
-            replay, but it is built from actual runs we conducted with the system rather than a
-            mocked animation. Two recorded runs are available: one completes cleanly, the other
-            halts at Legal.
+            validating output contracts, and either advancing or halting at each gate.
+            <strong class="font-semibold text-accent"
+              >This is a replay, but it is built from actual runs I conducted with the system.</strong
+            > Four recorded runs are available.
           </p>
-          <div class="mt-7 flex flex-wrap items-center gap-3 text-xs">
-            <span class="chip">Replay · not live</span>
-            <span class="chip">Four scenarios</span>
-            <span class="chip">Inspectable trace</span>
-          </div>
         </div>
 
         <div class="flex flex-col gap-4">
@@ -42,19 +37,18 @@ import DemoExperience from '../components/react/demo-codex/DemoExperience';
             <ul class="mt-3 space-y-2 text-sm leading-relaxed text-ink-700">
               <li>
                 <strong class="font-semibold text-ink-900">Pick a scenario</strong> with the selector.
-                Escalated is the default — it shows governance more clearly than the happy path.
               </li>
               <li>
-                <strong class="font-semibold text-ink-900">Press Start Replay</strong>. The supervisor
-                rail animates each phase: retrieve, bundle, dispatch, validate, decide.
+                <strong class="font-semibold text-ink-900">Press &lsquo;Start Replay&rsquo;</strong>.
+                The execution bar will follow you down the page; use it to navigate.
               </li>
               <li>
-                <strong class="font-semibold text-ink-900">Pause anytime</strong> and use Step or
-                click any node to inspect a single step in detail.
+                <strong class="font-semibold text-ink-900">Pause anytime</strong> and use the step
+                / back buttons, or click any node to inspect a single step in detail.
               </li>
               <li>
-                <strong class="font-semibold text-ink-900">Open the drawers</strong> below each step
-                for the audit log, raw structured output, and source previews.
+                <strong class="font-semibold text-ink-900">Open the black drawers</strong> in the
+                &ldquo;Technical Inspection&rdquo; section for full file previews.
               </li>
             </ul>
           </aside>
@@ -71,7 +65,7 @@ import DemoExperience from '../components/react/demo-codex/DemoExperience';
                   Complete
                 </span>
                 <p class="text-xs leading-relaxed text-ink-700">
-                  Step finished; pipeline continues.
+                  Step succeeds and pipeline proceeds.
                 </p>
               </li>
               <li class="flex items-start gap-3">
@@ -81,7 +75,7 @@ import DemoExperience from '../components/react/demo-codex/DemoExperience';
                   Escalated
                 </span>
                 <p class="text-xs leading-relaxed text-ink-700">
-                  Evidence present but unresolvable; pipeline halts.
+                  Conflicting evidence or ambiguous decision.
                 </p>
               </li>
               <li class="flex items-start gap-3">
@@ -91,7 +85,7 @@ import DemoExperience from '../components/react/demo-codex/DemoExperience';
                   Blocked
                 </span>
                 <p class="text-xs leading-relaxed text-ink-700">
-                  Required evidence absent; pipeline halts.
+                  Required evidence absent.
                 </p>
               </li>
             </ul>

@@ -139,10 +139,10 @@ export default function DocumentViewer({ src, title, kind, label, overrides, tri
         {trigger ?? (
           <button
             type="button"
-            className="group inline-flex max-w-full items-center gap-2 rounded-md border border-ink-200 bg-paper px-2.5 py-1.5 text-left text-xs text-ink-700 shadow-soft transition-colors hover:border-ink-900 hover:bg-paper-muted"
+            className="group inline-flex max-w-full items-start gap-2 rounded-md border border-ink-200 bg-paper px-2.5 py-1.5 text-left text-xs text-ink-700 shadow-soft transition-colors hover:border-ink-900 hover:bg-paper-muted"
           >
             <FileIcon kind={kind} />
-            <span className="min-w-0 truncate font-medium group-hover:text-ink-900">
+            <span className="min-w-0 break-all font-medium leading-snug group-hover:text-ink-900">
               {label ?? title}
             </span>
           </button>

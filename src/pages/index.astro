@@ -108,7 +108,7 @@ const schools = [
 const contextEngines = [
   {
     name: 'Unblocked',
-    angle: 'Authority signals — who reviewed whose code, who is the domain expert.',
+    angle: 'Organizational context and authority-aware signals.',
   },
   {
     name: 'Augment Code',
@@ -729,10 +729,11 @@ const documentStack: StackStage[] = [
       stance="This work is not another context engine. It is the governance layer that sits above the retrieval layer — the part that decides what the agent is allowed to see, under whose authority, and with what audit obligation. It is customizable to fit an organization’s structure, governance needs, and intended agentic use cases."
     >
       <Fragment slot="subtitle">
-        A dozen credible products crystallized into a single category in early 2026. Most are
-        solving retrieval over code. <strong class="font-semibold text-ink-900"
-          >Almost none are solving governed translation from enterprise intent into scoped,
-          authority-aware agent context.</strong
+        A wave of credible products coalesced around a new layer in early 2026: organizational
+        context delivery for AI systems. Most are strongest on code retrieval, repository
+        understanding, or developer workflow context. <strong class="font-semibold text-ink-900"
+          >Far fewer appear focused on the full governed translation from enterprise intent into
+          scoped, authority-aware agent context.</strong
         >
       </Fragment>
     </CompetitorGrid>
@@ -747,10 +748,10 @@ const documentStack: StackStage[] = [
         <p class="eyebrow mb-2">Common pattern</p>
         <h3 class="font-serif text-lg text-ink-900">Naive RAG</h3>
         <ul class="mt-4 space-y-2 text-sm leading-relaxed">
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>One flat searchable corpus with weak source boundaries.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Questionnaire answers, policy, and informal discussion blend together.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Similarity search becomes an implicit governance layer.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Output quality depends on retrieval luck and prompt phrasing.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Everything is pushed into one shared retrieval bucket.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Differences between source types and source authority get flattened.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>The retriever ends up making governance decisions by accident.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Good answers depend too much on retrieval luck rather than system design.</span></li>
         </ul>
       </article>
       <article class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors">
@@ -769,20 +770,20 @@ const documentStack: StackStage[] = [
         <p class="eyebrow mb-2">Context management approach</p>
         <h3 class="font-serif text-lg text-ink-900">Context Engine</h3>
         <ul class="mt-4 space-y-2 text-sm leading-relaxed">
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Context is assembled deliberately from multiple source types instead of pulled from one shared search layer.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Retrieval, authority, permissions, and bundle composition are treated as separate governed decisions.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Supervisor-planned subqueries and scoped bundles replace one-pass context gathering.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Best suited for workflows where correctness depends on structure, sequencing, and human-owned escalation.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>A middleware layer assembles context from multiple enterprise source types before it reaches an agent.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Retrieval, authority, permissions, and bundle composition are treated as governed delivery decisions.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Strongest when organizations need a reusable context layer across many tools, repos, and workflows.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Focuses on supplying the right context to agents, not necessarily on governing the full runtime workflow.</span></li>
         </ul>
       </article>
       <article class="flex h-full flex-col rounded-lg border border-ink-900 bg-paper p-6 text-ink-800 shadow-soft transition-colors">
         <p class="eyebrow mb-2">This project</p>
         <h3 class="font-serif text-lg text-ink-900">Governed agentic retrieval</h3>
         <ul class="mt-4 space-y-2 text-sm leading-relaxed">
-          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Per-source lanes with dense, lexical, and direct structured access.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Authority tiers and permissions preserved before the agent sees anything.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Supervisor-planned subqueries and bundle assembly replace one-pass search.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Escalations surface missing or conflicting evidence instead of hiding it.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>A spec-driven document stack governs context rules, retrieval behavior, and orchestration before runtime begins.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Source-aware retrieval feeds a deterministic supervisor that governs steps, gates, and state transitions.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Escalations, blockers, and unresolved evidence are preserved explicitly instead of being smoothed over.</span></li>
+          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>The system is designed not just to deliver context, but to produce auditable, stakeholder-ready workflow outcomes.</span></li>
         </ul>
       </article>
     </div>
@@ -1094,9 +1095,9 @@ const documentStack: StackStage[] = [
 
     <div class="mt-12">
       <Callout kind="architecture" title="Hybrid search is not the full story">
-        Hybrid search is the engine. Agentic retrieval is the planner, router, judge, and
-        assembler around it. The system does not win because it has vectors and keywords. It wins
-        because those capabilities are put inside a governed runtime path.
+        Hybrid search powers retrieval, but it does not by itself decide what should be asked,
+        which sources matter, how evidence should be prioritized, or when uncertainty should halt
+        the workflow. Agentic retrieval adds that planning and control layer around the engine.
       </Callout>
     </div>
 
