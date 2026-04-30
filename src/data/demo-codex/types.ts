@@ -41,7 +41,7 @@ export type SourceType =
   | 'Required-source manifest'
   | 'Upstream determination';
 
-export type SourceTreatment = 'primary' | 'supplementary' | 'excluded';
+export type SourceTreatment = 'primary' | 'supplementary' | 'excluded' | 'missing';
 
 export interface RetrievedEvidenceItem {
   id: string;

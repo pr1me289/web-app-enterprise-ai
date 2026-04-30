@@ -447,7 +447,7 @@ export const escalatedStep4Scenario: DemoScenario = {
       shortLabel: 'Procurement',
       actor: 'Procurement',
       question: 'Which approval path applies for this vendor and integration profile?',
-      governancePrinciple: 'Approval routing reads the matrix row',
+      governancePrinciple: 'Ambiguous decision reading procurement matrix',
       retrievedEvidence: [
         {
           id: 'step-02-pass-esc4',

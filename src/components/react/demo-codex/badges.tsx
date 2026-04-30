@@ -101,6 +101,10 @@ const treatmentMeta: Record<SourceTreatment, { label: string; cls: string }> = {
     label: 'excluded',
     cls: 'bg-rose-50 text-rose-700 border-rose-700/20',
   },
+  missing: {
+    label: 'missing',
+    cls: 'bg-rose-50 text-rose-700 border-rose-700/20',
+  },
 };
 
 export function TreatmentBadge({

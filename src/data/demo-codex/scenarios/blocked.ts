@@ -452,7 +452,7 @@ export const blockedScenario: DemoScenario = {
       shortLabel: 'Procurement',
       actor: 'Procurement',
       question: 'Which approval path applies for this vendor and integration profile?',
-      governancePrinciple: 'No registered source → no silent invention',
+      governancePrinciple: 'Missing registered source',
       retrievedEvidence: [
         {
           id: 'step-02-pass',
@@ -496,9 +496,9 @@ export const blockedScenario: DemoScenario = {
           type: 'Approval matrix',
           lane: 'indexed_hybrid',
           authorityTier: 1,
-          treatment: 'excluded',
+          treatment: 'missing',
           reason:
-            'Source PAM-001 is not registered in data/indexes/scenario_blocked_demo/index_registry.json. Router caught KeyError, returned denied=true with reason "Source \'PAM-001\' not found in index registry." Bundle\'s approval_path_matrix_rows arrives empty.',
+            'Source PAM-001 is not registered. Router caught KeyError, returned denied=true with reason "Source \'PAM-001\' not found in index registry." Bundle\'s approval_path_matrix_rows arrives empty.',
           chunksRetrieved: 0,
           chunksAdmitted: 0,
         },

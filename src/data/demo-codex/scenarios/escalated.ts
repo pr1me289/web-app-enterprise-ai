@@ -257,7 +257,7 @@ export const escalatedScenario: DemoScenario = {
       actor: 'Legal',
       question:
         'Are DPA and NDA obligations in force for this vendor and data class?',
-      governancePrinciple: 'Legal triggers come from the matrix, not inference',
+      governancePrinciple: 'DPA unsigned and NDA unconfirmed',
       retrievedEvidence: [
         {
           id: 'dpa-tm-001',
