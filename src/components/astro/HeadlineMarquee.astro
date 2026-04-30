@@ -15,13 +15,9 @@ interface Props {
 const { headlines, ariaLabel = 'Recent headlines', durationSeconds = 60 } = Astro.props;
 ---
 
-<section
-  class="marquee"
-  aria-label={ariaLabel}
-  style={`--marquee-duration: ${durationSeconds}s;`}
->
+<section class="marquee" aria-label={ariaLabel} style={`--marquee-duration: ${durationSeconds}s;`}>
   <div class="marquee__track">
-    <ul class="marquee__group" role="list">
+    <ul class="marquee__group">
       {
         headlines.map((h) => (
           <li class="marquee__item">
@@ -44,7 +40,7 @@ const { headlines, ariaLabel = 'Recent headlines', durationSeconds = 60 } = Astr
         ))
       }
     </ul>
-    <ul class="marquee__group" role="list" aria-hidden="true">
+    <ul class="marquee__group" aria-hidden="true">
       {
         headlines.map((h) => (
           <li class="marquee__item">
@@ -55,13 +51,7 @@ const { headlines, ariaLabel = 'Recent headlines', durationSeconds = 60 } = Astr
               loading="lazy"
               decoding="async"
             />
-            <img
-              class="marquee__logo"
-              src={h.logoSrc}
-              alt=""
-              loading="lazy"
-              decoding="async"
-            />
+            <img class="marquee__logo" src={h.logoSrc} alt="" loading="lazy" decoding="async" />
           </li>
         ))
       }

@@ -62,9 +62,14 @@ export default function ZoomableImage({ src, alt, className = '' }: ZoomableImag
           role="dialog"
           aria-modal="true"
           aria-label={alt}
-          onClick={handleClose}
           className="fixed inset-0 z-50 flex items-center justify-center bg-ink-900/85 p-6 backdrop-blur-sm"
         >
+          <button
+            type="button"
+            onClick={handleClose}
+            aria-label="Close zoomed image"
+            className="absolute inset-0 cursor-zoom-out"
+          />
           <button
             type="button"
             onClick={handleClose}
@@ -85,12 +90,7 @@ export default function ZoomableImage({ src, alt, className = '' }: ZoomableImag
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
-          <img
-            src={src}
-            alt={alt}
-            onClick={(e) => e.stopPropagation()}
-            className="max-h-full max-w-full cursor-zoom-out object-contain"
-          />
+          <img src={src} alt={alt} className="relative max-h-full max-w-full object-contain" />
         </div>
       )}
     </>

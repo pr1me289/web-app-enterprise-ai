@@ -5,13 +5,11 @@ import Container from '../components/astro/Container.astro';
 import NarrativeSection from '../components/astro/NarrativeSection.astro';
 import SectionHero from '../components/astro/SectionHero.astro';
 import Callout from '../components/astro/Callout.astro';
-import ComparisonBlock from '../components/astro/ComparisonBlock.astro';
 import CompetitorGrid from '../components/astro/CompetitorGrid.astro';
 import PrincipleList from '../components/astro/PrincipleList.astro';
 import SpecHierarchy from '../components/astro/SpecHierarchy.astro';
 import StatementCallout from '../components/astro/StatementCallout.astro';
 import SchoolsOfThought from '../components/astro/SchoolsOfThought.astro';
-import TakeawayCard from '../components/astro/TakeawayCard.astro';
 import ActCard from '../components/astro/ActCard.astro';
 import AgentIcon from '../components/astro/AgentIcon.astro';
 import StatBlock from '../components/astro/StatBlock.astro';
@@ -136,25 +134,6 @@ const contextEngines = [
   { name: 'Hyland ECE', angle: 'Broad content/process/people linking across ERP, CRM, EHR.' },
   { name: 'Faros Clara', angle: 'Enhanced AGENTS.md built from years of coding assistant usage.' },
   { name: 'Graphiti (Zep)', angle: 'Temporal knowledge graphs; time-aware fact management.' },
-];
-
-const pressurePoints = [
-  {
-    title: 'Context rot',
-    body: 'More context is not uniformly better. Long prompts bury critical details and make rule adherence less reliable.',
-  },
-  {
-    title: 'Authority conflicts',
-    body: 'Vendor questionnaires, Slack threads, matrices, and policy PDFs are not equivalent sources. The system has to know that.',
-  },
-  {
-    title: 'Temporal drift',
-    body: 'The reason behind a current rule often lives in a prior decision or precedent, not in the latest artifact alone.',
-  },
-  {
-    title: 'Runtime permissions',
-    body: 'Access control is a live execution concern. Retrieval cannot be treated as an ungoverned pre-processing step.',
-  },
 ];
 
 const approachPrinciples = [
@@ -546,7 +525,9 @@ const documentStack: StackStage[] = [
               class="font-serif text-2xl font-semibold leading-snug tracking-tight text-ink-900 md:text-3xl"
             >
               The gap is not model capability. It is the
-              <span class="text-accent">governed translation from enterprise intent into executable context.</span>
+              <span class="text-accent"
+                >governed translation from enterprise intent into executable context.</span
+              >
             </blockquote>
           </figure>
         </div>
@@ -611,8 +592,7 @@ const documentStack: StackStage[] = [
             <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
               Context is the information an AI model or agent is given so it can answer a question,
               make a decision, write something, or complete a task. This can include instructions,
-              documents, conversation history, policies, data from tools, and other relevant
-              inputs.
+              documents, conversation history, policies, data from tools, and other relevant inputs.
             </p>
           </div>
         </details>
@@ -656,8 +636,8 @@ const documentStack: StackStage[] = [
 
         <figure class="border-l-2 border-accent pl-5 pt-2">
           <blockquote class="font-serif text-lg leading-snug text-ink-800">
-            “Context is similar for agents and people. Context to me is all the information you
-            need to be good at your job.”
+            “Context is similar for agents and people. Context to me is all the information you need
+            to be good at your job.”
           </blockquote>
           <figcaption class="mt-3 text-sm text-ink-500">
             <a
@@ -666,8 +646,8 @@ const documentStack: StackStage[] = [
               rel="noopener noreferrer"
               class="text-ink-500 underline decoration-ink-200 underline-offset-2 transition-colors hover:text-ink-800 hover:decoration-ink-500"
             >
-              Dennis Pilarinos, Unblocked CEO, on the Software Engineering Daily podcast (March
-              25, 2026)
+              Dennis Pilarinos, Unblocked CEO, on the Software Engineering Daily podcast (March 25,
+              2026)
             </a>
           </figcaption>
         </figure>
@@ -675,12 +655,10 @@ const documentStack: StackStage[] = [
     </div>
 
     <div class="mt-20 max-w-3xl">
-      <h3
-        class="font-serif text-3xl font-semibold tracking-tight text-ink-900 md:text-display-sm"
-      >
-        <span class="text-accent">More context is not uniformly better.</span> Beyond a threshold,
-        it degrades performance. The enterprise fix is not a bigger window — it is a governed,
-        scoped, authority-aware retrieval layer.
+      <h3 class="font-serif text-3xl font-semibold tracking-tight text-ink-900 md:text-display-sm">
+        <span class="text-accent">More context is not uniformly better.</span> Beyond a threshold, it
+        degrades performance. The enterprise fix is not a bigger window — it is a governed, scoped, authority-aware
+        retrieval layer.
       </h3>
     </div>
 
@@ -728,14 +706,14 @@ const documentStack: StackStage[] = [
       competitors={contextEngines}
       stance="This work is not another context engine. It is the governance layer that sits above the retrieval layer — the part that decides what the agent is allowed to see, under whose authority, and with what audit obligation. It is customizable to fit an organization’s structure, governance needs, and intended agentic use cases."
     >
-      <Fragment slot="subtitle">
+      <span slot="subtitle">
         A wave of credible products coalesced around a new layer in early 2026: organizational
         context delivery for AI systems. Most are strongest on code retrieval, repository
         understanding, or developer workflow context. <strong class="font-semibold text-ink-900"
           >Far fewer appear focused on the full governed translation from enterprise intent into
           scoped, authority-aware agent context.</strong
         >
-      </Fragment>
+      </span>
     </CompetitorGrid>
 
     <div class="mt-20 max-w-3xl">
@@ -744,46 +722,126 @@ const documentStack: StackStage[] = [
 
     <div class="mt-8 grid gap-4 md:grid-cols-2">
       {/* Row 1 — Common pattern + Data structure approach */}
-      <article class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors">
+      <article
+        class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors"
+      >
         <p class="eyebrow mb-2">Common pattern</p>
         <h3 class="font-serif text-lg text-ink-900">Naive RAG</h3>
         <ul class="mt-4 space-y-2 text-sm leading-relaxed">
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Everything is pushed into one shared retrieval bucket.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Differences between source types and source authority get flattened.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>The retriever ends up making governance decisions by accident.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Good answers depend too much on retrieval luck rather than system design.</span></li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Everything is pushed into one shared retrieval bucket.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Differences between source types and source authority get flattened.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >The retriever ends up making governance decisions by accident.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Good answers depend too much on retrieval luck rather than system design.</span
+            >
+          </li>
         </ul>
       </article>
-      <article class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors">
+      <article
+        class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors"
+      >
         <p class="eyebrow mb-2">Data structure approach</p>
         <h3 class="font-serif text-lg text-ink-900">GraphRAG</h3>
         <ul class="mt-4 space-y-2 text-sm leading-relaxed">
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Knowledge is organized as entities and relationships rather than only flat chunks.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Strong for multi-hop reasoning across people, systems, documents, and dependencies.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Useful when the problem depends on traversing a connected knowledge structure.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Requires graph construction and maintenance before retrieval can work well.</span></li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Knowledge is organized as entities and relationships rather than only flat chunks.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Strong for multi-hop reasoning across people, systems, documents, and dependencies.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Useful when the problem depends on traversing a connected knowledge structure.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Requires graph construction and maintenance before retrieval can work well.</span
+            >
+          </li>
         </ul>
       </article>
 
       {/* Row 2 — Context management approach + This project */}
-      <article class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors">
+      <article
+        class="flex h-full flex-col rounded-lg border border-ink-100 bg-paper-muted p-6 text-ink-500 transition-colors"
+      >
         <p class="eyebrow mb-2">Context management approach</p>
         <h3 class="font-serif text-lg text-ink-900">Context Engine</h3>
         <ul class="mt-4 space-y-2 text-sm leading-relaxed">
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>A middleware layer assembles context from multiple enterprise source types before it reaches an agent.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Retrieval, authority, permissions, and bundle composition are treated as governed delivery decisions.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Strongest when organizations need a reusable context layer across many tools, repos, and workflows.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-ink-300">·</span><span>Focuses on supplying the right context to agents, not necessarily on governing the full runtime workflow.</span></li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >A middleware layer assembles context from multiple enterprise source types before it
+              reaches an agent.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Retrieval, authority, permissions, and bundle composition are treated as governed
+              delivery decisions.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Strongest when organizations need a reusable context layer across many tools, repos,
+              and workflows.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-ink-300">·</span><span
+              >Focuses on supplying the right context to agents, not necessarily on governing the
+              full runtime workflow.</span
+            >
+          </li>
         </ul>
       </article>
-      <article class="flex h-full flex-col rounded-lg border border-ink-900 bg-paper p-6 text-ink-800 shadow-soft transition-colors">
+      <article
+        class="flex h-full flex-col rounded-lg border border-ink-900 bg-paper p-6 text-ink-800 shadow-soft transition-colors"
+      >
         <p class="eyebrow mb-2">This project</p>
         <h3 class="font-serif text-lg text-ink-900">Governed agentic retrieval</h3>
         <ul class="mt-4 space-y-2 text-sm leading-relaxed">
-          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>A spec-driven document stack governs context rules, retrieval behavior, and orchestration before runtime begins.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Source-aware retrieval feeds a deterministic supervisor that governs steps, gates, and state transitions.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>Escalations, blockers, and unresolved evidence are preserved explicitly instead of being smoothed over.</span></li>
-          <li class="flex gap-2"><span aria-hidden class="text-accent">·</span><span>The system is designed not just to deliver context, but to produce auditable, stakeholder-ready workflow outcomes.</span></li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-accent">·</span><span
+              >A spec-driven document stack governs context rules, retrieval behavior, and
+              orchestration before runtime begins.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-accent">·</span><span
+              >Source-aware retrieval feeds a deterministic supervisor that governs steps, gates,
+              and state transitions.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-accent">·</span><span
+              >Escalations, blockers, and unresolved evidence are preserved explicitly instead of
+              being smoothed over.</span
+            >
+          </li>
+          <li class="flex gap-2">
+            <span aria-hidden class="text-accent">·</span><span
+              >The system is designed not just to deliver context, but to produce auditable,
+              stakeholder-ready workflow outcomes.</span
+            >
+          </li>
         </ul>
       </article>
     </div>
@@ -803,11 +861,7 @@ const documentStack: StackStage[] = [
   <NarrativeSection id="introduction" tone="muted" width="wide">
     <div class="grid gap-10 lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.8fr)]">
       <div>
-        <SectionHero
-          eyebrow={intro.data.eyebrow}
-          title={intro.data.title}
-          lede={intro.data.lede}
-        />
+        <SectionHero eyebrow={intro.data.eyebrow} title={intro.data.title} lede={intro.data.lede} />
 
         <figure class="mt-12 border-l-[3px] border-accent bg-accent-soft/40 py-6 pl-7 pr-6">
           <p class="eyebrow mb-4 text-accent">My argument</p>
@@ -816,86 +870,120 @@ const documentStack: StackStage[] = [
           >
             A hand-built orchestration layer is not architecture for its own sake. It is the only
             path that forces the enterprise to
-            <span class="text-accent">confront security, reliability, and business constraints</span>
+            <span class="text-accent">confront security, reliability, and business constraints</span
+            >
             — rather than inheriting someone else’s answers.
           </blockquote>
         </figure>
 
         <figure class="mt-12" aria-label="Three pillars: Security, Reliability, Profitability">
-      <svg
-        viewBox="0 0 680 410"
-        width="100%"
-        xmlns="http://www.w3.org/2000/svg"
-        role="img"
-        aria-labelledby="pillars-title pillars-desc"
-      >
-        <title id="pillars-title">Three pillars of enterprise AI</title>
-        <desc id="pillars-desc">
-          Three classical columns labeled Security, Reliability, and Profitability, sitting on a
-          shared stylobate.
-        </desc>
+          <svg
+            viewBox="0 0 680 410"
+            width="100%"
+            xmlns="http://www.w3.org/2000/svg"
+            role="img"
+            aria-labelledby="pillars-title pillars-desc"
+          >
+            <title id="pillars-title">Three pillars of enterprise AI</title>
+            <desc id="pillars-desc">
+              Three classical columns labeled Security, Reliability, and Profitability, sitting on a
+              shared stylobate.
+            </desc>
 
-        <style>
-          .p-outline { fill: none; stroke: #1a1a1a; stroke-width: 1.2; stroke-linejoin: round; }
-          .p-fluting { stroke: #1a1a1a; stroke-width: 0.5; opacity: 0.5; fill: none; }
-          .p-ring { stroke: #1a1a1a; stroke-width: 0.7; fill: none; }
-          .p-label { font-family: ui-sans-serif, system-ui, -apple-system, sans-serif; font-size: 15px; font-weight: 500; fill: #1a1a1a; text-anchor: middle; letter-spacing: 0.12em; }
-          .p-num { font-family: ui-serif, Georgia, serif; font-size: 14px; fill: #6b6b6b; text-anchor: middle; opacity: 0.55; font-style: italic; letter-spacing: 0.1em; }
-        </style>
+            <style>
+              .p-outline {
+                fill: none;
+                stroke: #1a1a1a;
+                stroke-width: 1.2;
+                stroke-linejoin: round;
+              }
+              .p-fluting {
+                stroke: #1a1a1a;
+                stroke-width: 0.5;
+                opacity: 0.5;
+                fill: none;
+              }
+              .p-ring {
+                stroke: #1a1a1a;
+                stroke-width: 0.7;
+                fill: none;
+              }
+              .p-label {
+                font-family:
+                  ui-sans-serif,
+                  system-ui,
+                  -apple-system,
+                  sans-serif;
+                font-size: 15px;
+                font-weight: 500;
+                fill: #1a1a1a;
+                text-anchor: middle;
+                letter-spacing: 0.12em;
+              }
+              .p-num {
+                font-family: ui-serif, Georgia, serif;
+                font-size: 14px;
+                fill: #6b6b6b;
+                text-anchor: middle;
+                opacity: 0.55;
+                font-style: italic;
+                letter-spacing: 0.1em;
+              }
+            </style>
 
-        <rect x="40" y="340" width="600" height="18" class="p-outline" />
+            <rect x="40" y="340" width="600" height="18" class="p-outline"></rect>
 
-        <g>
-          <rect x="55" y="325" width="120" height="15" class="p-outline" />
-          <path d="M 68 325 L 75 315 L 155 315 L 162 325 Z" class="p-outline" />
-          <rect x="75" y="85" width="80" height="230" class="p-outline" />
-          <line x1="86" y1="88" x2="86" y2="312" class="p-fluting" />
-          <line x1="97" y1="88" x2="97" y2="312" class="p-fluting" />
-          <line x1="108" y1="88" x2="108" y2="312" class="p-fluting" />
-          <line x1="122" y1="88" x2="122" y2="312" class="p-fluting" />
-          <line x1="133" y1="88" x2="133" y2="312" class="p-fluting" />
-          <line x1="144" y1="88" x2="144" y2="312" class="p-fluting" />
-          <line x1="75" y1="88" x2="155" y2="88" class="p-ring" />
-          <path d="M 75 85 L 68 75 L 162 75 L 155 85 Z" class="p-outline" />
-          <rect x="55" y="60" width="120" height="15" class="p-outline" />
-          <text x="115" y="205" class="p-num">I</text>
-          <text x="115" y="390" class="p-label">Security</text>
-        </g>
+            <g>
+              <rect x="55" y="325" width="120" height="15" class="p-outline"></rect>
+              <path d="M 68 325 L 75 315 L 155 315 L 162 325 Z" class="p-outline"></path>
+              <rect x="75" y="85" width="80" height="230" class="p-outline"></rect>
+              <line x1="86" y1="88" x2="86" y2="312" class="p-fluting"></line>
+              <line x1="97" y1="88" x2="97" y2="312" class="p-fluting"></line>
+              <line x1="108" y1="88" x2="108" y2="312" class="p-fluting"></line>
+              <line x1="122" y1="88" x2="122" y2="312" class="p-fluting"></line>
+              <line x1="133" y1="88" x2="133" y2="312" class="p-fluting"></line>
+              <line x1="144" y1="88" x2="144" y2="312" class="p-fluting"></line>
+              <line x1="75" y1="88" x2="155" y2="88" class="p-ring"></line>
+              <path d="M 75 85 L 68 75 L 162 75 L 155 85 Z" class="p-outline"></path>
+              <rect x="55" y="60" width="120" height="15" class="p-outline"></rect>
+              <text x="115" y="205" class="p-num">I</text>
+              <text x="115" y="390" class="p-label">Security</text>
+            </g>
 
-        <g>
-          <rect x="280" y="325" width="120" height="15" class="p-outline" />
-          <path d="M 293 325 L 300 315 L 380 315 L 387 325 Z" class="p-outline" />
-          <rect x="300" y="85" width="80" height="230" class="p-outline" />
-          <line x1="311" y1="88" x2="311" y2="312" class="p-fluting" />
-          <line x1="322" y1="88" x2="322" y2="312" class="p-fluting" />
-          <line x1="333" y1="88" x2="333" y2="312" class="p-fluting" />
-          <line x1="347" y1="88" x2="347" y2="312" class="p-fluting" />
-          <line x1="358" y1="88" x2="358" y2="312" class="p-fluting" />
-          <line x1="369" y1="88" x2="369" y2="312" class="p-fluting" />
-          <line x1="300" y1="88" x2="380" y2="88" class="p-ring" />
-          <path d="M 300 85 L 293 75 L 387 75 L 380 85 Z" class="p-outline" />
-          <rect x="280" y="60" width="120" height="15" class="p-outline" />
-          <text x="340" y="205" class="p-num">II</text>
-          <text x="340" y="390" class="p-label">Reliability</text>
-        </g>
+            <g>
+              <rect x="280" y="325" width="120" height="15" class="p-outline"></rect>
+              <path d="M 293 325 L 300 315 L 380 315 L 387 325 Z" class="p-outline"></path>
+              <rect x="300" y="85" width="80" height="230" class="p-outline"></rect>
+              <line x1="311" y1="88" x2="311" y2="312" class="p-fluting"></line>
+              <line x1="322" y1="88" x2="322" y2="312" class="p-fluting"></line>
+              <line x1="333" y1="88" x2="333" y2="312" class="p-fluting"></line>
+              <line x1="347" y1="88" x2="347" y2="312" class="p-fluting"></line>
+              <line x1="358" y1="88" x2="358" y2="312" class="p-fluting"></line>
+              <line x1="369" y1="88" x2="369" y2="312" class="p-fluting"></line>
+              <line x1="300" y1="88" x2="380" y2="88" class="p-ring"></line>
+              <path d="M 300 85 L 293 75 L 387 75 L 380 85 Z" class="p-outline"></path>
+              <rect x="280" y="60" width="120" height="15" class="p-outline"></rect>
+              <text x="340" y="205" class="p-num">II</text>
+              <text x="340" y="390" class="p-label">Reliability</text>
+            </g>
 
-        <g>
-          <rect x="505" y="325" width="120" height="15" class="p-outline" />
-          <path d="M 518 325 L 525 315 L 605 315 L 612 325 Z" class="p-outline" />
-          <rect x="525" y="85" width="80" height="230" class="p-outline" />
-          <line x1="536" y1="88" x2="536" y2="312" class="p-fluting" />
-          <line x1="547" y1="88" x2="547" y2="312" class="p-fluting" />
-          <line x1="558" y1="88" x2="558" y2="312" class="p-fluting" />
-          <line x1="572" y1="88" x2="572" y2="312" class="p-fluting" />
-          <line x1="583" y1="88" x2="583" y2="312" class="p-fluting" />
-          <line x1="594" y1="88" x2="594" y2="312" class="p-fluting" />
-          <line x1="525" y1="88" x2="605" y2="88" class="p-ring" />
-          <path d="M 525 85 L 518 75 L 612 75 L 605 85 Z" class="p-outline" />
-          <rect x="505" y="60" width="120" height="15" class="p-outline" />
-          <text x="565" y="205" class="p-num">III</text>
-          <text x="565" y="390" class="p-label">Profitability</text>
-        </g>
-      </svg>
+            <g>
+              <rect x="505" y="325" width="120" height="15" class="p-outline"></rect>
+              <path d="M 518 325 L 525 315 L 605 315 L 612 325 Z" class="p-outline"></path>
+              <rect x="525" y="85" width="80" height="230" class="p-outline"></rect>
+              <line x1="536" y1="88" x2="536" y2="312" class="p-fluting"></line>
+              <line x1="547" y1="88" x2="547" y2="312" class="p-fluting"></line>
+              <line x1="558" y1="88" x2="558" y2="312" class="p-fluting"></line>
+              <line x1="572" y1="88" x2="572" y2="312" class="p-fluting"></line>
+              <line x1="583" y1="88" x2="583" y2="312" class="p-fluting"></line>
+              <line x1="594" y1="88" x2="594" y2="312" class="p-fluting"></line>
+              <line x1="525" y1="88" x2="605" y2="88" class="p-ring"></line>
+              <path d="M 525 85 L 518 75 L 612 75 L 605 85 Z" class="p-outline"></path>
+              <rect x="505" y="60" width="120" height="15" class="p-outline"></rect>
+              <text x="565" y="205" class="p-num">III</text>
+              <text x="565" y="390" class="p-label">Profitability</text>
+            </g>
+          </svg>
         </figure>
       </div>
 
@@ -913,10 +1001,10 @@ const documentStack: StackStage[] = [
           </summary>
           <div class="border-t border-ink-100 px-6 py-5">
             <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
-              Retrieval is the part of the system that finds and gathers the information an AI
-              agent needs to do its job. Instead of expecting the agent to “just know” everything,
-              retrieval pulls the most relevant documents, records, or data from the
-              organization’s sources and gives them to the agent at the right time.
+              Retrieval is the part of the system that finds and gathers the information an AI agent
+              needs to do its job. Instead of expecting the agent to “just know” everything,
+              retrieval pulls the most relevant documents, records, or data from the organization’s
+              sources and gives them to the agent at the right time.
             </p>
           </div>
         </details>
@@ -939,9 +1027,9 @@ const documentStack: StackStage[] = [
               the agent the right context from the organization’s data.
             </p>
             <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
-              An orchestration layer governs how the overall system behaves. It decides what
-              happens first, which agent acts next, when the system should pause or escalate, and
-              how the workflow moves from step to step.
+              An orchestration layer governs how the overall system behaves. It decides what happens
+              first, which agent acts next, when the system should pause or escalate, and how the
+              workflow moves from step to step.
             </p>
           </div>
         </details>
@@ -980,10 +1068,10 @@ const documentStack: StackStage[] = [
           </summary>
           <div class="border-t border-ink-100 px-6 py-5">
             <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
-              Chunking is the process of breaking large documents into smaller, usable pieces so
-              the system can work with them more effectively. Instead of handing an agent an
-              entire policy or report at once, the system splits it into meaningful sections that
-              are easier to store, search, and retrieve later.
+              Chunking is the process of breaking large documents into smaller, usable pieces so the
+              system can work with them more effectively. Instead of handing an agent an entire
+              policy or report at once, the system splits it into meaningful sections that are
+              easier to store, search, and retrieve later.
             </p>
           </div>
         </details>
@@ -1001,10 +1089,10 @@ const documentStack: StackStage[] = [
           <div class="border-t border-ink-100 px-6 py-5">
             <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
               Embedding is the process of turning a piece of text into a numerical representation
-              that helps the system find related meaning, not just matching keywords. This makes
-              it possible to search for information based on semantic similarity — for example,
-              finding a relevant policy section even if it does not use the exact same wording as
-              the question.
+              that helps the system find related meaning, not just matching keywords. This makes it
+              possible to search for information based on semantic similarity — for example, finding
+              a relevant policy section even if it does not use the exact same wording as the
+              question.
             </p>
           </div>
         </details>
@@ -1065,9 +1153,9 @@ const documentStack: StackStage[] = [
         <h3 class="font-serif text-xl font-semibold text-ink-900">What is the Supervisor?</h3>
         <p class="mt-3 text-sm leading-relaxed text-ink-600">
           The Supervisor is my programmatic solution for an orchestration layer — governable AI
-          agent guidance. It does not replace the agents’ reasoning — it governs the workflow
-          around them, deciding what must be known, what happens next, and when the system
-          should pause, escalate, or continue.
+          agent guidance. It does not replace the agents’ reasoning — it governs the workflow around
+          them, deciding what must be known, what happens next, and when the system should pause,
+          escalate, or continue.
         </p>
       </div>
 
@@ -1086,8 +1174,8 @@ const documentStack: StackStage[] = [
           <p class="text-[0.95rem] italic leading-relaxed text-ink-600">
             A context bundle is the package of information an agent receives before it does its
             work. Instead of giving the agent unrestricted access to everything, the system
-            assembles a scoped set of instructions, documents, rules, and relevant evidence so
-            the agent can reason within the right boundaries.
+            assembles a scoped set of instructions, documents, rules, and relevant evidence so the
+            agent can reason within the right boundaries.
           </p>
         </div>
       </details>
@@ -1095,9 +1183,9 @@ const documentStack: StackStage[] = [
 
     <div class="mt-12">
       <Callout kind="architecture" title="Hybrid search is not the full story">
-        Hybrid search powers retrieval, but it does not by itself decide what should be asked,
-        which sources matter, how evidence should be prioritized, or when uncertainty should halt
-        the workflow. Agentic retrieval adds that planning and control layer around the engine.
+        Hybrid search powers retrieval, but it does not by itself decide what should be asked, which
+        sources matter, how evidence should be prioritized, or when uncertainty should halt the
+        workflow. Agentic retrieval adds that planning and control layer around the engine.
       </Callout>
     </div>
 
@@ -1131,7 +1219,6 @@ const documentStack: StackStage[] = [
         className="h-auto w-full"
       />
     </div>
-
   </NarrativeSection>
 
   <NarrativeSection id="scenario" tone="muted" width="wide">
@@ -1291,10 +1378,10 @@ const documentStack: StackStage[] = [
       </div>
     </div>
 
-    <p class="eyebrow mb-3 mt-24 text-accent">
-      The document stack for my mock business scenario
-    </p>
-    <ol class="relative mt-8 space-y-10 before:absolute before:bottom-6 before:left-[1.125rem] before:top-6 before:w-px before:bg-accent/40 md:before:left-[1.375rem]">
+    <p class="eyebrow mb-3 mt-24 text-accent">The document stack for my mock business scenario</p>
+    <ol
+      class="relative mt-8 space-y-10 before:absolute before:bottom-6 before:left-[1.125rem] before:top-6 before:w-px before:bg-accent/40 md:before:left-[1.375rem]"
+    >
       {
         documentStack.map((stage, i) => (
           <li class="relative grid grid-cols-[auto_minmax(0,26rem)_minmax(0,1fr)] items-center gap-5 md:gap-7">
@@ -1308,9 +1395,7 @@ const documentStack: StackStage[] = [
                 <h4 class="font-serif text-xl font-semibold tracking-tight text-ink-900">
                   {stage.name}
                 </h4>
-                {stage.subtitle && (
-                  <p class="text-xs italic text-ink-500">{stage.subtitle}</p>
-                )}
+                {stage.subtitle && <p class="text-xs italic text-ink-500">{stage.subtitle}</p>}
               </div>
               <p class="mt-3 max-w-prose text-sm leading-relaxed text-ink-600">
                 {stage.jurisdiction}
@@ -1365,7 +1450,15 @@ const documentStack: StackStage[] = [
                     </marker>
                   </defs>
 
-                  <circle cx="10" cy="24" r="6.5" fill="none" stroke="currentColor" stroke-width="0.7" opacity="0.35" />
+                  <circle
+                    cx="10"
+                    cy="24"
+                    r="6.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="0.7"
+                    opacity="0.35"
+                  />
                   <circle cx="10" cy="24" r="2.4" fill="currentColor" />
 
                   <use
@@ -1453,15 +1546,14 @@ const documentStack: StackStage[] = [
     isolation: isolate;
     padding: 1.5rem 1.75rem;
     border-radius: 0.9rem;
-    background:
-      linear-gradient(
-        135deg,
-        #f6f8fa 0%,
-        #dde3e8 22%,
-        #f1f4f6 48%,
-        #c8d0d7 74%,
-        #e8ecef 100%
-      );
+    background: linear-gradient(
+      135deg,
+      #f6f8fa 0%,
+      #dde3e8 22%,
+      #f1f4f6 48%,
+      #c8d0d7 74%,
+      #e8ecef 100%
+    );
     border: 1px solid rgba(24, 33, 38, 0.14);
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.85),

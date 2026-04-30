@@ -50,12 +50,10 @@ function Token({
   value,
   indent,
   citationsByKey,
-  parentKey,
 }: {
   value: unknown;
   indent: number;
   citationsByKey: Map<string, OutputCitation>;
-  parentKey?: string;
 }) {
   const pad = '  '.repeat(indent);
   const childPad = '  '.repeat(indent + 1);
@@ -114,12 +112,7 @@ function Token({
               {childPad}
               <span className={KEY_CLS}>{`"${k}"`}</span>
               <span className={PUNCT_CLS}>: </span>
-              <Token
-                value={v}
-                indent={indent + 1}
-                citationsByKey={citationsByKey}
-                parentKey={k}
-              />
+              <Token value={v} indent={indent + 1} citationsByKey={citationsByKey} />
               {idx < entries.length - 1 && <span className={PUNCT_CLS}>,</span>}
               {citation && <CitationChip citation={citation} />}
             </span>
@@ -157,9 +150,7 @@ function CitationChip({ citation }: { citation: OutputCitation }) {
           <p className="font-mono text-[0.6rem] uppercase tracking-[0.12em] text-accent-ring">
             Cited from
           </p>
-          <p className="mt-1 break-words font-mono text-[0.78rem] text-ink-50">
-            {citation.source}
-          </p>
+          <p className="mt-1 break-words font-mono text-[0.78rem] text-ink-50">{citation.source}</p>
           <Tooltip.Arrow className="fill-ink-900" />
         </Tooltip.Content>
       </Tooltip.Portal>

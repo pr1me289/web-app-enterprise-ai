@@ -1,18 +1,156 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Container from '../components/astro/Container.astro';
-import SectionHero from '../components/astro/SectionHero.astro';
 ---
 
-<BaseLayout title="Summary">
-  <section class="border-b border-ink-100">
-    <Container width="wide" class="py-16 md:py-24">
-      <SectionHero
-        as="h1"
-        eyebrow="Part 07 · Summary & closing thoughts"
-        title="What the work demonstrated, what surprised it, and what it should not overclaim."
-        lede="The most useful learnings were not generic benchmark wins. They were design discoveries: where governance had to become structural, where evaluation had to become behavioral, and where the real failure causes actually lived."
-      />
+<BaseLayout
+  title="Summary"
+  description="A concise closing summary of the spec-driven enterprise context engineering presentation."
+>
+  <section class="relative overflow-hidden border-b border-ink-100">
+    <div class="summary-glow pointer-events-none absolute inset-0" aria-hidden="true"></div>
+    <Container width="wide" class="relative py-16 md:py-24">
+      <div class="mx-auto max-w-4xl text-center">
+        <p class="eyebrow text-accent">Part 07 · Summary</p>
+        <h1
+          class="display-balance mt-5 font-serif text-display-sm font-semibold tracking-tight text-ink-900 md:text-display"
+        >
+          The story this project is really telling.
+        </h1>
+        <p class="mx-auto mt-6 max-w-3xl text-lg leading-relaxed text-ink-600 md:text-xl">
+          This presentation started with a simple tension: enterprises are investing heavily in AI,
+          but the real value is still hard to capture because enterprise work is not just a question
+          of better answers. It is a question of <strong class="font-semibold text-ink-900"
+            >trust, boundaries, evidence, ownership, and workflow</strong
+          >.
+        </p>
+      </div>
+    </Container>
+  </section>
+
+  <section class="py-section-sm md:py-section">
+    <Container width="wide">
+      <div class="grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(18rem,0.8fr)]">
+        <article class="panel p-7 md:p-9">
+          <p class="eyebrow text-accent">My argument</p>
+          <p class="mt-5 font-serif text-2xl font-semibold leading-snug text-ink-900 md:text-3xl">
+            A custom orchestration layer is not extra architecture for its own sake. It is how an
+            enterprise makes its own security, reliability, and business constraints unavoidable
+            parts of the AI system.
+          </p>
+          <p class="mt-6 text-base leading-relaxed text-ink-700">
+            Without that layer, the organization inherits someone else&rsquo;s assumptions about
+            what matters, which sources count, when uncertainty is acceptable, and when a human
+            needs to step in. My approach treats those questions as the core product problem.
+          </p>
+        </article>
+
+        <aside class="rounded-[1.25rem] border border-accent/20 bg-accent-soft/45 p-7 shadow-soft">
+          <p class="eyebrow text-accent">What changed</p>
+          <p class="mt-4 text-sm leading-relaxed text-ink-700">
+            The project reframes enterprise AI from &ldquo;give an agent more context&rdquo; to
+            <strong class="font-semibold text-ink-900">
+              govern what context it receives, why it receives it, and what it may do next</strong
+            >.
+          </p>
+        </aside>
+      </div>
+
+      <div class="mt-8 grid gap-4 md:grid-cols-3">
+        <article class="summary-card">
+          <span class="summary-card__number">01</span>
+          <h2>Research</h2>
+          <p>
+            The landscape showed why generic context engines, long-context prompts, and naive RAG
+            are not enough by themselves. Enterprise data carries authority, permissions, freshness,
+            and political ownership.
+          </p>
+        </article>
+        <article class="summary-card">
+          <span class="summary-card__number">02</span>
+          <h2>Approach</h2>
+          <p>
+            The proposed answer was spec-driven enterprise context engineering: a document stack,
+            hybrid source-aware retrieval, scoped context bundles, domain agents, and a
+            deterministic supervisor.
+          </p>
+        </article>
+        <article class="summary-card">
+          <span class="summary-card__number">03</span>
+          <h2>Demo</h2>
+          <p>
+            The replay made the architecture visible. Each step retrieved only what it needed,
+            produced structured output, passed through a supervisor gate, and either continued or
+            halted safely.
+          </p>
+        </article>
+      </div>
+
+      <div
+        class="mt-8 rounded-[1.5rem] border border-ink-100 bg-ink-900 p-7 text-paper shadow-soft md:p-9"
+      >
+        <p class="eyebrow text-paper/55">The core lesson</p>
+        <div class="mt-5 grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(16rem,0.6fr)]">
+          <p class="font-serif text-2xl font-semibold leading-snug text-paper md:text-3xl">
+            The system should not feel magical. It should feel accountable.
+          </p>
+          <p class="text-sm leading-relaxed text-paper/70">
+            A complete run is valuable because every determination is traceable. An escalation is
+            valuable because ambiguity is preserved instead of hidden. The win is not just
+            automation; it is a workflow that business, legal, security, procurement, and
+            engineering can all inspect and trust.
+          </p>
+        </div>
+      </div>
+
+      <div class="mx-auto mt-10 max-w-3xl text-center">
+        <p class="font-serif text-2xl leading-snug text-ink-900">
+          In short: this project argues that enterprise AI becomes useful when context is not merely
+          retrieved, but <strong class="font-semibold text-accent">governed</strong>.
+        </p>
+      </div>
     </Container>
   </section>
 </BaseLayout>
+
+<style>
+  .summary-glow {
+    background:
+      radial-gradient(circle at 20% 20%, rgba(157, 87, 40, 0.16), transparent 28rem),
+      radial-gradient(circle at 80% 10%, rgba(33, 71, 60, 0.14), transparent 26rem);
+  }
+
+  .summary-card {
+    border: 1px solid rgba(24, 33, 38, 0.08);
+    border-radius: 1.25rem;
+    background: rgba(252, 250, 245, 0.88);
+    padding: 1.5rem;
+    box-shadow:
+      0 8px 24px rgba(24, 33, 38, 0.06),
+      0 1px 2px rgba(24, 33, 38, 0.05);
+  }
+
+  .summary-card__number {
+    display: inline-flex;
+    margin-bottom: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #9d5728;
+  }
+
+  .summary-card h2 {
+    font-family: 'Iowan Old Style', 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #182126;
+  }
+
+  .summary-card p {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #47616d;
+  }
+</style>
