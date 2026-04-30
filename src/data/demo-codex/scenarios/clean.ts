@@ -450,7 +450,7 @@ export const cleanScenario: DemoScenario = {
       retrievedEvidence: [
         {
           id: 'pam-001-std',
-          name: 'Procurement Approval Matrix row STD-04',
+          name: 'Procurement Approval Matrix row C-T1',
           type: 'Approval matrix',
           lane: 'direct_structured',
           authorityTier: 1,
@@ -480,12 +480,12 @@ export const cleanScenario: DemoScenario = {
         ],
         evidence: [
           {
-            source: 'PAM-001 row STD-04 — Procurement Approval Matrix',
+            source: 'PAM-001 row C-T1 — Procurement Approval Matrix',
             tier: 1,
-            note: 'TIER_2 + cleared legal → STANDARD routing.',
+            note: 'TIER_3 + cleared legal → FAST_TRACK routing.',
           },
         ],
-        citations: ['PAM-001 row STD-04'],
+        citations: ['PAM-001 row C-T1'],
         permissions: ['Read PAM-001', 'Read upstream determinations'],
         nonGoals: ['Do not re-evaluate legal or security determinations.'],
         outputContract: [
@@ -512,7 +512,7 @@ export const cleanScenario: DemoScenario = {
           ],
           estimated_timeline: '3-5 business days',
           policy_citations: [
-            { source_id: 'PAM-001', version: '2.0', chunk_id: 'PAM-001__row_C-T1', row_id: 'C-T1', approval_path_condition: 'Class C vendor, Tier 1 integration, UNREGULATED data classification, fast-track eligible, no DPA required', citation_class: 'PRIMARY' },
+            { source_id: 'PAM-001', version: '2.0', chunk_id: 'PAM-001__row_C-T1', row_id: 'C-T1', approval_path_condition: 'Class C vendor, Tier 3 integration, UNREGULATED data classification, fast-track eligible, no DPA required', citation_class: 'PRIMARY' },
           ],
         },
         citations: [
@@ -736,15 +736,17 @@ export const cleanScenario: DemoScenario = {
       },
       output: {
         summary:
-          'Stakeholder guidance emitted to Procurement Manager and Business Owner. Fast-track approval path confirmed; no blockers or security follow-up actions required. Status: complete.',
+          'Stakeholder guidance emitted to all four named owners — Procurement Manager, Business Owner, IT Security, and Legal. Fast-track approval path confirmed; no blockers or security follow-up actions required. Status: complete.',
         plainSummary:
-          'The final approval package has been routed to the relevant stakeholders. OptiChain is approved through the fast-track process — no further blockers or follow-ups.',
+          'The final approval package has been routed to all four stakeholders for the engagement. OptiChain is approved through the fast-track process — no further blockers or follow-ups.',
         structured: {
           status: 'COMPLETE',
           package_emitted: true,
           recipients: [
             'Procurement: Procurement Manager',
             'Operations: Business Owner',
+            'IT Security: IT Security Lead',
+            'Legal: General Counsel',
           ],
           final_status: 'FAST_TRACK_APPROVED',
         },
@@ -766,7 +768,7 @@ export const cleanScenario: DemoScenario = {
         {
           timestamp: '2026-04-27T15:41:26Z',
           type: 'DETERMINATION',
-          payload: 'step_id=STEP-06 · guidance_documents=2 · stakeholder_roles=[Procurement Manager, Business Owner] · status=complete',
+          payload: 'step_id=STEP-06 · guidance_documents=4 · stakeholder_roles=[Procurement Manager, Business Owner, IT Security, Legal] · status=complete',
         },
         {
           timestamp: '2026-04-27T15:41:26Z',

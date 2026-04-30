@@ -50,7 +50,7 @@ export default function FinalOutputsPanel() {
         </h3>
         <p className="max-w-3xl text-sm leading-relaxed text-ink-600">
           {isEscalated
-            ? 'When the supervisor halts at STEP-03, this is the artifact that lands on the right desks. Determined items remain visible alongside named blockers and owners.'
+            ? `When the supervisor halts at ${final.haltedAt ?? 'an upstream step'}, this is the artifact that lands on the right desks. Determined items remain visible alongside named blockers and owners.`
             : 'When all six steps complete, this is the artifact that lands in stakeholder inboxes. Every line is cited and routed to a named owner.'}
         </p>
       </header>

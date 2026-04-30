@@ -186,7 +186,7 @@ export const escalatedScenario: DemoScenario = {
       },
       output: {
         summary:
-          'Integration pattern is AMBIGUOUS — vendor description references a possible extraction agent with service-account credentials, which does not clearly map to Tier 1, 2, or 3 per ISP-001 §12.2. Agent assigns integration_tier=UNCLASSIFIED_PENDING_REVIEW, data_classification=REGULATED (EU personal data present), fast_track_eligible=false (DISALLOWED_AMBIGUOUS_SCOPE), and emits three required security actions. Status: escalated.',
+          'Integration pattern is AMBIGUOUS — vendor description references a possible extraction agent with service-account credentials, which does not clearly map to Tier 1, 2, or 3 per ISP-001 §12.2. Agent assigns integration_tier=UNCLASSIFIED_PENDING_REVIEW, data_classification=REGULATED (EU personal data present), fast_track_eligible=false (DISALLOWED_AMBIGUOUS_SCOPE), and emits two required security actions. Status: escalated.',
         plainSummary:
           "The vendor wants direct, live access to our systems and will be handling EU employee data — both make this a high-risk engagement that needs a full security review. Fast-track approval is not available, and a few security actions are queued up before onboarding can continue.",
         structured: {
@@ -233,17 +233,16 @@ export const escalatedScenario: DemoScenario = {
       auditEvents: [
         { timestamp: '2026-04-27T17:24:52Z', type: 'RETRIEVAL', payload: 'R02-SQ-04 · lane=indexed_hybrid · source=ISP-001 · output=erp_tier_policy_chunks · admitted=5' },
         { timestamp: '2026-04-27T17:24:52Z', type: 'RETRIEVAL', payload: 'R02-SQ-07A · lane=direct_structured · source=VQ-OC-001 · output=nda_inputs · admitted=1' },
-        { timestamp: '2026-04-27T17:25:02Z', type: 'DETERMINATION', payload: 'step_id=STEP-02 · integration_tier=UNCLASSIFIED_PENDING_REVIEW · fast_track_eligible=false · status=escalated · required_security_actions=3' },
+        { timestamp: '2026-04-27T17:25:02Z', type: 'DETERMINATION', payload: 'step_id=STEP-02 · integration_tier=UNCLASSIFIED_PENDING_REVIEW · fast_track_eligible=false · status=escalated · required_security_actions=2' },
         { timestamp: '2026-04-27T17:25:02Z', type: 'STATUS_CHANGE', payload: 'step_id=STEP-02 · from=IN_PROGRESS · to=ESCALATED' },
         { timestamp: '2026-04-27T17:25:02Z', type: 'ESCALATION', payload: 'step_id=STEP-02 · evidence_condition=Security classification requires review before downstream execution · resolution_owner=IT Security' },
-        { timestamp: '2026-04-27T17:25:02Z', type: 'RUN_EVENT', payload: 'Pipeline halted in escalated state · overall_status=ESCALATED' },
       ],
       replayMoments: {
         retrieving: 'Pulling ISP-001 §12.2 (indexed hybrid) and questionnaire facts.',
         bundling: 'Assembling 3-source bundle; capping Slack to supplementary.',
         dispatching: 'Dispatching to IT Security agent.',
         agent_working: 'Matching vendor description against tier table conditions.',
-        output_ready: 'Pattern ambiguous → integration_tier=UNCLASSIFIED_PENDING_REVIEW; fast_track_eligible=false · 3 required security actions.',
+        output_ready: 'Pattern ambiguous → integration_tier=UNCLASSIFIED_PENDING_REVIEW; fast_track_eligible=false · 2 required security actions.',
         gating: 'Validating output contract; escalated status allows run to continue.',
         decided: 'Gate passed → advance to STEP-03.',
       },
@@ -288,7 +287,7 @@ export const escalatedScenario: DemoScenario = {
           lane: 'direct_structured',
           authorityTier: 2,
           treatment: 'primary',
-          reason: 'Vendor-reported DPA and NDA execution status — both NOT_STARTED / UNKNOWN.',
+          reason: 'Vendor-reported DPA and NDA execution status — DPA NOT_STARTED, NDA PENDING.',
           chunksRetrieved: 2,
           chunksAdmitted: 2,
         },
